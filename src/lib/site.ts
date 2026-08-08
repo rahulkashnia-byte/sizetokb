@@ -96,4 +96,11 @@ export const SITE_KEYWORDS = [
   "flip image online",
   "PDF to Word online free",
   "Word to PDF online free",
+  "passport size photo maker",
+  "signature cleaner online",
+  "HEIC to JPG converter",
+  "merge PDF online free",
+  "split PDF online free",
+  "white background photo maker",
+  "Aadhaar masker",
 ] as const;

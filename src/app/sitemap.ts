@@ -12,11 +12,22 @@ export default function sitemap(): MetadataRoute.Sitemap {
     "/custom",
     "/image-to-pdf",
     "/pdf-compressor",
+    "/pdf-merge",
+    "/pdf-split",
     "/image-merger",
     "/image-cropper",
     "/image-reverse",
     "/pdf-to-word",
     "/word-to-pdf",
+    "/passport-photo",
+    "/white-background",
+    "/signature-cleaner",
+    "/exam-pack",
+    "/heic-to-jpg",
+    "/image-convert",
+    "/color-bw",
+    "/image-checker",
+    "/id-masker",
     "/about-us",
     "/contact-us",
     "/privacy-policy",
@@ -27,7 +38,16 @@ export default function sitemap(): MetadataRoute.Sitemap {
     url: `${SITE.url}${path === "" ? "/" : path.endsWith("/") ? path : `${path}/`}`,
     lastModified: now,
     changeFrequency: path === "" ? "daily" : "weekly",
-    priority: path === "" ? 1 : path.includes("image") || path === "/custom" || path === "/pdf-compressor" ? 0.9 : 0.5,
+    priority:
+      path === ""
+        ? 1
+        : path.includes("image") ||
+            path === "/custom" ||
+            path === "/pdf-compressor" ||
+            path === "/passport-photo" ||
+            path === "/signature-cleaner"
+          ? 0.9
+          : 0.5,
   }));
 
   const exams: MetadataRoute.Sitemap = EXAMS.map((e) => ({

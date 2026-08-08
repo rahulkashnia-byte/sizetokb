@@ -110,11 +110,11 @@ export default function HomePage() {
         ]}
         links={[
           { href: "/custom/", label: "Custom reduce size" },
-          { href: "/image-resizer/", label: "Compress image to KB" },
-          { href: "/image-to-pdf/", label: "Image to PDF" },
+          { href: "/passport-photo/", label: "Passport photo" },
+          { href: "/signature-cleaner/", label: "Signature cleaner" },
+          { href: "/exam-pack/", label: "Exam ZIP pack" },
           { href: "/pdf-compressor/", label: "PDF shrink" },
-          { href: "/image-merger/", label: "Image merger" },
-          { href: "/pdf-to-word/", label: "PDF to Word" },
+          { href: "/heic-to-jpg/", label: "HEIC to JPG" },
           { href: "/ssc-cgl/", label: "SSC CGL" },
           { href: "/neet-ug/", label: "NEET photo size" },
         ]}

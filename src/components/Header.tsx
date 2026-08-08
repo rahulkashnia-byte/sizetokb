@@ -5,57 +5,27 @@ import { useState } from "react";
 import { SARKARISUCHI, sarkarisuchiEnabled, sarkarisuchiJobsUrl } from "@/lib/sevadesk";
 
 const TOOLS = [
-  {
-    href: "/",
-    title: "Exam KB presets",
-    desc: "Pick SSC, UPSC, Bank…",
-    badge: "Start",
-  },
-  {
-    href: "/custom/",
-    title: "Custom size to KB",
-    desc: "Your own min–max KB",
-  },
-  {
-    href: "/image-resizer/",
-    title: "Image compressor",
-    desc: "Hit any KB target",
-  },
-  {
-    href: "/pdf-compressor/",
-    title: "PDF slim",
-    desc: "Shrink PDF uploads",
-  },
-  {
-    href: "/image-to-pdf/",
-    title: "Photos → PDF",
-    desc: "Merge pages fast",
-  },
-  {
-    href: "/image-merger/",
-    title: "Image merger",
-    desc: "Join photos in one JPG",
-  },
-  {
-    href: "/image-cropper/",
-    title: "Image cropper",
-    desc: "Crop for form photos",
-  },
-  {
-    href: "/image-reverse/",
-    title: "Flip / rotate",
-    desc: "Mirror or turn photos",
-  },
-  {
-    href: "/pdf-to-word/",
-    title: "PDF → Word",
-    desc: "Text PDF to .docx",
-  },
-  {
-    href: "/word-to-pdf/",
-    title: "Word → PDF",
-    desc: "DOCX for portals",
-  },
+  { href: "/", title: "Exam KB presets", desc: "Pick SSC, UPSC, Bank…", badge: "Start" },
+  { href: "/custom/", title: "Custom size to KB", desc: "Your own min–max KB" },
+  { href: "/image-resizer/", title: "Image compressor", desc: "Hit any KB target" },
+  { href: "/passport-photo/", title: "Passport photo", desc: "3.5×4.5 / 2×2" },
+  { href: "/signature-cleaner/", title: "Signature cleaner", desc: "Ink + 10–20 KB" },
+  { href: "/exam-pack/", title: "Exam ZIP pack", desc: "Photo + sign together" },
+  { href: "/pdf-compressor/", title: "PDF slim", desc: "Shrink PDF uploads" },
+  { href: "/pdf-merge/", title: "Merge PDF", desc: "Combine certificates" },
+  { href: "/pdf-split/", title: "Split PDF", desc: "Extract pages" },
+  { href: "/image-to-pdf/", title: "Photos → PDF", desc: "Merge pages fast" },
+  { href: "/pdf-to-word/", title: "PDF → Word", desc: "Text PDF to .docx" },
+  { href: "/word-to-pdf/", title: "Word → PDF", desc: "DOCX for portals" },
+  { href: "/image-merger/", title: "Image merger", desc: "Join photos in one JPG" },
+  { href: "/image-cropper/", title: "Image cropper", desc: "Crop for form photos" },
+  { href: "/image-reverse/", title: "Flip / rotate", desc: "Mirror or turn photos" },
+  { href: "/white-background/", title: "White background", desc: "Plain bg → white" },
+  { href: "/heic-to-jpg/", title: "HEIC → JPG", desc: "iPhone photos" },
+  { href: "/image-convert/", title: "JPG / PNG / WebP", desc: "Format convert" },
+  { href: "/color-bw/", title: "Color → B&W", desc: "Grayscale or pure B&W" },
+  { href: "/image-checker/", title: "Image checker", desc: "Pixels, KB, print size" },
+  { href: "/id-masker/", title: "ID masker", desc: "Blur Aadhaar digits" },
 ];
 
 export function Header() {
