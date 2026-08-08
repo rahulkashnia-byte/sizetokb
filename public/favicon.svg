@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="SizeToKB">
+  <rect width="64" height="64" rx="12" fill="#f7f4ef"/>
+  <!-- photo frame -->
+  <rect x="10" y="8" width="44" height="40" rx="6" fill="#fff" stroke="#1a1a1a" stroke-width="2.5"/>
+  <!-- landscape -->
+  <circle cx="40" cy="20" r="5" fill="#c45c26"/>
+  <path d="M12 40 L24 26 L32 34 L40 24 L52 40 Z" fill="#c45c26" opacity="0.45"/>
+  <!-- size badge -->
+  <rect x="28" y="38" width="28" height="16" rx="5" fill="#c45c26"/>
+  <text x="42" y="50" text-anchor="middle" font-family="system-ui,Segoe UI,sans-serif" font-size="11" font-weight="800" fill="#fff">KB</text>
+</svg>

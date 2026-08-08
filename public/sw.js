@@ -1,6 +1,6 @@
 /* SizeToKB offline shell — caches app shell for static export */
-const CACHE = "sizetokb-v1";
-const PRECACHE = ["/", "/manifest.webmanifest", "/offline.html"];
+const CACHE = "sizetokb-v2";
+const PRECACHE = ["/", "/manifest.webmanifest", "/offline.html", "/favicon.svg", "/icon-192.png"];
 
 self.addEventListener("install", (event) => {
   event.waitUntil(
