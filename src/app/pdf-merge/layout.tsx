@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 import { pageMeta } from "@/lib/seo";
 
 export const metadata: Metadata = pageMeta({
-  title: "Merge PDF Online Free — Combine PDF Files",
-  description: "Merge multiple PDFs into one file in your browser for exam certificate uploads — SizeToKB.in",
+  title: "Merge PDF Online Free — Combine Files Then Reduce PDF Size",
+  description: "Merge multiple PDFs into one for exam certificate uploads, then reduce PDF size if needed — SizeToKB.in",
   path: "/pdf-merge/",
   keywords: ["merge PDF online free","combine PDF files","join PDF India"],
 });

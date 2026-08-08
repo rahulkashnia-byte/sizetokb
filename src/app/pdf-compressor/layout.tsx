@@ -2,17 +2,10 @@ import type { Metadata } from "next";
 import { pageMeta } from "@/lib/seo";
 
 export const metadata: Metadata = pageMeta({
-  title: "PDF Compressor Online Free — Reduce PDF Size in KB",
-  description:
-    "Compress PDF online free toward a target KB for government exam uploads and form fill. Browser-based PDF compressor — SizeToKB.in",
+  title: "Reduce PDF Size Online Free — Compress PDF to KB",
+  description: "Reduce PDF size online free toward a target KB for exam and government uploads. Browser PDF compressor — SizeToKB.in",
   path: "/pdf-compressor/",
-  keywords: [
-    "PDF compressor online free",
-    "compress PDF to KB",
-    "reduce PDF size online",
-    "PDF size reducer India",
-    "exam PDF compressor",
-  ],
+  keywords: ["reduce PDF size online","compress PDF to KB","PDF compressor online free","PDF size reducer India"],
 });
 
 export default function PdfCompressorLayout({ children }: { children: React.ReactNode }) {

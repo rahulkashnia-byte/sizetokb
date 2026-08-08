@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 import { pageMeta } from "@/lib/seo";
 
 export const metadata: Metadata = pageMeta({
-  title: "Aadhaar ID Number Masker Online Free",
-  description: "Blur Aadhaar or ID numbers on photos before sharing — private browser tool — SizeToKB.in",
+  title: "Aadhaar ID Masker Online Free — Blur Numbers Before Share",
+  description: "Blur Aadhaar or ID numbers on photos before sharing. Private browser tool — SizeToKB.in",
   path: "/id-masker/",
   keywords: ["Aadhaar masker online","blur ID number photo","mask Aadhaar card"],
 });

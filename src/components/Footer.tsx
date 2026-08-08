@@ -43,43 +43,33 @@ export function Footer() {
             <h4 className="text-xs font-bold uppercase tracking-wider text-white/45">Tools</h4>
             <ul className="mt-3 space-y-2 text-sm">
               <li>
-                <Link href="/custom/" className="text-white/75 hover:text-white">
-                  Custom KB resize
+                <Link href="/#custom-tool" className="text-white/75 hover:text-white">
+                  Reduce size to KB
                 </Link>
               </li>
               <li>
                 <Link href="/passport-photo/" className="text-white/75 hover:text-white">
-                  Passport photo
+                  Passport photo maker
                 </Link>
               </li>
               <li>
                 <Link href="/signature-cleaner/" className="text-white/75 hover:text-white">
-                  Signature cleaner
-                </Link>
-              </li>
-              <li>
-                <Link href="/exam-pack/" className="text-white/75 hover:text-white">
-                  Exam ZIP pack
+                  Reduce signature size
                 </Link>
               </li>
               <li>
                 <Link href="/pdf-compressor/" className="text-white/75 hover:text-white">
-                  PDF shrink
+                  Reduce PDF size
                 </Link>
               </li>
               <li>
-                <Link href="/pdf-merge/" className="text-white/75 hover:text-white">
-                  Merge / split PDF
-                </Link>
-              </li>
-              <li>
-                <Link href="/heic-to-jpg/" className="text-white/75 hover:text-white">
-                  HEIC to JPG
+                <Link href="/#tools" className="text-white/75 hover:text-white">
+                  All tools
                 </Link>
               </li>
               <li>
                 <Link href="/sitemap/" className="text-white/75 hover:text-white">
-                  All tools
+                  Full sitemap
                 </Link>
               </li>
             </ul>

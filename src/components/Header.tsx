@@ -2,41 +2,28 @@
 
 import Link from "next/link";
 import { useState } from "react";
+import { featuredTools, toolsForNav } from "@/lib/toolsCatalog";
 import { SARKARISUCHI, sarkarisuchiEnabled, sarkarisuchiJobsUrl } from "@/lib/sevadesk";
 
-const TOOLS = [
-  { href: "/", title: "Exam KB presets", desc: "Pick SSC, UPSC, Bank…", badge: "Start" },
-  { href: "/custom/", title: "Custom size to KB", desc: "Your own min–max KB" },
-  { href: "/image-resizer/", title: "Image compressor", desc: "Hit any KB target" },
-  { href: "/passport-photo/", title: "Passport photo", desc: "3.5×4.5 / 2×2" },
-  { href: "/signature-cleaner/", title: "Signature cleaner", desc: "Ink + 10–20 KB" },
-  { href: "/exam-pack/", title: "Exam ZIP pack", desc: "Photo + sign together" },
-  { href: "/pdf-compressor/", title: "PDF slim", desc: "Shrink PDF uploads" },
-  { href: "/pdf-merge/", title: "Merge PDF", desc: "Combine certificates" },
-  { href: "/pdf-split/", title: "Split PDF", desc: "Extract pages" },
-  { href: "/image-to-pdf/", title: "Photos → PDF", desc: "Merge pages fast" },
-  { href: "/pdf-to-word/", title: "PDF → Word", desc: "Text PDF to .docx" },
-  { href: "/word-to-pdf/", title: "Word → PDF", desc: "DOCX for portals" },
-  { href: "/image-merger/", title: "Image merger", desc: "Join photos in one JPG" },
-  { href: "/image-cropper/", title: "Image cropper", desc: "Crop for form photos" },
-  { href: "/image-reverse/", title: "Flip / rotate", desc: "Mirror or turn photos" },
-  { href: "/white-background/", title: "White background", desc: "Plain bg → white" },
-  { href: "/heic-to-jpg/", title: "HEIC → JPG", desc: "iPhone photos" },
-  { href: "/image-convert/", title: "JPG / PNG / WebP", desc: "Format convert" },
-  { href: "/color-bw/", title: "Color → B&W", desc: "Grayscale or pure B&W" },
-  { href: "/image-checker/", title: "Image checker", desc: "Pixels, KB, print size" },
-  { href: "/id-masker/", title: "ID masker", desc: "Blur Aadhaar digits" },
+const QUICK = [
+  { href: "/#custom-tool", label: "Reduce to KB" },
+  { href: "/passport-photo/", label: "Passport" },
+  { href: "/pdf-compressor/", label: "Reduce PDF" },
+  { href: "/#tools", label: "All tools" },
 ];
 
 export function Header() {
   const [open, setOpen] = useState(false);
   const jobsUrl = sarkarisuchiEnabled() ? sarkarisuchiJobsUrl() : null;
+  const menuTools = [...featuredTools().filter((t) => t.href !== "/#custom-tool"), ...toolsForNav()]
+    .filter((t, i, arr) => arr.findIndex((x) => x.href === t.href) === i)
+    .slice(0, 12);
 
   return (
-    <header className="sticky top-0 z-40 border-b border-[var(--line)] bg-[var(--surface)]/85 backdrop-blur-xl">
+    <header className="sticky top-0 z-40 border-b border-[var(--line)] bg-[var(--surface)]/90 backdrop-blur-xl">
       <div className="mx-auto flex h-14 max-w-6xl items-center justify-between gap-3 px-4 sm:px-6">
-        <Link href="/" className="group flex items-baseline gap-0.5 leading-none">
-          <span className="font-[family-name:var(--font-display)] text-xl font-800 tracking-tight text-[var(--ink)] sm:text-2xl">
+        <Link href="/" className="group flex shrink-0 items-baseline gap-0.5 leading-none">
+          <span className="font-[family-name:var(--font-display)] text-xl font-extrabold tracking-tight text-[var(--ink)] sm:text-2xl">
             SizeTo<span className="text-[var(--accent)]">KB</span>
           </span>
           <span className="hidden text-[10px] font-semibold uppercase tracking-[0.14em] text-[var(--muted)] sm:inline">
@@ -44,45 +31,57 @@ export function Header() {
           </span>
         </Link>
 
+        {/* Desktop: tools always visible */}
+        <nav className="hidden items-center gap-1 lg:flex" aria-label="Primary tools">
+          {QUICK.map((item) => (
+            <Link
+              key={item.href}
+              href={item.href}
+              className="rounded-lg px-2.5 py-2 text-sm font-semibold text-[var(--ink)] hover:bg-[var(--wash)] hover:text-[var(--accent-ink)]"
+            >
+              {item.label}
+            </Link>
+          ))}
+        </nav>
+
         <div className="flex items-center gap-2">
           <Link
             href="/#custom-tool"
             className="inline-flex items-center rounded-lg bg-[var(--ink)] px-3 py-2 text-xs font-bold text-white hover:bg-[var(--accent)] sm:text-sm"
           >
-            Custom KB
+            Reduce to KB
           </Link>
 
-          <div className="relative">
+          {/* Mobile / tablet: compact list */}
+          <div className="relative lg:hidden">
             <button
               type="button"
               onClick={() => setOpen((v) => !v)}
-              onBlur={() => setTimeout(() => setOpen(false), 150)}
               className="inline-flex items-center gap-1.5 rounded-lg border border-[var(--line)] bg-white px-3 py-2 text-xs font-semibold text-[var(--ink)] sm:text-sm"
               aria-expanded={open}
+              aria-label="Open tools menu"
             >
               Tools
               <span className={`text-[10px] transition ${open ? "rotate-180" : ""}`}>▾</span>
             </button>
-
             {open && (
-              <div className="absolute right-0 top-full mt-2 max-h-[70vh] w-72 overflow-y-auto overflow-x-hidden rounded-xl border border-[var(--line)] bg-white shadow-xl">
-                {TOOLS.map((t) => (
+              <div className="absolute right-0 top-full z-50 mt-2 max-h-[70vh] w-72 overflow-y-auto rounded-xl border border-[var(--line)] bg-white shadow-xl">
+                <Link
+                  href="/#tools"
+                  onClick={() => setOpen(false)}
+                  className="block border-b border-[var(--line)] bg-[var(--accent-soft)] px-3.5 py-3 text-sm font-bold text-[var(--accent-ink)]"
+                >
+                  View all tools on home →
+                </Link>
+                {menuTools.map((t) => (
                   <Link
                     key={t.href}
                     href={t.href}
-                    className="flex items-start justify-between gap-2 border-b border-[var(--line)] px-3.5 py-2.5 last:border-0 hover:bg-[var(--wash)]"
+                    onClick={() => setOpen(false)}
+                    className="block border-b border-[var(--line)] px-3.5 py-2.5 last:border-0 hover:bg-[var(--wash)]"
                   >
-                    <div>
-                      <div className="flex items-center gap-2 text-sm font-semibold text-[var(--ink)]">
-                        {t.title}
-                        {"badge" in t && t.badge ? (
-                          <span className="rounded bg-[var(--accent-soft)] px-1.5 py-0.5 text-[9px] font-bold uppercase text-[var(--accent-ink)]">
-                            {t.badge}
-                          </span>
-                        ) : null}
-                      </div>
-                      <p className="text-xs text-[var(--muted)]">{t.desc}</p>
-                    </div>
+                    <span className="text-sm font-semibold text-[var(--ink)]">{t.label}</span>
+                    <span className="mt-0.5 block text-xs text-[var(--muted)]">{t.blurb}</span>
                   </Link>
                 ))}
                 {jobsUrl ? (
@@ -90,22 +89,30 @@ export function Header() {
                     href={jobsUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex items-start justify-between gap-2 px-3.5 py-2.5 hover:bg-[var(--wash)]"
+                    className="block px-3.5 py-2.5 hover:bg-[var(--wash)]"
                   >
-                    <div>
-                      <div className="flex items-center gap-2 text-sm font-semibold text-[var(--ink)]">
-                        {SARKARISUCHI.name} jobs
-                        <span className="rounded bg-[var(--accent-soft)] px-1.5 py-0.5 text-[9px] font-bold uppercase text-[var(--accent-ink)]">
-                          Partner
-                        </span>
-                      </div>
-                      <p className="text-xs text-[var(--muted)]">Vacancies, results, admit cards</p>
-                    </div>
+                    <span className="text-sm font-semibold">{SARKARISUCHI.name} jobs</span>
+                    <span className="mt-0.5 block text-xs text-[var(--muted)]">Partner</span>
                   </a>
                 ) : null}
               </div>
             )}
           </div>
+        </div>
+      </div>
+
+      {/* Tablet strip: visible tool chips */}
+      <div className="border-t border-[var(--line)] bg-white/70 lg:hidden">
+        <div className="mx-auto flex max-w-6xl gap-2 overflow-x-auto px-4 py-2 sm:px-6">
+          {QUICK.map((item) => (
+            <Link
+              key={item.href}
+              href={item.href}
+              className="shrink-0 rounded-full border border-[var(--line)] bg-[var(--wash)] px-3 py-1.5 text-xs font-bold text-[var(--ink)]"
+            >
+              {item.label}
+            </Link>
+          ))}
         </div>
       </div>
     </header>

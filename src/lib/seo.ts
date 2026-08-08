@@ -4,7 +4,7 @@ import { SITE, SITE_KEYWORDS } from "@/lib/site";
 export const defaultMetadata: Metadata = {
   metadataBase: new URL(SITE.url),
   title: {
-    default: `${SITE.name} | Reduce Image & Signature Size Online Free (KB) India`,
+    default: `Reduce Image & Signature Size to Exact KB Online Free | ${SITE.name}`,
     template: `%s | ${SITE.name}`,
   },
   description:
@@ -22,13 +22,13 @@ export const defaultMetadata: Metadata = {
     locale: SITE.locale,
     url: SITE.url,
     siteName: SITE.name,
-    title: `${SITE.name} — Reduce image & signature size to exact KB`,
+    title: `Reduce image & signature size to exact KB | ${SITE.name}`,
     description:
       "Free tool to reduce photo size (20–50KB) and signature size (10–20KB) for Indian exam form uploads.",
   },
   twitter: {
     card: "summary_large_image",
-    title: `${SITE.name} | Reduce Image & Signature Size`,
+    title: `Reduce Image & Signature Size to KB | ${SITE.name}`,
     description: "Reduce photo & signature size in KB online free for SSC, UPSC, Bank & more.",
   },
   robots: {

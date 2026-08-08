@@ -2,17 +2,10 @@ import type { Metadata } from "next";
 import { pageMeta } from "@/lib/seo";
 
 export const metadata: Metadata = pageMeta({
-  title: "Image to PDF Converter Free — JPG to PDF Online India",
-  description:
-    "Free image to PDF converter: combine photos into one PDF, reorder pages, set target KB. Ideal for exam document uploads. SizeToKB.in",
+  title: "Image to PDF Converter Free — Reduce Photos to PDF KB Limit",
+  description: "Convert images to PDF online free, reorder pages, and reduce toward a target KB for exam uploads — SizeToKB.in",
   path: "/image-to-pdf/",
-  keywords: [
-    "image to PDF converter",
-    "JPG to PDF online free",
-    "photos to PDF",
-    "exam document PDF",
-    "image to PDF India",
-  ],
+  keywords: ["image to PDF converter","JPG to PDF online free","photos to PDF"],
 });
 
 export default function ImageToPdfLayout({ children }: { children: React.ReactNode }) {

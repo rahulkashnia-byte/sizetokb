@@ -4,42 +4,27 @@ import { LegalLayout } from "@/components/LegalLayout";
 import { EXAMS } from "@/lib/exams";
 import { SITE } from "@/lib/site";
 import { pageMeta } from "@/lib/seo";
+import { toolsForNav } from "@/lib/toolsCatalog";
 
 export const metadata: Metadata = pageMeta({
-  title: "Sitemap — All Exam Photo Resizers & Tools | SizeToKB",
+  title: "Sitemap — Reduce Image Size Tools & Exam Photo Resizers",
   description:
-    "Complete sitemap of SizeToKB.in — exam photo resizers, image compressor KB tools, PDF tools, and legal pages for Indian aspirants.",
+    "Complete sitemap of SizeToKB.in — reduce image size to KB, reduce signature size, PDF tools, and exam photo resizers for Indian aspirants.",
   path: "/sitemap",
   keywords: [
     "SizeToKB sitemap",
+    "reduce image size tools",
     "SSC photo resizer list",
-    "exam photo size tools India",
     "compress image to KB",
   ],
 });
 
 const TOOLS = [
-  { href: "/", label: "Exam Photo & Signature Resizer (Home)" },
-  { href: "/image-resizer", label: "Image Resizer — exact KB & dimensions" },
-  { href: "/custom", label: "Custom Requirements Resizer" },
-  { href: "/passport-photo", label: "Passport Size Photo Maker" },
-  { href: "/signature-cleaner", label: "Signature Cleaner" },
-  { href: "/exam-pack", label: "Exam Photo + Signature ZIP Pack" },
-  { href: "/white-background", label: "White Background Photo" },
-  { href: "/heic-to-jpg", label: "HEIC to JPG" },
-  { href: "/image-convert", label: "JPG / PNG / WebP Converter" },
-  { href: "/color-bw", label: "Color to Black & White" },
-  { href: "/image-checker", label: "Image DPI & Pixel Checker" },
-  { href: "/id-masker", label: "Aadhaar / ID Masker" },
-  { href: "/image-to-pdf", label: "Image to PDF Converter" },
-  { href: "/pdf-compressor", label: "PDF Compressor Online" },
-  { href: "/pdf-merge", label: "Merge PDF" },
-  { href: "/pdf-split", label: "Split PDF" },
-  { href: "/image-merger", label: "Image Merger" },
-  { href: "/image-cropper", label: "Image Cropper" },
-  { href: "/image-reverse", label: "Image Flip / Rotate" },
-  { href: "/pdf-to-word", label: "PDF to Word" },
-  { href: "/word-to-pdf", label: "Word to PDF" },
+  { href: "/", label: "Home — Reduce image & signature size to KB" },
+  ...toolsForNav().map((t) => ({
+    href: t.href.replace(/\/$/, ""),
+    label: t.seoTitle.replace(/ Online Free.*$/, "").replace(/ —.*$/, "") || t.label,
+  })),
 ];
 
 const LEGAL = [
@@ -65,27 +50,25 @@ export default function SitemapPage() {
       <ul>
         {TOOLS.map((t) => (
           <li key={t.href}>
-            <Link href={t.href}>{t.label}</Link>
+            <Link href={t.href.endsWith("/") || t.href === "/" ? t.href : `${t.href}/`}>{t.label}</Link>
           </li>
         ))}
       </ul>
 
-      <h2>Company & legal</h2>
+      <h2>Legal & company</h2>
       <ul>
         {LEGAL.map((t) => (
           <li key={t.href}>
-            <Link href={t.href}>{t.label}</Link>
+            <Link href={`${t.href}/`}>{t.label}</Link>
           </li>
         ))}
       </ul>
 
-      <h2>All exam photo & signature resizers ({sorted.length})</h2>
-      <ul className="columns-1 gap-x-8 sm:columns-2">
+      <h2>Exam photo & signature size presets ({sorted.length})</h2>
+      <ul className="columns-1 sm:columns-2 md:columns-3">
         {sorted.map((e) => (
-          <li key={e.slug} className="break-inside-avoid">
-            <Link href={`/${e.slug}`}>
-              {e.name} photo size & signature resize
-            </Link>
+          <li key={e.slug}>
+            <Link href={`/${e.slug}/`}>{e.name}</Link>
           </li>
         ))}
       </ul>

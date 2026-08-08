@@ -2,10 +2,10 @@ import type { Metadata } from "next";
 import { pageMeta } from "@/lib/seo";
 
 export const metadata: Metadata = pageMeta({
-  title: "Exam Photo + Signature ZIP Pack Online Free",
-  description: "Process photo and signature to exam KB specs and download as one ZIP — SizeToKB.in",
+  title: "Reduce Exam Photo & Signature Size to KB — Download ZIP Pack",
+  description: "Reduce photo size and signature size to exam KB specs, then download both in one ZIP — SizeToKB.in",
   path: "/exam-pack/",
-  keywords: ["exam photo signature zip","bulk photo signature download","SSC photo pack"],
+  keywords: ["exam photo signature zip","reduce photo and signature size","SSC photo pack"],
 });
 
 export default function Layout({ children }: { children: React.ReactNode }) {

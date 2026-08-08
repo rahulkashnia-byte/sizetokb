@@ -87,7 +87,12 @@ export const SITE_KEYWORDS = [
   "bank exam photo size",
   "government exam photo resizer",
   "sarkari form photo size",
-  // Tools
+  // Tools — reduce-to-KB intent
+  "reduce image size online free",
+  "reduce signature size online",
+  "reduce photo size to 50KB",
+  "reduce signature size to 20KB",
+  "reduce PDF size online",
   "PDF compressor online free",
   "image to PDF converter",
   "photo to PDF online",
