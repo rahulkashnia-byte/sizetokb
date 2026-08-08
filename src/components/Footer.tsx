@@ -64,7 +64,22 @@ export function Footer() {
               </li>
               <li>
                 <Link href="/pdf-compressor/" className="text-white/75 hover:text-white">
-                  Reduce PDF size
+                  Compress PDF
+                </Link>
+              </li>
+              <li>
+                <Link href="/pdf-to-jpg/" className="text-white/75 hover:text-white">
+                  PDF to JPG
+                </Link>
+              </li>
+              <li>
+                <Link href="/pdf-unlock/" className="text-white/75 hover:text-white">
+                  Unlock PDF
+                </Link>
+              </li>
+              <li>
+                <Link href="/image-to-pdf/" className="text-white/75 hover:text-white">
+                  JPG to PDF
                 </Link>
               </li>
               <li>

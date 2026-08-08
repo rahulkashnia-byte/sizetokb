@@ -11,15 +11,29 @@ type Props = {
   /** Hide outer page chrome when embedded on home */
   embedded?: boolean;
   className?: string;
+  /** Preset targets for SEO landers (e.g. compress to 50KB) */
+  initialMinKb?: number;
+  initialMaxKb?: number;
+  defaultFilename?: string;
+  headline?: string;
+  subhead?: string;
 };
 
-export function CustomResizeTool({ embedded = false, className = "" }: Props) {
-  const [minKb, setMinKb] = useState(10);
-  const [maxKb, setMaxKb] = useState(100);
+export function CustomResizeTool({
+  embedded = false,
+  className = "",
+  initialMinKb = 10,
+  initialMaxKb = 100,
+  defaultFilename = "",
+  headline,
+  subhead,
+}: Props) {
+  const [minKb, setMinKb] = useState(initialMinKb);
+  const [maxKb, setMaxKb] = useState(initialMaxKb);
   const [width, setWidth] = useState<string>("");
   const [height, setHeight] = useState<string>("");
   const [unit, setUnit] = useState<DimUnit>("cm");
-  const [outName, setOutName] = useState("");
+  const [outName, setOutName] = useState(defaultFilename);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [result, setResult] = useState<ProcessedImage | null>(null);
@@ -48,12 +62,12 @@ export function CustomResizeTool({ embedded = false, className = "" }: Props) {
   const reset = () => {
     if (preview) URL.revokeObjectURL(preview);
     if (result?.url) URL.revokeObjectURL(result.url);
-    setMinKb(10);
-    setMaxKb(100);
+    setMinKb(initialMinKb);
+    setMaxKb(initialMaxKb);
     setWidth("");
     setHeight("");
     setUnit("cm");
-    setOutName("");
+    setOutName(defaultFilename);
     setFile(null);
     setPreview(null);
     setResult(null);
@@ -104,17 +118,17 @@ export function CustomResizeTool({ embedded = false, className = "" }: Props) {
 
   return (
     <div className={className}>
-      {embedded && (
+      {(embedded || headline) && (
         <div className="mb-5 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
           <div>
             <p className="text-xs font-bold uppercase tracking-[0.16em] text-[var(--accent)]">
-              Custom KB tool
+              Exact KB tool
             </p>
             <h2 className="mt-1 font-[family-name:var(--font-display)] text-2xl font-extrabold text-[var(--ink)] sm:text-3xl">
-              Set min / max KB and resize here
+              {headline ?? "Set min / max KB and resize here"}
             </h2>
             <p className="mt-1 text-sm text-[var(--muted)]">
-              No need to open another page — upload, resize, download.
+              {subhead ?? "No need to open another page — upload, resize, download."}
             </p>
           </div>
           <div className="flex flex-wrap gap-2">

@@ -2,6 +2,7 @@ import { CustomResizeTool } from "@/components/CustomResizeTool";
 import { ExamPicker } from "@/components/ExamPicker";
 import { Features, TrustPills } from "@/components/Features";
 import { Faq } from "@/components/Faq";
+import { HotToolsStrip } from "@/components/HotToolsStrip";
 import { IndiaKeywordHub } from "@/components/IndiaKeywordHub";
 import { JsonLd, faqJsonLd } from "@/components/JsonLd";
 import { SeoKeywordBlock } from "@/components/SeoKeywordBlock";
@@ -9,20 +10,23 @@ import { SevaDeskPartnerStrip } from "@/components/SevaDeskPartner";
 import { ShareButtons } from "@/components/ShareButtons";
 import { ToolsGrid } from "@/components/ToolsGrid";
 import Link from "next/link";
-import { featuredTools } from "@/lib/toolsCatalog";
 
 const HOME_FAQS = [
   {
     q: "How do I reduce image size to 50KB online free?",
-    a: "Use Reduce to KB on this homepage: set max to 50KB (or 20–50), upload your photo, and download when the output is in range.",
+    a: "Open Compress to 50KB (or use Reduce to KB on this homepage): upload your photo and download when the output is at or under 50KB.",
   },
   {
     q: "How do I reduce signature size to 10KB–20KB?",
-    a: "On the homepage tool, tap “Sign 10–20 KB”, upload the signature, then download the JPG when it falls inside 10–20KB.",
+    a: "Use Signature cleaner, or on the homepage tool tap “Sign 10–20 KB”, upload, then download when it falls inside 10–20KB.",
   },
   {
     q: "Photo size / signature size kam kaise kare without app?",
-    a: "Use sizetokb.in in Chrome or Safari on phone or laptop — no install. Processing stays on your device.",
+    a: "Use sizetokb.in in Chrome or Safari — Hindi guides + 20/50/100KB tools. No install; processing stays on your device.",
+  },
+  {
+    q: "How do I convert PDF to JPG or unlock a PDF?",
+    a: "Use PDF to JPG for page images, or Unlock PDF to remove an open password — both run in your browser on SizeToKB.",
   },
   {
     q: "What if my exam is not listed?",
@@ -31,8 +35,6 @@ const HOME_FAQS = [
 ];
 
 export default function HomePage() {
-  const featured = featuredTools().filter((t) => !t.href.startsWith("/#"));
-
   return (
     <>
       <JsonLd data={faqJsonLd(HOME_FAQS)} />
@@ -56,8 +58,8 @@ export default function HomePage() {
               <span className="text-[var(--accent)]">exact KB</span> your form needs
             </h1>
             <p className="mx-auto mt-4 max-w-2xl text-base leading-relaxed text-[var(--muted)] sm:text-lg">
-              Reduce photo size to 20–50 KB and signature size to 10–20 KB for SSC, UPSC, NEET, JEE,
-              Railway, IBPS and 190+ exams — right on this page.
+              Compress photo to 20KB / 50KB / 100KB, signature to 10–20KB, plus PDF to JPG, unlock
+              PDF, merge & compress — for SSC, UPSC, NEET, Railway, IBPS and more.
             </p>
             <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
               <a
@@ -66,36 +68,26 @@ export default function HomePage() {
               >
                 Reduce size to KB now
               </a>
-              <a
-                href="#tools"
+              <Link
+                href="/compress-to-50kb/"
                 className="inline-flex rounded-xl border border-[var(--line)] bg-white px-5 py-3 text-sm font-bold text-[var(--ink)] hover:border-[var(--accent)]"
               >
-                Browse all tools
-              </a>
-              <a
-                href="#presets"
+                Compress to 50KB
+              </Link>
+              <Link
+                href="/pdf-to-jpg/"
                 className="inline-flex rounded-xl border border-[var(--line)] bg-white px-5 py-3 text-sm font-bold text-[var(--ink)] hover:border-[var(--accent)]"
               >
-                Exam presets
-              </a>
+                PDF to JPG
+              </Link>
             </div>
             <div className="mt-5 flex justify-center">
               <TrustPills />
             </div>
           </div>
 
-          {/* Featured tools — always visible */}
-          <div className="animate-rise-delay mx-auto mt-8 grid max-w-5xl gap-2 sm:grid-cols-2 lg:grid-cols-3">
-            {featured.slice(0, 6).map((tool) => (
-              <Link
-                key={tool.href}
-                href={tool.href}
-                className="rounded-2xl border border-[var(--line)] bg-white/90 px-4 py-3 text-left shadow-sm transition hover:border-[var(--accent)]"
-              >
-                <span className="block text-sm font-bold text-[var(--ink)]">{tool.label}</span>
-                <span className="mt-0.5 block text-xs text-[var(--muted)]">{tool.blurb}</span>
-              </Link>
-            ))}
+          <div className="animate-rise-delay mx-auto mt-8 max-w-5xl">
+            <HotToolsStrip />
           </div>
         </div>
       </section>
@@ -131,16 +123,16 @@ export default function HomePage() {
       <SeoKeywordBlock
         heading="Reduce image size & reduce signature size online free (KB)"
         paragraphs={[
-          "People search reduce image size online free, reduce photo size to 50KB, reduce signature size to 20KB, photo size kam kaise kare, signature size kam kaise kare, compress image to 20KB / 50KB, and passport size photo maker. SizeToKB is built for those exact form limits.",
-          "Also: reduce PDF size online, HEIC to JPG, image to PDF, and exam photo packs — always verify the latest official notification.",
+          "People search compress image to 50KB, compress image to 20KB, reduce photo size to 50KB, photo size kam kaise kare, signature size kam kaise kare, PDF to JPG, unlock PDF, jpg to pdf, and merge PDF. SizeToKB is built for those exact jobs.",
+          "Also: compress PDF, HEIC to JPG, Word to PDF, and exam photo packs — always verify the latest official notification.",
         ]}
         links={[
-          { href: "/#custom-tool", label: "Reduce size to KB" },
-          { href: "/passport-photo/", label: "Passport photo" },
+          { href: "/compress-to-50kb/", label: "Compress to 50KB" },
+          { href: "/compress-to-20kb/", label: "Compress to 20KB" },
+          { href: "/pdf-to-jpg/", label: "PDF to JPG" },
+          { href: "/pdf-unlock/", label: "Unlock PDF" },
+          { href: "/size-kam-kaise-kare/", label: "Size kam kaise kare" },
           { href: "/signature-cleaner/", label: "Reduce signature size" },
-          { href: "/pdf-compressor/", label: "Reduce PDF size" },
-          { href: "/ssc-cgl/", label: "SSC CGL" },
-          { href: "/neet-ug/", label: "NEET photo size" },
         ]}
       />
     </>

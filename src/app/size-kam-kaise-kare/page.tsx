@@ -4,44 +4,60 @@ import { LegalLayout } from "@/components/LegalLayout";
 import { pageMeta } from "@/lib/seo";
 
 export const metadata: Metadata = pageMeta({
-  title: "Photo Size Kam Kaise Kare — Reduce Image & Signature Size to KB Free",
+  title: "Photo Size Kam Kaise Kare — 20KB 50KB Photo Online Free",
   description:
-    "Photo size kam kaise kare aur signature size kam kaise kare — SizeToKB.in par free. Reduce image size to 20KB/50KB, signature to 10–20KB for SSC, Bank, Railway forms.",
+    "Photo size kam kaise kare? SizeToKB.in par free — photo ko 20KB, 50KB, 100KB mein compress karein. Signature size kam kaise kare (10–20KB). SSC, Bank, Railway forms.",
   path: "/size-kam-kaise-kare/",
   keywords: [
     "photo size kam kaise kare",
-    "signature size kam kaise kare",
+    "photo size kam kaise kare online",
+    "20kb 50kb photo kaise banaye",
     "image size reduce kaise kare",
     "photo size reduce online free",
-    "20kb 50kb photo kaise banaye",
+    "signature size kam kaise kare",
   ],
 });
 
 const LINKS = [
-  { href: "/#custom-tool", label: "Reduce size to KB (home tool)" },
-  { href: "/signature-cleaner/", label: "Signature size kam kare (10–20 KB)" },
-  { href: "/bulk-reduce/", label: "Bulk reduce photos" },
-  { href: "/passport-photo/", label: "Passport size photo" },
-  { href: "/upload-fixer/", label: "Portal upload error fixer" },
-  { href: "/photo-guide/", label: "Photo quality check" },
+  { href: "/compress-to-20kb/", label: "Photo 20KB mein compress karein" },
+  { href: "/compress-to-50kb/", label: "Photo 50KB mein compress karein" },
+  { href: "/compress-to-100kb/", label: "Photo 100KB mein compress karein" },
+  { href: "/signature-size-kam-kaise-kare/", label: "Signature size kam kaise kare" },
+  { href: "/pdf-size-kam-kaise-kare/", label: "PDF size kam kaise kare" },
+  { href: "/signature-cleaner/", label: "Signature 10–20 KB tool" },
+  { href: "/passport-photo/", label: "Passport size photo maker" },
+  { href: "/upload-fixer/", label: "Form reject / upload error fixer" },
   { href: "/heic-to-jpg/", label: "iPhone HEIC to JPG" },
-  { href: "/marksheet-pdf/", label: "Marksheet PDF size kam kare" },
+  { href: "/#custom-tool", label: "Custom min–max KB tool" },
 ];
 
 export default function SizeKamKaiseKarePage() {
   return (
-    <LegalLayout title="Photo / Signature Size Kam Kaise Kare">
+    <LegalLayout title="Photo Size Kam Kaise Kare (20KB / 50KB / 100KB)">
       <p>
-        <strong>Photo size kam kaise kare</strong> aur <strong>signature size kam kaise kare</strong>{" "}
-        — SizeToKB.in par free tools se aap exact KB target (20KB, 50KB, 10–20KB) hit kar sakte ho.
-        Processing browser mein hoti hai; file server par upload nahi hoti.
+        <strong>Photo size kam kaise kare</strong> — SizeToKB.in par free tool se aap photo ko exact{" "}
+        <strong>20KB, 50KB ya 100KB</strong> tak compress kar sakte ho. Processing browser mein hoti
+        hai; file server par upload nahi hoti.
       </p>
-      <h2>Step-by-step</h2>
+      <h2>Sabse tez tareeka</h2>
       <ol>
-        <li>Home page par Custom tool kholo — min/max KB daalo (jaise photo 20–50, sign 10–20).</li>
-        <li>Photo ya signature upload karo → Resize → Download.</li>
-        <li>Agar portal reject kare to Upload Error Fixer mein message paste karo.</li>
+        <li>
+          Neeche tool link kholo — <Link href="/compress-to-50kb/">50KB</Link> (SSC/Bank sabse
+          common), <Link href="/compress-to-20kb/">20KB</Link>, ya{" "}
+          <Link href="/compress-to-100kb/">100KB</Link>.
+        </li>
+        <li>Photo upload karo → Resize → Download.</li>
+        <li>
+          Agar form reject kare to <Link href="/upload-fixer/">Upload Error Fixer</Link> mein message
+          paste karo.
+        </li>
       </ol>
+      <h2>Signature aur PDF</h2>
+      <p>
+        <Link href="/signature-size-kam-kaise-kare/">Signature size kam kaise kare</Link> (10–20KB)
+        aur <Link href="/pdf-size-kam-kaise-kare/">PDF size kam kaise kare</Link> (100/200/500KB)
+        ke alag guides bhi hain.
+      </p>
       <h2>Tools</h2>
       <ul>
         {LINKS.map((l) => (
@@ -51,8 +67,8 @@ export default function SizeKamKaiseKarePage() {
         ))}
       </ul>
       <p>
-        English: reduce image size online free, reduce signature size to 20KB, compress photo to
-        50KB for SSC / IBPS / Railway form fill.
+        English: compress image to 20KB / 50KB / 100KB, reduce photo size online free for SSC IBPS
+        Railway form fill.
       </p>
     </LegalLayout>
   );

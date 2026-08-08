@@ -2,10 +2,11 @@ import type { Metadata } from "next";
 import { pageMeta } from "@/lib/seo";
 
 export const metadata: Metadata = pageMeta({
-  title: "Split PDF Online Free — Extract Pages to Reduce Upload Size",
-  description: "Split a PDF into separate pages or extract a range online free to reduce upload size — SizeToKB.in",
+  title: "Split PDF Online Free — Extract PDF Pages",
+  description:
+    "Split PDF online free. Extract pages or a page range to reduce upload size — SizeToKB.in",
   path: "/pdf-split/",
-  keywords: ["split PDF online free","extract PDF pages","PDF page splitter"],
+  keywords: ["split pdf", "split PDF online free", "extract PDF pages", "PDF page splitter"],
 });
 
 export default function Layout({ children }: { children: React.ReactNode }) {

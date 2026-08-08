@@ -7,9 +7,9 @@ import { SARKARISUCHI, sarkarisuchiEnabled, sarkarisuchiJobsUrl } from "@/lib/se
 
 const QUICK = [
   { href: "/#custom-tool", label: "Reduce to KB" },
-  { href: "/bulk-reduce/", label: "Bulk" },
-  { href: "/form-wizard/", label: "Form pack" },
-  { href: "/upload-fixer/", label: "Fix upload" },
+  { href: "/compress-to-50kb/", label: "50KB" },
+  { href: "/pdf-to-jpg/", label: "PDF to JPG" },
+  { href: "/pdf-unlock/", label: "Unlock PDF" },
   { href: "/#tools", label: "All tools" },
 ];
 

@@ -20,6 +20,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
     "/image-reverse",
     "/pdf-to-word",
     "/word-to-pdf",
+    "/pdf-to-jpg",
+    "/pdf-unlock",
     "/passport-photo",
     "/white-background",
     "/signature-cleaner",
@@ -40,6 +42,11 @@ export default function sitemap(): MetadataRoute.Sitemap {
     "/watermark",
     "/photo-guide",
     "/size-kam-kaise-kare",
+    "/signature-size-kam-kaise-kare",
+    "/pdf-size-kam-kaise-kare",
+    "/compress-to-20kb",
+    "/compress-to-50kb",
+    "/compress-to-100kb",
     "/about-us",
     "/contact-us",
     "/privacy-policy",
@@ -62,7 +69,18 @@ export default function sitemap(): MetadataRoute.Sitemap {
             path === "/form-wizard" ||
             path === "/upload-fixer" ||
             path === "/marksheet-pdf" ||
-            path === "/size-kam-kaise-kare"
+            path === "/size-kam-kaise-kare" ||
+            path === "/pdf-to-jpg" ||
+            path === "/pdf-unlock" ||
+            path === "/image-to-pdf" ||
+            path === "/pdf-merge" ||
+            path === "/pdf-to-word" ||
+            path === "/word-to-pdf" ||
+            path === "/compress-to-20kb" ||
+            path === "/compress-to-50kb" ||
+            path === "/compress-to-100kb" ||
+            path === "/signature-size-kam-kaise-kare" ||
+            path === "/pdf-size-kam-kaise-kare"
           ? 0.9
           : 0.5,
   }));

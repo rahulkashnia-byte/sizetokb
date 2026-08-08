@@ -52,6 +52,24 @@ const RULES: { match: RegExp; suggestion: FixSuggestion }[] = [
     },
   },
   {
+    match: /password|encrypted|locked pdf|protected pdf|cannot open pdf/i,
+    suggestion: {
+      title: "Unlock PDF password",
+      reason: "PDF is password protected — unlock then upload or compress.",
+      href: "/pdf-unlock/",
+      cta: "Unlock PDF",
+    },
+  },
+  {
+    match: /pdf to (jpg|image|jpeg)|need (jpg|image) from pdf/i,
+    suggestion: {
+      title: "PDF to JPG",
+      reason: "Convert PDF pages to JPG images for photo-style uploads.",
+      href: "/pdf-to-jpg/",
+      cta: "PDF → JPG",
+    },
+  },
+  {
     match: /pdf|document.*size|certificate/i,
     suggestion: {
       title: "Reduce PDF size",

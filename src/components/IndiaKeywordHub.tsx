@@ -52,10 +52,39 @@ export function IndiaKeywordHub() {
         <div>
           <h3 className="text-lg font-bold text-[var(--ink)]">Popular KB targets aspirants type</h3>
           <ul className="mt-2 columns-1 gap-x-8 text-sm text-[var(--muted)] sm:columns-2">
-            {[
+              <li className="mb-1 list-disc ml-4">
+                <Link href="/compress-to-50kb/" className="font-semibold text-[var(--accent-ink)]">
+                  compress image to 50kb
+                </Link>
+              </li>
+              <li className="mb-1 list-disc ml-4">
+                <Link href="/compress-to-20kb/" className="font-semibold text-[var(--accent-ink)]">
+                  compress image to 20kb
+                </Link>
+              </li>
+              <li className="mb-1 list-disc ml-4">
+                <Link href="/compress-to-100kb/" className="font-semibold text-[var(--accent-ink)]">
+                  compress image to 100kb
+                </Link>
+              </li>
+              <li className="mb-1 list-disc ml-4">
+                <Link href="/size-kam-kaise-kare/" className="font-semibold text-[var(--accent-ink)]">
+                  photo size kam kaise kare
+                </Link>
+              </li>
+              <li className="mb-1 list-disc ml-4">
+                <Link href="/pdf-to-jpg/" className="font-semibold text-[var(--accent-ink)]">
+                  pdf to jpg
+                </Link>
+              </li>
+              <li className="mb-1 list-disc ml-4">
+                <Link href="/pdf-unlock/" className="font-semibold text-[var(--accent-ink)]">
+                  unlock pdf / remove password
+                </Link>
+              </li>
+              {[
               "reduce image size in KB",
               "reduce image size for online form",
-              "compress image to 20kb / 50kb",
               "resize photo to 20kb 50kb",
               "resize signature to 10kb 20kb",
               "JPG compressor online free",
@@ -78,23 +107,26 @@ export function IndiaKeywordHub() {
         </div>
 
         <div className="flex flex-wrap gap-2">
-          <Link href="/custom/" className="rounded-lg bg-[var(--accent)] px-3 py-2 text-xs font-bold text-white">
-            Reduce to any KB (Custom)
+          <Link href="/compress-to-50kb/" className="rounded-lg bg-[var(--accent)] px-3 py-2 text-xs font-bold text-white">
+            Compress to 50KB
           </Link>
-          <Link href="/image-resizer/" className="rounded-lg border border-[var(--line)] px-3 py-2 text-xs font-bold">
-            Image size reducer
+          <Link href="/compress-to-20kb/" className="rounded-lg border border-[var(--line)] px-3 py-2 text-xs font-bold">
+            Compress to 20KB
           </Link>
-          <Link href="/pdf-compressor/" className="rounded-lg border border-[var(--line)] px-3 py-2 text-xs font-bold">
-            PDF shrink
+          <Link href="/compress-to-100kb/" className="rounded-lg border border-[var(--line)] px-3 py-2 text-xs font-bold">
+            Compress to 100KB
           </Link>
-          <Link href="/image-cropper/" className="rounded-lg border border-[var(--line)] px-3 py-2 text-xs font-bold">
-            Crop photo
+          <Link href="/size-kam-kaise-kare/" className="rounded-lg border border-[var(--line)] px-3 py-2 text-xs font-bold">
+            Photo size kam kaise kare
           </Link>
-          <Link href="/ssc-gd/" className="rounded-lg border border-[var(--line)] px-3 py-2 text-xs font-bold">
-            SSC photo / sign size
+          <Link href="/pdf-to-jpg/" className="rounded-lg border border-[var(--line)] px-3 py-2 text-xs font-bold">
+            PDF to JPG
           </Link>
-          <Link href="/ibps-po/" className="rounded-lg border border-[var(--line)] px-3 py-2 text-xs font-bold">
-            Bank exam photo size
+          <Link href="/pdf-unlock/" className="rounded-lg border border-[var(--line)] px-3 py-2 text-xs font-bold">
+            Unlock PDF
+          </Link>
+          <Link href="/signature-cleaner/" className="rounded-lg border border-[var(--line)] px-3 py-2 text-xs font-bold">
+            Signature 10–20KB
           </Link>
         </div>
       </div>
