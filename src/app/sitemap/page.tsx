@@ -1,0 +1,78 @@
+import type { Metadata } from "next";
+import Link from "next/link";
+import { LegalLayout } from "@/components/LegalLayout";
+import { EXAMS } from "@/lib/exams";
+import { SITE } from "@/lib/site";
+import { pageMeta } from "@/lib/seo";
+
+export const metadata: Metadata = pageMeta({
+  title: "Sitemap — All Exam Photo Resizers & Tools | SizeToKB",
+  description:
+    "Complete sitemap of SizeToKB.in — exam photo resizers, image compressor KB tools, PDF tools, and legal pages for Indian aspirants.",
+  path: "/sitemap",
+  keywords: [
+    "SizeToKB sitemap",
+    "SSC photo resizer list",
+    "exam photo size tools India",
+    "compress image to KB",
+  ],
+});
+
+const TOOLS = [
+  { href: "/", label: "Exam Photo & Signature Resizer (Home)" },
+  { href: "/image-resizer", label: "Image Resizer — exact KB & dimensions" },
+  { href: "/custom", label: "Custom Requirements Resizer" },
+  { href: "/image-to-pdf", label: "Image to PDF Converter" },
+  { href: "/pdf-compressor", label: "PDF Compressor Online" },
+];
+
+const LEGAL = [
+  { href: "/about-us", label: "About Us" },
+  { href: "/contact-us", label: "Contact Us" },
+  { href: "/privacy-policy", label: "Privacy Policy" },
+  { href: "/terms-of-service", label: "Terms of Service" },
+  { href: "/disclaimer", label: "Disclaimer" },
+];
+
+export default function SitemapPage() {
+  const sorted = [...EXAMS].sort((a, b) => a.name.localeCompare(b.name));
+
+  return (
+    <LegalLayout title="Sitemap">
+      <p>
+        Browse every tool and exam photo resizer on {SITE.name}. Use this HTML sitemap for quick
+        navigation; search engines also receive our XML sitemap at{" "}
+        <a href={`${SITE.url}/sitemap.xml`}>{SITE.url}/sitemap.xml</a>.
+      </p>
+
+      <h2>Tools</h2>
+      <ul>
+        {TOOLS.map((t) => (
+          <li key={t.href}>
+            <Link href={t.href}>{t.label}</Link>
+          </li>
+        ))}
+      </ul>
+
+      <h2>Company & legal</h2>
+      <ul>
+        {LEGAL.map((t) => (
+          <li key={t.href}>
+            <Link href={t.href}>{t.label}</Link>
+          </li>
+        ))}
+      </ul>
+
+      <h2>All exam photo & signature resizers ({sorted.length})</h2>
+      <ul className="columns-1 gap-x-8 sm:columns-2">
+        {sorted.map((e) => (
+          <li key={e.slug} className="break-inside-avoid">
+            <Link href={`/${e.slug}`}>
+              {e.name} photo size & signature resize
+            </Link>
+          </li>
+        ))}
+      </ul>
+    </LegalLayout>
+  );
+}
