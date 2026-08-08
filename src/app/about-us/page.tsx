@@ -44,6 +44,13 @@ export default function AboutPage() {
         your documents on your phone or laptop.
       </p>
 
+      <h2>Related: government jobs &amp; exam updates</h2>
+      <p>
+        For vacancies, important dates, results and admit cards, we partner with{" "}
+        <strong>SevaDesk</strong> — clearer summaries of public recruitment notices with official
+        apply links. Resize your photo here, then check the notice details there.
+      </p>
+
       <h2>Contact</h2>
       <p>
         Reach us at <a href={`mailto:${SITE.email}`}>{SITE.email}</a> or the{" "}

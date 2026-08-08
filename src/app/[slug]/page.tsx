@@ -5,6 +5,7 @@ import { Faq } from "@/components/Faq";
 import { TrustPills } from "@/components/Features";
 import { JsonLd, breadcrumbJsonLd, faqJsonLd } from "@/components/JsonLd";
 import { SeoKeywordBlock } from "@/components/SeoKeywordBlock";
+import { SevaDeskPartnerStrip } from "@/components/SevaDeskPartner";
 import { EXAMS, getExam } from "@/lib/exams";
 import { formatSpecSummary } from "@/lib/format";
 import { SITE } from "@/lib/site";
@@ -157,6 +158,8 @@ export default async function ExamPage({ params }: { params: Promise<{ slug: str
       </section>
 
       <Faq items={faqs} />
+
+      <SevaDeskPartnerStrip examSlug={exam.slug} examName={exam.name} />
 
       <SeoKeywordBlock
         heading={`Reduce ${exam.name} image size & signature size online free`}

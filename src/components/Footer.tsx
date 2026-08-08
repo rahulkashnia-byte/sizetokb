@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { SevaDeskFooterBlock } from "@/components/SevaDeskPartner";
 import { EXAMS } from "@/lib/exams";
 import { SITE } from "@/lib/site";
 
@@ -121,6 +122,8 @@ export function Footer() {
             ))}
           </div>
         </div>
+
+        <SevaDeskFooterBlock />
 
         <div className="mt-8 space-y-3 border-t border-white/10 pt-6 text-xs leading-relaxed text-white/40">
           <p>

@@ -4,6 +4,7 @@ import { Faq } from "@/components/Faq";
 import { IndiaKeywordHub } from "@/components/IndiaKeywordHub";
 import { JsonLd, faqJsonLd } from "@/components/JsonLd";
 import { SeoKeywordBlock } from "@/components/SeoKeywordBlock";
+import { SevaDeskPartnerStrip } from "@/components/SevaDeskPartner";
 import Link from "next/link";
 
 const HOME_FAQS = [
@@ -93,6 +94,7 @@ export default function HomePage() {
       </div>
 
       <Features />
+      <SevaDeskPartnerStrip />
       <Faq items={HOME_FAQS} />
       <IndiaKeywordHub />
 

@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { SevaDeskPartnerStrip } from "@/components/SevaDeskPartner";
 import { pageMeta } from "@/lib/seo";
 
 export const metadata: Metadata = pageMeta({
@@ -17,5 +18,10 @@ export const metadata: Metadata = pageMeta({
 });
 
 export default function CustomLayout({ children }: { children: React.ReactNode }) {
-  return children;
+  return (
+    <>
+      {children}
+      <SevaDeskPartnerStrip />
+    </>
+  );
 }
