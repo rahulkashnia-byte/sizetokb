@@ -11,9 +11,11 @@ export default function PdfCompressorPage() {
   const [file, setFile] = useState<File | null>(null);
   const [maxKb, setMaxKb] = useState(200);
   const [busy, setBusy] = useState(false);
+  const [progress, setProgress] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [resultKb, setResultKb] = useState<number | null>(null);
   const [origKb, setOrigKb] = useState<number | null>(null);
+  const [pages, setPages] = useState<number | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
   const run = async () => {
@@ -21,22 +23,29 @@ export default function PdfCompressorPage() {
       setError("Choose a PDF first");
       return;
     }
+    if (maxKb < 20) {
+      setError("Target should be at least 20 KB");
+      return;
+    }
     setBusy(true);
     setError(null);
+    setProgress(null);
     try {
       setOrigKb(Math.round((file.size / 1024) * 10) / 10);
-      const { blob, sizeKb } = await compressPdfFile(file, maxKb);
+      const { blob, sizeKb, pages: pageCount } = await compressPdfFile(file, maxKb, setProgress);
       setResultKb(sizeKb);
+      setPages(pageCount);
       downloadBlob(blob, file.name.replace(/\.pdf$/i, "") + "-compressed.pdf");
       if (sizeKb > maxKb) {
         setError(
-          `Compressed to ${sizeKb} KB (still above ${maxKb} KB). For image-heavy PDFs, rebuild via Image → PDF with a lower quality target.`
+          `Best effort: ${sizeKb} KB (still above ${maxKb} KB). Try a higher target, or fewer pages / Image→PDF for photo-only files.`
         );
       }
     } catch (e) {
       setError(e instanceof Error ? e.message : "Compression failed");
     } finally {
       setBusy(false);
+      setProgress(null);
     }
   };
 
@@ -44,10 +53,11 @@ export default function PdfCompressorPage() {
     <div className="mx-auto max-w-3xl px-4 py-10 sm:px-6">
       <div className="text-center">
         <h1 className="font-[family-name:var(--font-display)] text-3xl text-[var(--ink)] sm:text-4xl">
-          PDF <span className="text-[var(--accent)]">Compressor</span>
+          PDF <span className="text-[var(--accent)]">Shrink</span>
         </h1>
         <p className="mt-3 text-[var(--muted)]">
-          Shrink a PDF toward a target size. Processing stays in your browser.
+          Actually recompresses pages (render → JPEG → rebuild) to hit your target KB — in the
+          browser.
         </p>
         <TrustPills />
       </div>
@@ -78,6 +88,7 @@ export default function PdfCompressorPage() {
           onChange={(e) => {
             setFile(e.target.files?.[0] ?? null);
             setResultKb(null);
+            setPages(null);
             setError(null);
           }}
         />
@@ -85,8 +96,10 @@ export default function PdfCompressorPage() {
         {origKb != null && resultKb != null && (
           <p className="mt-3 text-center text-sm text-[var(--accent-ink)]">
             {origKb} KB → {resultKb} KB
+            {pages != null ? ` · ${pages} page${pages === 1 ? "" : "s"}` : ""}
           </p>
         )}
+        {progress && <p className="mt-3 text-center text-sm text-[var(--muted)]">{progress}</p>}
         {error && <p className="mt-3 text-center text-sm text-amber-700">{error}</p>}
 
         <button
@@ -95,14 +108,17 @@ export default function PdfCompressorPage() {
           onClick={() => void run()}
           className="mt-5 w-full rounded-xl bg-[var(--accent)] py-3 text-sm font-bold text-white hover:brightness-95 disabled:opacity-60"
         >
-          {busy ? "Compressing…" : "Compress & Download"}
+          {busy ? "Shrinking…" : "Shrink & Download"}
         </button>
+        <p className="mt-3 text-center text-xs text-[var(--muted)]">
+          Tip: scanned marksheets/photos compress well. Already-tiny text PDFs may not shrink much.
+        </p>
       </div>
 
       <ShareButtons
         className="mt-6"
-        title="PDF compressor online free — SizeToKB"
-        text="Compress PDF size in KB free for exam uploads on SizeToKB.in"
+        title="PDF compressor / shrink online free — SizeToKB"
+        text="Shrink PDF size in KB free for exam uploads on SizeToKB.in"
         path="/pdf-compressor/"
       />
 
@@ -110,11 +126,12 @@ export default function PdfCompressorPage() {
         heading="PDF compressor online free — reduce PDF size in KB"
         paragraphs={[
           "Compress PDF online free for government exam and job application uploads. Search intent we cover: PDF compressor online free, reduce PDF size online, compress PDF to KB, PDF size reducer India, and exam PDF compressor.",
-          "For image-heavy PDFs that stay large after compression, rebuild using Image to PDF with a lower quality target.",
+          "SizeToKB re-renders each page and rebuilds the file so image-heavy PDFs actually get smaller.",
         ]}
         links={[
           { href: "/image-to-pdf/", label: "Image to PDF" },
-          { href: "/image-resizer/", label: "Compress image to KB" },
+          { href: "/pdf-to-word/", label: "PDF to Word" },
+          { href: "/word-to-pdf/", label: "Word to PDF" },
         ]}
       />
     </div>

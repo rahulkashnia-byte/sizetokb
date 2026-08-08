@@ -31,6 +31,31 @@ const TOOLS = [
     title: "Photos → PDF",
     desc: "Merge pages fast",
   },
+  {
+    href: "/image-merger/",
+    title: "Image merger",
+    desc: "Join photos in one JPG",
+  },
+  {
+    href: "/image-cropper/",
+    title: "Image cropper",
+    desc: "Crop for form photos",
+  },
+  {
+    href: "/image-reverse/",
+    title: "Flip / rotate",
+    desc: "Mirror or turn photos",
+  },
+  {
+    href: "/pdf-to-word/",
+    title: "PDF → Word",
+    desc: "Text PDF to .docx",
+  },
+  {
+    href: "/word-to-pdf/",
+    title: "Word → PDF",
+    desc: "DOCX for portals",
+  },
 ];
 
 export function Header() {
@@ -70,7 +95,7 @@ export function Header() {
             </button>
 
             {open && (
-              <div className="absolute right-0 top-full mt-2 w-64 overflow-hidden rounded-xl border border-[var(--line)] bg-white shadow-xl">
+              <div className="absolute right-0 top-full mt-2 max-h-[70vh] w-72 overflow-y-auto overflow-x-hidden rounded-xl border border-[var(--line)] bg-white shadow-xl">
                 {TOOLS.map((t) => (
                   <Link
                     key={t.href}

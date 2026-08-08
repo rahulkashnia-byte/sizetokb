@@ -84,6 +84,12 @@ export function IndiaKeywordHub() {
           <Link href="/image-resizer/" className="rounded-lg border border-[var(--line)] px-3 py-2 text-xs font-bold">
             Image size reducer
           </Link>
+          <Link href="/pdf-compressor/" className="rounded-lg border border-[var(--line)] px-3 py-2 text-xs font-bold">
+            PDF shrink
+          </Link>
+          <Link href="/image-cropper/" className="rounded-lg border border-[var(--line)] px-3 py-2 text-xs font-bold">
+            Crop photo
+          </Link>
           <Link href="/ssc-gd/" className="rounded-lg border border-[var(--line)] px-3 py-2 text-xs font-bold">
             SSC photo / sign size
           </Link>

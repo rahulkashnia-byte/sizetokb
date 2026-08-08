@@ -62,6 +62,31 @@ export function Footer() {
                   PDF compressor
                 </Link>
               </li>
+              <li>
+                <Link href="/image-merger/" className="text-white/75 hover:text-white">
+                  Image merger
+                </Link>
+              </li>
+              <li>
+                <Link href="/image-cropper/" className="text-white/75 hover:text-white">
+                  Image cropper
+                </Link>
+              </li>
+              <li>
+                <Link href="/image-reverse/" className="text-white/75 hover:text-white">
+                  Flip / rotate
+                </Link>
+              </li>
+              <li>
+                <Link href="/pdf-to-word/" className="text-white/75 hover:text-white">
+                  PDF to Word
+                </Link>
+              </li>
+              <li>
+                <Link href="/word-to-pdf/" className="text-white/75 hover:text-white">
+                  Word to PDF
+                </Link>
+              </li>
             </ul>
           </div>
           <div>

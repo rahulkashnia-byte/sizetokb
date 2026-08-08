@@ -106,13 +106,15 @@ export default function HomePage() {
         heading="Also searched: compress image, resize photo, JPG compressor, form fill photo"
         paragraphs={[
           "Besides reduce image size / reduce signature size, SizeToKB covers compress image to 20KB, compress image to 50KB, photo resize online free, signature resize online free, passport size photo maker, decrease image size online, make photo smaller KB, and sarkari form photo size.",
-          "Tool extras: image to PDF converter and PDF compressor online free when certificates must stay under a portal upload cap. Always match the latest official notification.",
+          "Tool extras: image to PDF, PDF shrink, image merger/cropper/flip, and PDF↔Word converters when portals need documents under a size cap. Always match the latest official notification.",
         ]}
         links={[
           { href: "/custom/", label: "Custom reduce size" },
           { href: "/image-resizer/", label: "Compress image to KB" },
           { href: "/image-to-pdf/", label: "Image to PDF" },
-          { href: "/pdf-compressor/", label: "PDF compressor" },
+          { href: "/pdf-compressor/", label: "PDF shrink" },
+          { href: "/image-merger/", label: "Image merger" },
+          { href: "/pdf-to-word/", label: "PDF to Word" },
           { href: "/ssc-cgl/", label: "SSC CGL" },
           { href: "/neet-ug/", label: "NEET photo size" },
         ]}

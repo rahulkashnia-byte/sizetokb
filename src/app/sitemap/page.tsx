@@ -24,6 +24,11 @@ const TOOLS = [
   { href: "/custom", label: "Custom Requirements Resizer" },
   { href: "/image-to-pdf", label: "Image to PDF Converter" },
   { href: "/pdf-compressor", label: "PDF Compressor Online" },
+  { href: "/image-merger", label: "Image Merger" },
+  { href: "/image-cropper", label: "Image Cropper" },
+  { href: "/image-reverse", label: "Image Flip / Rotate" },
+  { href: "/pdf-to-word", label: "PDF to Word" },
+  { href: "/word-to-pdf", label: "Word to PDF" },
 ];
 
 const LEGAL = [

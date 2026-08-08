@@ -91,4 +91,9 @@ export const SITE_KEYWORDS = [
   "PDF compressor online free",
   "image to PDF converter",
   "photo to PDF online",
+  "image merger online free",
+  "image cropper online free",
+  "flip image online",
+  "PDF to Word online free",
+  "Word to PDF online free",
 ] as const;
