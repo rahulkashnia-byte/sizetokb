@@ -24,7 +24,7 @@ export function PassportPhotoMaker() {
   const [crop, setCrop] = useState<CropRect | null>(null);
   const [adjust, setAdjust] = useState<PassportAdjust>(DEFAULT_ADJUST);
   const [bgColor, setBgColor] = useState("#ffffff");
-  const [replaceBg, setReplaceBg] = useState(true);
+  const [replaceBg, setReplaceBg] = useState(false);
   const [format, setFormat] = useState<"image/jpeg" | "image/png">("image/jpeg");
   const [maxKb, setMaxKb] = useState(100);
   const [printCount, setPrintCount] = useState<PrintLayout>(8);

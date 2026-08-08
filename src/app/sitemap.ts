@@ -12,6 +12,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     "/custom",
     "/image-to-pdf",
     "/pdf-compressor",
+    "/pdf-editor",
     "/pdf-merge",
     "/pdf-split",
     "/image-merger",

@@ -58,6 +58,11 @@ export function Footer() {
                 </Link>
               </li>
               <li>
+                <Link href="/pdf-editor/" className="text-white/75 hover:text-white">
+                  Edit PDF
+                </Link>
+              </li>
+              <li>
                 <Link href="/pdf-compressor/" className="text-white/75 hover:text-white">
                   Reduce PDF size
                 </Link>

@@ -120,6 +120,23 @@ export const TOOLS: ToolDef[] = [
     featured: true,
   },
   {
+    href: "/pdf-editor/",
+    label: "Edit PDF",
+    blurb: "Text, highlight, draw, images",
+    category: "pdf",
+    seoTitle: "Edit PDF Online Free — Add Text, Images, Highlight & Draw",
+    seoDescription:
+      "Advanced PDF editor online free: add text, images, highlights, shapes and drawings, then download. Private browser tool — SizeToKB.in",
+    keywords: [
+      "edit PDF online free",
+      "PDF editor online",
+      "annotate PDF free",
+      "add text to PDF",
+      "highlight PDF online",
+    ],
+    featured: true,
+  },
+  {
     href: "/passport-photo/",
     label: "Passport photo maker",
     blurb: "3.5×4.5 cm, crop, background, print",
