@@ -3,6 +3,7 @@
 import { useRef, useState } from "react";
 import { TrustPills } from "@/components/Features";
 import { SeoKeywordBlock } from "@/components/SeoKeywordBlock";
+import { ShareButtons } from "@/components/ShareButtons";
 import { downloadBlob } from "@/lib/image";
 import { imagesToPdf } from "@/lib/pdf";
 
@@ -138,6 +139,13 @@ export default function ImageToPdfPage() {
           {busy ? "Building…" : "Download PDF"}
         </button>
       </div>
+
+      <ShareButtons
+        className="mt-6"
+        title="Image to PDF converter — SizeToKB"
+        text="Convert photos to PDF free for exam documents on SizeToKB.in"
+        path="/image-to-pdf/"
+      />
 
       <SeoKeywordBlock
         heading="Image to PDF converter free for exam documents"

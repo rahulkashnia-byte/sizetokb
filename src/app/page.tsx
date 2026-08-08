@@ -5,6 +5,7 @@ import { IndiaKeywordHub } from "@/components/IndiaKeywordHub";
 import { JsonLd, faqJsonLd } from "@/components/JsonLd";
 import { SeoKeywordBlock } from "@/components/SeoKeywordBlock";
 import { SevaDeskPartnerStrip } from "@/components/SevaDeskPartner";
+import { ShareButtons } from "@/components/ShareButtons";
 import Link from "next/link";
 
 const HOME_FAQS = [
@@ -60,6 +61,9 @@ export default function HomePage() {
             </a>
           </div>
           <TrustPills />
+          <div className="mt-6">
+            <ShareButtons path="/" />
+          </div>
         </div>
 
         <div className="animate-rise-delay kb-meter rounded-2xl p-5 sm:p-6">

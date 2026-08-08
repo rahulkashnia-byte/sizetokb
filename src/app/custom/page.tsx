@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { TrustPills } from "@/components/Features";
 import { SeoKeywordBlock } from "@/components/SeoKeywordBlock";
+import { ShareButtons } from "@/components/ShareButtons";
 import { downloadBlob, processToSpec } from "@/lib/image";
 import type { DocSpec, DimUnit, ProcessedImage } from "@/lib/types";
 
@@ -280,6 +281,14 @@ export default function CustomPage() {
             </button>
           </div>
         </div>
+      </div>
+
+      <div className="mx-auto max-w-3xl px-4 pb-6 sm:px-6">
+        <ShareButtons
+          title="Custom reduce photo & signature size — SizeToKB"
+          text="Reduce photo & signature size to any custom KB free on SizeToKB.in"
+          path="/custom/"
+        />
       </div>
 
       <SeoKeywordBlock

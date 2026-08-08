@@ -6,6 +6,7 @@ import { TrustPills } from "@/components/Features";
 import { JsonLd, breadcrumbJsonLd, faqJsonLd } from "@/components/JsonLd";
 import { SeoKeywordBlock } from "@/components/SeoKeywordBlock";
 import { SevaDeskPartnerStrip } from "@/components/SevaDeskPartner";
+import { ShareButtons } from "@/components/ShareButtons";
 import { EXAMS, getExam } from "@/lib/exams";
 import { formatSpecSummary } from "@/lib/format";
 import { SITE } from "@/lib/site";
@@ -104,6 +105,14 @@ export default async function ExamPage({ params }: { params: Promise<{ slug: str
         </p>
         <TrustPills />
       </section>
+
+      <div className="mx-auto max-w-5xl px-4 pb-6 sm:px-6">
+        <ShareButtons
+          title={`${exam.name} photo & signature size — SizeToKB`}
+          text={`Reduce ${exam.name} photo & signature size to exact KB free on SizeToKB.in`}
+          path={`/${exam.slug}/`}
+        />
+      </div>
 
       <section className="mx-auto max-w-5xl px-4 pb-10 sm:px-6">
         <div className="overflow-hidden rounded-3xl border border-[var(--line)] bg-white shadow-[var(--card-shadow)]">

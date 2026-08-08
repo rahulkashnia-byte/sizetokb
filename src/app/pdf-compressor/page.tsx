@@ -3,6 +3,7 @@
 import { useRef, useState } from "react";
 import { TrustPills } from "@/components/Features";
 import { SeoKeywordBlock } from "@/components/SeoKeywordBlock";
+import { ShareButtons } from "@/components/ShareButtons";
 import { downloadBlob } from "@/lib/image";
 import { compressPdfFile } from "@/lib/pdf";
 
@@ -97,6 +98,13 @@ export default function PdfCompressorPage() {
           {busy ? "Compressing…" : "Compress & Download"}
         </button>
       </div>
+
+      <ShareButtons
+        className="mt-6"
+        title="PDF compressor online free — SizeToKB"
+        text="Compress PDF size in KB free for exam uploads on SizeToKB.in"
+        path="/pdf-compressor/"
+      />
 
       <SeoKeywordBlock
         heading="PDF compressor online free — reduce PDF size in KB"
