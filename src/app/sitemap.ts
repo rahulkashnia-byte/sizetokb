@@ -29,6 +29,17 @@ export default function sitemap(): MetadataRoute.Sitemap {
     "/color-bw",
     "/image-checker",
     "/id-masker",
+    "/bulk-reduce",
+    "/form-wizard",
+    "/upload-fixer",
+    "/pan-photo",
+    "/aadhaar-photo",
+    "/thumb-impression",
+    "/marksheet-pdf",
+    "/pdf-organize",
+    "/watermark",
+    "/photo-guide",
+    "/size-kam-kaise-kare",
     "/about-us",
     "/contact-us",
     "/privacy-policy",
@@ -46,7 +57,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
             path === "/custom" ||
             path === "/pdf-compressor" ||
             path === "/passport-photo" ||
-            path === "/signature-cleaner"
+            path === "/signature-cleaner" ||
+            path === "/bulk-reduce" ||
+            path === "/form-wizard" ||
+            path === "/upload-fixer" ||
+            path === "/marksheet-pdf" ||
+            path === "/size-kam-kaise-kare"
           ? 0.9
           : 0.5,
   }));

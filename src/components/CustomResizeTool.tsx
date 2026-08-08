@@ -280,6 +280,39 @@ export function CustomResizeTool({ embedded = false, className = "" }: Props) {
           </div>
         )}
 
+        {file && result && (
+          <div className="mt-4 rounded-2xl border border-[var(--line)] bg-[var(--wash)] p-4">
+            <p className="text-center text-xs font-bold uppercase tracking-wide text-[var(--muted)]">
+              Before → After size
+            </p>
+            <p className="mt-2 text-center font-[family-name:var(--font-display)] text-2xl font-extrabold text-[var(--ink)]">
+              {(file.size / 1024).toFixed(1)} KB{" "}
+              <span className="text-[var(--accent)]">→</span> {result.sizeKb} KB
+            </p>
+            <p className="mt-1 text-center text-sm text-[var(--accent-ink)]">
+              {(() => {
+                const before = file.size / 1024;
+                const saved = Math.max(0, before - result.sizeKb);
+                const pct = before > 0 ? Math.round((saved / before) * 100) : 0;
+                return `${saved.toFixed(1)} KB smaller (${pct}% reduced)${
+                  result.inRange ? " · within your min–max ✓" : " · adjust min/max if needed"
+                }`;
+              })()}
+            </p>
+            <div className="mt-3 h-2.5 overflow-hidden rounded-full bg-white">
+              <div
+                className="h-full rounded-full bg-[var(--accent)] transition-all"
+                style={{
+                  width: `${Math.min(
+                    100,
+                    (result.sizeKb / Math.max(file.size / 1024, 0.1)) * 100
+                  )}%`,
+                }}
+              />
+            </div>
+          </div>
+        )}
+
         {error && <p className="mt-3 text-center text-sm text-rose-600">{error}</p>}
 
         <div className="mt-5 flex flex-wrap gap-2">

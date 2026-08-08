@@ -104,6 +104,99 @@ export const TOOLS: ToolDef[] = [
     ],
   },
   {
+    href: "/bulk-reduce/",
+    label: "Bulk reduce to KB",
+    blurb: "Many photos → one ZIP",
+    category: "size",
+    seoTitle: "Bulk Reduce Image Size to KB Online Free — Compress Many Photos at Once",
+    seoDescription:
+      "Bulk reduce photo size to exact KB online free. Compress many images to 20KB/50KB for SSC, Bank & exam forms — ZIP download. SizeToKB.in",
+    keywords: [
+      "bulk reduce image size to KB",
+      "compress multiple photos to 50kb",
+      "batch photo compressor online free",
+      "reduce many images size KB",
+    ],
+    featured: true,
+  },
+  {
+    href: "/form-wizard/",
+    label: "Form photo wizard",
+    blurb: "Preset packs for portals",
+    category: "size",
+    seoTitle: "Form Photo Pack Wizard — Reduce Photo & Signature Size to KB",
+    seoDescription:
+      "Admit card / form photo pack wizard. Reduce photo and signature size to portal KB limits for SSC, IBPS, PAN, Aadhaar — SizeToKB.in",
+    keywords: [
+      "form photo size wizard",
+      "admit card photo size",
+      "reduce photo signature pack KB",
+      "SSC form photo pack",
+    ],
+    featured: true,
+  },
+  {
+    href: "/upload-fixer/",
+    label: "Upload error fixer",
+    blurb: "Paste error → exact KB fix",
+    category: "size",
+    seoTitle: "Portal Upload Error Fixer — Reduce File Size to Match KB Limit",
+    seoDescription:
+      "Paste portal upload error text and get exact fix: reduce photo/signature/PDF size to the KB limit your form needs — SizeToKB.in",
+    keywords: [
+      "file size exceeds maximum limit fix",
+      "photo upload error fix",
+      "reduce size to match portal limit",
+      "signature size too large fix",
+    ],
+    featured: true,
+  },
+  {
+    href: "/pan-photo/",
+    label: "Reduce PAN photo",
+    blurb: "PAN card photo to KB",
+    category: "size",
+    seoTitle: "Reduce PAN Card Photo Size Online Free to KB",
+    seoDescription:
+      "Reduce PAN card photo size online free to typical 10–50 KB portal limits. Private browser compressor — SizeToKB.in",
+    keywords: [
+      "reduce PAN photo size",
+      "PAN card photo size KB",
+      "UTIITSL photo size",
+      "compress PAN application photo",
+    ],
+  },
+  {
+    href: "/aadhaar-photo/",
+    label: "Reduce Aadhaar photo",
+    blurb: "UIDAI-style photo to KB",
+    category: "size",
+    seoTitle: "Reduce Aadhaar Photo Size Online Free to KB",
+    seoDescription:
+      "Reduce Aadhaar / UIDAI photo size online free toward common KB limits for update forms — SizeToKB.in",
+    keywords: [
+      "reduce Aadhaar photo size",
+      "Aadhaar photo size KB",
+      "UIDAI photo compress",
+      "Aadhaar photo resize online",
+    ],
+  },
+  {
+    href: "/thumb-impression/",
+    label: "Thumb impression",
+    blurb: "Clean & reduce to 10–40 KB",
+    category: "size",
+    seoTitle: "Reduce Thumb Impression Size Online Free to KB",
+    seoDescription:
+      "Reduce thumb impression size online free to 10–40 KB for police, bank and exam forms — SizeToKB.in",
+    keywords: [
+      "reduce thumb impression size",
+      "thumb impression size KB",
+      "police form thumb impression",
+      "compress thumb impression online",
+    ],
+  },
+  {
     href: "/pdf-compressor/",
     label: "Reduce PDF size",
     blurb: "Shrink PDF toward target KB",
@@ -118,6 +211,82 @@ export const TOOLS: ToolDef[] = [
       "PDF size reducer India",
     ],
     featured: true,
+  },
+  {
+    href: "/marksheet-pdf/",
+    label: "Marksheet PDF shrink",
+    blurb: "200 / 500 KB presets",
+    category: "pdf",
+    seoTitle: "Reduce Marksheet PDF Size Online Free to 200KB 500KB",
+    seoDescription:
+      "Reduce marksheet / certificate PDF size online free toward 200KB, 500KB or 1MB for scholarship and job portals — SizeToKB.in",
+    keywords: [
+      "reduce marksheet PDF size",
+      "compress certificate PDF 200KB",
+      "marksheet PDF compressor",
+      "reduce PDF to 500KB online",
+    ],
+    featured: true,
+  },
+  {
+    href: "/pdf-organize/",
+    label: "Reorder PDF pages",
+    blurb: "Delete / reorder then shrink",
+    category: "pdf",
+    seoTitle: "Reorder Delete PDF Pages Online Free — Then Reduce PDF Size to KB",
+    seoDescription:
+      "Reorder and delete PDF pages online free, then compress toward target KB for exam and government uploads — SizeToKB.in",
+    keywords: [
+      "reorder PDF pages online free",
+      "delete PDF pages online",
+      "organize PDF pages",
+      "reduce PDF size after reorder",
+    ],
+  },
+  {
+    href: "/watermark/",
+    label: "Watermark FOR UPLOAD",
+    blurb: "Stamp photo or PDF safely",
+    category: "extra",
+    seoTitle: "Watermark Photo & PDF Online Free — FOR UPLOAD ONLY Stamp",
+    seoDescription:
+      "Add FOR UPLOAD ONLY watermark on photos or PDFs before sharing. Private browser watermark tool — SizeToKB.in",
+    keywords: [
+      "watermark photo online free",
+      "FOR UPLOAD ONLY watermark",
+      "watermark PDF online",
+      "stamp image for upload",
+    ],
+  },
+  {
+    href: "/photo-guide/",
+    label: "Photo guidelines check",
+    blurb: "Brightness, blur, framing tips",
+    category: "extra",
+    seoTitle: "Photo Guidelines Checker Online Free — Before Reduce Size to KB",
+    seoDescription:
+      "Check photo guidelines: face framing, brightness, blur and background tips before you reduce size to KB for forms — SizeToKB.in",
+    keywords: [
+      "photo guidelines checker",
+      "passport photo quality check",
+      "exam photo requirements check",
+      "photo brightness blur check",
+    ],
+  },
+  {
+    href: "/size-kam-kaise-kare/",
+    label: "Size kam kaise kare",
+    blurb: "Hindi SEO guide + tools",
+    category: "extra",
+    seoTitle: "Photo Size Kam Kaise Kare — Reduce Image & Signature Size to KB Free",
+    seoDescription:
+      "Photo size kam kaise kare aur signature size kam kaise kare — free tools to reduce to 20KB/50KB and signature 10–20KB — SizeToKB.in",
+    keywords: [
+      "photo size kam kaise kare",
+      "signature size kam kaise kare",
+      "image size reduce kaise kare",
+      "20kb 50kb photo kaise banaye",
+    ],
   },
   {
     href: "/pdf-editor/",

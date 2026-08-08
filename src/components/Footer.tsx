@@ -68,6 +68,26 @@ export function Footer() {
                 </Link>
               </li>
               <li>
+                <Link href="/bulk-reduce/" className="text-white/75 hover:text-white">
+                  Bulk reduce to KB
+                </Link>
+              </li>
+              <li>
+                <Link href="/form-wizard/" className="text-white/75 hover:text-white">
+                  Form photo wizard
+                </Link>
+              </li>
+              <li>
+                <Link href="/upload-fixer/" className="text-white/75 hover:text-white">
+                  Upload error fixer
+                </Link>
+              </li>
+              <li>
+                <Link href="/size-kam-kaise-kare/" className="text-white/75 hover:text-white">
+                  Size kam kaise kare
+                </Link>
+              </li>
+              <li>
                 <Link href="/#tools" className="text-white/75 hover:text-white">
                   All tools
                 </Link>
