@@ -46,7 +46,7 @@ export function Header() {
 
         <div className="flex items-center gap-2">
           <Link
-            href="/custom/"
+            href="/#custom-tool"
             className="inline-flex items-center rounded-lg bg-[var(--ink)] px-3 py-2 text-xs font-bold text-white hover:bg-[var(--accent)] sm:text-sm"
           >
             Custom KB

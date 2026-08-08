@@ -28,7 +28,7 @@ export function ExamPicker() {
     <section className="overflow-hidden rounded-2xl border border-[var(--line)] bg-white shadow-[var(--card-shadow)]">
       {/* Custom — always visible, pinned */}
       <Link
-        href="/custom/"
+        href="/#custom-tool"
         className="flex flex-col gap-1 border-b-2 border-[var(--accent)] bg-[var(--ink)] px-4 py-4 text-white transition hover:bg-[#151d2e] sm:flex-row sm:items-center sm:justify-between sm:px-6"
       >
         <div>
@@ -39,11 +39,11 @@ export function ExamPicker() {
             Custom — set your own min / max KB
           </p>
           <p className="mt-0.5 text-sm text-white/65">
-            No exam match? Enter exact size rules from your notification.
+            No exam match? Use the tool on this page — exact size rules from your notification.
           </p>
         </div>
         <span className="mt-2 inline-flex w-fit items-center rounded-lg bg-[var(--accent)] px-4 py-2 text-sm font-bold text-white sm:mt-0">
-          Open Custom →
+          Jump to tool ↑
         </span>
       </Link>
 
@@ -90,11 +90,11 @@ export function ExamPicker() {
           {/* Custom also first in list — always */}
           <li>
             <Link
-              href="/custom/"
+              href="/#custom-tool"
               className="flex items-center justify-between gap-3 bg-[var(--accent-soft)] px-4 py-3 transition hover:brightness-95"
             >
               <span className="text-sm font-bold text-[var(--accent-ink)]">Custom size to KB</span>
-              <span className="text-xs font-semibold text-[var(--accent-ink)]">Open</span>
+              <span className="text-xs font-semibold text-[var(--accent-ink)]">Use tool ↑</span>
             </Link>
           </li>
           {visible.map((exam) => (
@@ -120,10 +120,10 @@ export function ExamPicker() {
         {list.length === 0 && (
           <p className="mt-4 text-center text-sm text-[var(--muted)]">
             No preset found — use{" "}
-            <Link href="/custom/" className="font-bold text-[var(--accent-ink)]">
+            <Link href="/#custom-tool" className="font-bold text-[var(--accent-ink)]">
               Custom
             </Link>{" "}
-            above (always available).
+            on this page (always available).
           </p>
         )}
 
