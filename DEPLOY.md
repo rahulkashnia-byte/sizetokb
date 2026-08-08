@@ -27,16 +27,16 @@ You do **not** need a VPS for this project unless you later add server APIs, log
 4. Create mailbox **support@sizetokb.in** (matches Contact / Privacy pages).
 5. Point **sizetokb.com** → redirect 301 to `https://sizetokb.in` (Domains → Redirects).
 
-## Partner: SevaDesk cross-links
+## Partner: SarkariSuchi cross-links
 
-Before building for production, set your live SevaDesk URL so SizeToKB can link back to jobs / results:
+Before building for production, set your live SarkariSuchi URL so SizeToKB can link back to jobs / results:
 
 ```bash
 # .env.local (or Hostinger build env)
-NEXT_PUBLIC_SEVADESK_URL=https://your-sevadesk-domain.com
+NEXT_PUBLIC_SARKARISUCHI_URL=https://sarkarisuchi.com
 ```
 
-Then `npm run build` and upload `out/` as usual. Without this variable, SevaDesk partner strips stay hidden.
+Then `npm run build` and upload `out/` as usual. Without this variable, SarkariSuchi partner strips stay hidden.
 
 ## Build on your Mac
 

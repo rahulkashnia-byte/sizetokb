@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useState } from "react";
-import { SEVADESK, sevadeskEnabled, sevadeskJobsUrl } from "@/lib/sevadesk";
+import { SARKARISUCHI, sarkarisuchiEnabled, sarkarisuchiJobsUrl } from "@/lib/sevadesk";
 
 const TOOLS = [
   {
@@ -35,7 +35,7 @@ const TOOLS = [
 
 export function Header() {
   const [open, setOpen] = useState(false);
-  const jobsUrl = sevadeskEnabled() ? sevadeskJobsUrl() : null;
+  const jobsUrl = sarkarisuchiEnabled() ? sarkarisuchiJobsUrl() : null;
 
   return (
     <header className="sticky top-0 z-40 border-b border-[var(--line)] bg-[var(--surface)]/85 backdrop-blur-xl">
@@ -99,7 +99,7 @@ export function Header() {
                   >
                     <div>
                       <div className="flex items-center gap-2 text-sm font-semibold text-[var(--ink)]">
-                        {SEVADESK.name} jobs
+                        {SARKARISUCHI.name} jobs
                         <span className="rounded bg-[var(--accent-soft)] px-1.5 py-0.5 text-[9px] font-bold uppercase text-[var(--accent-ink)]">
                           Partner
                         </span>

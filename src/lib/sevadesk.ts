@@ -1,39 +1,79 @@
-/** Cross-links from SizeToKB → SevaDesk (govt jobs / results). */
+/** Cross-links from SizeToKB → SarkariSuchi (govt jobs / results). */
 
-export const SEVADESK = {
-  name: "SevaDesk",
-  /** Set NEXT_PUBLIC_SEVADESK_URL when SevaDesk is live (e.g. https://sevadesk.in). */
-  url: (process.env.NEXT_PUBLIC_SEVADESK_URL || "").replace(/\/$/, ""),
+export const SARKARISUCHI = {
+  name: "SarkariSuchi",
+  /**
+   * Prefer NEXT_PUBLIC_SARKARISUCHI_URL.
+   * Falls back to NEXT_PUBLIC_SEVADESK_URL for older builds, then the live domain.
+   */
+  url: (
+    process.env.NEXT_PUBLIC_SARKARISUCHI_URL ||
+    process.env.NEXT_PUBLIC_SEVADESK_URL ||
+    "https://sarkarisuchi.com"
+  ).replace(/\/$/, ""),
 } as const;
 
-export function sevadeskEnabled(): boolean {
-  return Boolean(SEVADESK.url);
+/** @deprecated use SARKARISUCHI */
+export const SEVADESK = SARKARISUCHI;
+
+export function sarkarisuchiEnabled(): boolean {
+  return Boolean(SARKARISUCHI.url);
 }
 
-export function sevadeskPath(path = "/"): string {
-  const base = SEVADESK.url;
+/** @deprecated use sarkarisuchiEnabled */
+export function sevadeskEnabled(): boolean {
+  return sarkarisuchiEnabled();
+}
+
+export function sarkarisuchiPath(path = "/"): string {
+  const base = SARKARISUCHI.url;
   if (!base) return "#";
   if (!path || path === "/") return `${base}/`;
   return `${base}${path.startsWith("/") ? path : `/${path}`}`;
 }
 
+/** @deprecated use sarkarisuchiPath */
+export function sevadeskPath(path = "/"): string {
+  return sarkarisuchiPath(path);
+}
+
+export function sarkarisuchiSearchUrl(query: string): string {
+  return sarkarisuchiPath(`/search?q=${encodeURIComponent(query)}`);
+}
+
+/** @deprecated */
 export function sevadeskSearchUrl(query: string): string {
-  return sevadeskPath(`/search?q=${encodeURIComponent(query)}`);
+  return sarkarisuchiSearchUrl(query);
 }
 
+export function sarkarisuchiJobsUrl(): string {
+  return sarkarisuchiPath("/jobs");
+}
+
+/** @deprecated */
 export function sevadeskJobsUrl(): string {
-  return sevadeskPath("/jobs");
+  return sarkarisuchiJobsUrl();
 }
 
+export function sarkarisuchiResultsUrl(): string {
+  return sarkarisuchiPath("/results");
+}
+
+/** @deprecated */
 export function sevadeskResultsUrl(): string {
-  return sevadeskPath("/results");
+  return sarkarisuchiResultsUrl();
 }
 
+export function sarkarisuchiAdmitCardsUrl(): string {
+  return sarkarisuchiPath("/admit-cards");
+}
+
+/** @deprecated */
 export function sevadeskAdmitCardsUrl(): string {
-  return sevadeskPath("/admit-cards");
+  return sarkarisuchiAdmitCardsUrl();
 }
 
-/** Map SizeToKB exam slug → SevaDesk search query. */
+/** Map SizeToKB exam slug → SarkariSuchi search query. */
 const EXAM_TO_SEARCH: Record<string, string> = {
   "ibps-clerk": "IBPS Clerk",
   "ibps-po": "IBPS PO",
@@ -72,18 +112,29 @@ const EXAM_TO_SEARCH: Record<string, string> = {
   gate: "GATE",
 };
 
-export function sevadeskForExam(slug: string, examName: string): { href: string; label: string } | null {
-  if (!sevadeskEnabled()) return null;
+export function sarkarisuchiForExam(
+  slug: string,
+  examName: string
+): { href: string; label: string } | null {
+  if (!sarkarisuchiEnabled()) return null;
   const q = EXAM_TO_SEARCH[slug] || examName;
   return {
-    href: sevadeskSearchUrl(q),
-    label: `${q} jobs & updates on SevaDesk`,
+    href: sarkarisuchiSearchUrl(q),
+    label: `${q} jobs & updates on SarkariSuchi`,
   };
 }
 
-export const SEVADESK_NAV = [
+/** @deprecated */
+export function sevadeskForExam(slug: string, examName: string) {
+  return sarkarisuchiForExam(slug, examName);
+}
+
+export const SARKARISUCHI_NAV = [
   { path: "/jobs", label: "Latest government jobs" },
   { path: "/results", label: "Sarkari results" },
   { path: "/admit-cards", label: "Admit cards" },
   { path: "/search", label: "Search all notices" },
 ] as const;
+
+/** @deprecated */
+export const SEVADESK_NAV = SARKARISUCHI_NAV;

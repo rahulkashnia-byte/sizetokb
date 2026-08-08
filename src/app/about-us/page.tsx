@@ -47,8 +47,12 @@ export default function AboutPage() {
       <h2>Related: government jobs &amp; exam updates</h2>
       <p>
         For vacancies, important dates, results and admit cards, we partner with{" "}
-        <strong>SevaDesk</strong> — clearer summaries of public recruitment notices with official
-        apply links. Resize your photo here, then check the notice details there.
+        <strong>SarkariSuchi</strong> (
+        <a href="https://sarkarisuchi.com" target="_blank" rel="noopener noreferrer">
+          sarkarisuchi.com
+        </a>
+        ) — clearer summaries of public recruitment notices with official apply links. Resize your
+        photo here, then check the notice details there.
       </p>
 
       <h2>Contact</h2>
