@@ -71,4 +71,8 @@ export const SITE_KEYWORDS = [
   "decrypt PDF online",
   "bulk reduce image size to KB",
   "reduce marksheet PDF size",
+  "biodata maker",
+  "sarkari biodata maker",
+  "resume maker online free",
+  "biodata format for government job",
 ] as const;

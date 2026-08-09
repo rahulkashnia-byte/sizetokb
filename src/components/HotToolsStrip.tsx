@@ -45,6 +45,12 @@ export const HOT_TOOLS = [
     badge: null,
   },
   {
+    href: "/biodata/",
+    label: "Biodata maker",
+    blurb: "Sarkari resume → print PDF",
+    badge: "New",
+  },
+  {
     href: "/signature-cleaner/",
     label: "Signature 10–20KB",
     blurb: "Clean & compress for SSC / Bank",

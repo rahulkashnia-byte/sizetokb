@@ -604,6 +604,23 @@ export const TOOLS: ToolDef[] = [
       "Blur Aadhaar or ID numbers on photos before sharing. Private browser tool — SizeToKB.in",
     keywords: ["Aadhaar masker online", "blur ID number photo", "mask Aadhaar card"],
   },
+  {
+    href: "/biodata/",
+    label: "Biodata / resume maker",
+    blurb: "Sarkari biodata → print PDF",
+    category: "extra",
+    seoTitle: "Free Sarkari Biodata & Resume Maker Online — Print Ready PDF",
+    seoDescription:
+      "Free sarkari biodata / resume maker with photo upload, education, skills packs and print-ready PDF — SizeToKB.in",
+    keywords: [
+      "biodata maker",
+      "sarkari biodata maker",
+      "resume maker online free",
+      "biodata format for government job",
+      "bio data maker with photo",
+    ],
+    featured: true,
+  },
 ];
 
 export function toolsForNav() {
