@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Lato } from "next/font/google";
 import { Footer } from "@/components/Footer";
+import { GoogleAnalytics } from "@/components/GoogleAnalytics";
 import { Header } from "@/components/Header";
 import { JsonLd, webAppJsonLd, websiteJsonLd } from "@/components/JsonLd";
 import { PwaRegister } from "@/components/PwaRegister";
@@ -43,6 +44,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html lang="en-IN" className={`${lato.variable} h-full antialiased`}>
       <body className="flex min-h-full flex-col font-[family-name:var(--font-lato)]">
+        <GoogleAnalytics />
         <JsonLd data={websiteJsonLd()} />
         <JsonLd data={webAppJsonLd()} />
         <PwaRegister />
