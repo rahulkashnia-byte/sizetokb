@@ -1,4 +1,5 @@
 import type { DocSpec, ProcessedImage } from "./types";
+import { trackToolUse } from "./usage";
 
 const DPI = 96; // browser canvas approx for cm→px
 
@@ -311,6 +312,11 @@ export async function processToSpec(
 }
 
 export function downloadBlob(blob: Blob, filename: string): void {
+  try {
+    trackToolUse();
+  } catch {
+    /* ignore analytics failures */
+  }
   const a = document.createElement("a");
   a.href = URL.createObjectURL(blob);
   a.download = filename;
