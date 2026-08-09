@@ -83,6 +83,11 @@ export function Footer() {
                 </Link>
               </li>
               <li>
+                <Link href="/biodata/" className="text-white/75 hover:text-white">
+                  Biodata / resume maker
+                </Link>
+              </li>
+              <li>
                 <Link href="/bulk-reduce/" className="text-white/75 hover:text-white">
                   Bulk reduce to KB
                 </Link>

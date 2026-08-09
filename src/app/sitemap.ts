@@ -47,6 +47,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     "/compress-to-20kb",
     "/compress-to-50kb",
     "/compress-to-100kb",
+    "/biodata",
     "/about-us",
     "/contact-us",
     "/privacy-policy",
@@ -79,6 +80,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
             path === "/compress-to-20kb" ||
             path === "/compress-to-50kb" ||
             path === "/compress-to-100kb" ||
+            path === "/biodata" ||
             path === "/signature-size-kam-kaise-kare" ||
             path === "/pdf-size-kam-kaise-kare"
           ? 0.9
