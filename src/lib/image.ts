@@ -35,6 +35,43 @@ async function loadImageFromFile(file: File): Promise<HTMLImageElement> {
   }
 }
 
+export type RotateDeg = 0 | 90 | 180 | 270;
+
+/** Draw image onto a new canvas with 90°-step rotation. */
+export function canvasFromRotatedImage(
+  img: HTMLImageElement,
+  rotate: RotateDeg
+): HTMLCanvasElement {
+  const canvas = document.createElement("canvas");
+  const ctx = canvas.getContext("2d")!;
+  if (rotate === 90 || rotate === 270) {
+    canvas.width = img.naturalHeight;
+    canvas.height = img.naturalWidth;
+  } else {
+    canvas.width = img.naturalWidth;
+    canvas.height = img.naturalHeight;
+  }
+  ctx.save();
+  if (rotate === 90) {
+    ctx.translate(canvas.width, 0);
+    ctx.rotate(Math.PI / 2);
+  } else if (rotate === 180) {
+    ctx.translate(canvas.width, canvas.height);
+    ctx.rotate(Math.PI);
+  } else if (rotate === 270) {
+    ctx.translate(0, canvas.height);
+    ctx.rotate(-Math.PI / 2);
+  }
+  ctx.drawImage(img, 0, 0);
+  ctx.restore();
+  return canvas;
+}
+
+function sourceSize(src: HTMLImageElement | HTMLCanvasElement): { w: number; h: number } {
+  if (src instanceof HTMLCanvasElement) return { w: src.width, h: src.height };
+  return { w: src.naturalWidth, h: src.naturalHeight };
+}
+
 function applyScanEffect(
   ctx: CanvasRenderingContext2D,
   width: number,
@@ -58,7 +95,7 @@ function applyScanEffect(
 }
 
 function drawToCanvas(
-  img: HTMLImageElement,
+  src: HTMLImageElement | HTMLCanvasElement,
   width: number,
   height: number,
   scan: boolean
@@ -70,13 +107,14 @@ function drawToCanvas(
   ctx.fillStyle = "#ffffff";
   ctx.fillRect(0, 0, width, height);
 
+  const { w: nw, h: nh } = sourceSize(src);
   // cover-fit (crop center) for passport-style photos
-  const scale = Math.max(width / img.naturalWidth, height / img.naturalHeight);
+  const scale = Math.max(width / nw, height / nh);
   const sw = width / scale;
   const sh = height / scale;
-  const sx = (img.naturalWidth - sw) / 2;
-  const sy = (img.naturalHeight - sh) / 2;
-  ctx.drawImage(img, sx, sy, sw, sh, 0, 0, width, height);
+  const sx = (nw - sw) / 2;
+  const sy = (nh - sh) / 2;
+  ctx.drawImage(src, sx, sy, sw, sh, 0, 0, width, height);
 
   if (scan) applyScanEffect(ctx, width, height);
   return canvas;
@@ -102,9 +140,13 @@ async function canvasToBlob(
 export async function processToSpec(
   file: File,
   spec: DocSpec,
-  options?: { filename?: string; forceScan?: boolean }
+  options?: { filename?: string; forceScan?: boolean; rotate?: RotateDeg }
 ): Promise<ProcessedImage> {
   const img = await loadImageFromFile(file);
+  const rotate = options?.rotate ?? 0;
+  const source: HTMLImageElement | HTMLCanvasElement =
+    rotate === 0 ? img : canvasFromRotatedImage(img, rotate);
+  const { w: srcW, h: srcH } = sourceSize(source);
   const mime = spec.format === "png" ? "image/png" : "image/jpeg";
   const scan = options?.forceScan ?? !!spec.scanEffect;
 
@@ -112,9 +154,9 @@ export async function processToSpec(
   if (!width || !height) {
     // size-only: start from natural dims, capped
     const maxSide = 1600;
-    const scale = Math.min(1, maxSide / Math.max(img.naturalWidth, img.naturalHeight));
-    width = Math.round(img.naturalWidth * scale);
-    height = Math.round(img.naturalHeight * scale);
+    const scale = Math.min(1, maxSide / Math.max(srcW, srcH));
+    width = Math.round(srcW * scale);
+    height = Math.round(srcH * scale);
   }
 
   const minBytes = spec.minKb * 1024;
@@ -127,7 +169,7 @@ export async function processToSpec(
   for (let attempt = 0; attempt < 8; attempt++) {
     const w = Math.max(40, Math.round(width * scaleFactor));
     const h = Math.max(40, Math.round(height * scaleFactor));
-    const canvas = drawToCanvas(img, w, h, scan);
+    const canvas = drawToCanvas(source, w, h, scan);
 
     if (mime === "image/png") {
       const blob = await canvasToBlob(canvas, mime, 1);

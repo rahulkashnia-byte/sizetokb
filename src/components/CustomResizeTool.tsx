@@ -1,7 +1,8 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { downloadBlob, processToSpec } from "@/lib/image";
+import { RotateControls } from "@/components/RotateControls";
+import { downloadBlob, processToSpec, type RotateDeg } from "@/lib/image";
 import type { DocSpec, DimUnit, ProcessedImage } from "@/lib/types";
 
 const fieldClass =
@@ -40,6 +41,7 @@ export function CustomResizeTool({
   const [file, setFile] = useState<File | null>(null);
   const [preview, setPreview] = useState<string | null>(null);
   const [dragging, setDragging] = useState(false);
+  const [rotate, setRotate] = useState<RotateDeg>(0);
   const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
@@ -55,6 +57,7 @@ export function CustomResizeTool({
     if (result?.url) URL.revokeObjectURL(result.url);
     setResult(null);
     setError(null);
+    setRotate(0);
     setFile(next);
     setPreview(next ? URL.createObjectURL(next) : null);
   };
@@ -72,6 +75,7 @@ export function CustomResizeTool({
     setPreview(null);
     setResult(null);
     setError(null);
+    setRotate(0);
   };
 
   const resize = async () => {
@@ -101,6 +105,7 @@ export function CustomResizeTool({
       };
       const out = await processToSpec(file, spec, {
         filename: outName || "custom-resize",
+        rotate,
       });
       setResult(out);
     } catch (e) {
@@ -210,6 +215,8 @@ export function CustomResizeTool({
           </Field>
         </div>
 
+        <RotateControls className="mt-4" value={rotate} onChange={setRotate} />
+
         <button
           type="button"
           onClick={() => inputRef.current?.click()}
@@ -254,7 +261,8 @@ export function CustomResizeTool({
                 <img
                   src={preview}
                   alt="Original preview"
-                  className="mx-auto max-h-56 w-full object-contain p-3"
+                  className="mx-auto max-h-56 w-full object-contain p-3 transition-transform"
+                  style={{ transform: `rotate(${rotate}deg)` }}
                 />
               ) : (
                 <div className="flex h-40 items-center justify-center text-xs text-[var(--muted)]">

@@ -1,9 +1,10 @@
 "use client";
 
 import { useCallback, useRef, useState } from "react";
+import { RotateControls } from "@/components/RotateControls";
 import type { DocSpec, ProcessedImage } from "@/lib/types";
 import { formatSpecSummary } from "@/lib/format";
-import { downloadBlob, processToSpec } from "@/lib/image";
+import { downloadBlob, processToSpec, type RotateDeg } from "@/lib/image";
 
 export function DocUploader({
   spec,
@@ -14,6 +15,8 @@ export function DocUploader({
 }) {
   const inputRef = useRef<HTMLInputElement>(null);
   const [scanOn, setScanOn] = useState(!!spec.scanEffect);
+  const [rotate, setRotate] = useState<RotateDeg>(0);
+  const [file, setFile] = useState<File | null>(null);
   const [dragging, setDragging] = useState(false);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -24,16 +27,15 @@ export function DocUploader({
   const isSign = spec.scanEffect || spec.id === "sign";
 
   const run = useCallback(
-    async (file: File) => {
+    async (nextFile: File, nextRotate: RotateDeg = rotate) => {
       setError(null);
       setBusy(true);
       setResult(null);
-      const localPreview = URL.createObjectURL(file);
-      setPreview(localPreview);
       try {
-        const out = await processToSpec(file, spec, {
+        const out = await processToSpec(nextFile, spec, {
           forceScan: isSign ? scanOn : false,
           filename: `${examSlug}-${spec.id}`,
+          rotate: nextRotate,
         });
         setResult(out);
       } catch (e) {
@@ -42,12 +44,19 @@ export function DocUploader({
         setBusy(false);
       }
     },
-    [examSlug, isSign, scanOn, spec]
+    [examSlug, isSign, rotate, scanOn, spec]
   );
 
   const onFiles = (files: FileList | null) => {
-    const file = files?.[0];
-    if (file) void run(file);
+    const next = files?.[0];
+    if (!next) return;
+    if (preview) URL.revokeObjectURL(preview);
+    if (result?.url) URL.revokeObjectURL(result.url);
+    setFile(next);
+    setPreview(URL.createObjectURL(next));
+    setRotate(0);
+    setResult(null);
+    void run(next, 0);
   };
 
   return (
@@ -111,7 +120,8 @@ export function DocUploader({
             <img
               src={result?.url || preview || ""}
               alt="Preview"
-              className="mb-3 max-h-36 rounded-lg object-contain shadow-sm"
+              className="mb-3 max-h-36 rounded-lg object-contain shadow-sm transition-transform"
+              style={result ? undefined : { transform: `rotate(${rotate}deg)` }}
             />
           )}
           <p className="text-sm font-medium text-[var(--ink)]">
@@ -127,6 +137,17 @@ export function DocUploader({
           className="hidden"
           onChange={(e) => onFiles(e.target.files)}
         />
+
+        {file && (
+          <RotateControls
+            className="mt-3"
+            value={rotate}
+            onChange={(deg) => {
+              setRotate(deg);
+              setResult(null);
+            }}
+          />
+        )}
 
         <div className="mt-3 grid grid-cols-3 gap-2 text-center text-[11px]">
           <SpecChip label="Size" value={summary.size} />
@@ -148,8 +169,10 @@ export function DocUploader({
         <div className="mt-4 flex gap-2">
           <button
             type="button"
-            disabled={busy}
-            onClick={() => inputRef.current?.click()}
+            disabled={busy || !file}
+            onClick={() => {
+              if (file) void run(file, rotate);
+            }}
             className={`flex-1 rounded-xl py-3 text-sm font-bold text-white shadow-sm transition hover:brightness-95 disabled:opacity-60 ${
               isSign ? "bg-[var(--sign)]" : "bg-[var(--accent)]"
             }`}

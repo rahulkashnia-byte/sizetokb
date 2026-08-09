@@ -153,19 +153,53 @@ export async function whiteBackground(
 
 export async function cleanSignature(
   file: File,
-  options?: { maxKb?: number; minKb?: number; threshold?: number }
+  options?: { maxKb?: number; minKb?: number; threshold?: number; rotate?: 0 | 90 | 180 | 270 }
 ): Promise<{ blob: Blob; url: string; width: number; height: number; sizeKb: number }> {
   const maxKb = options?.maxKb ?? 20;
   const minKb = options?.minKb ?? 10;
   const threshold = options?.threshold ?? 165;
+  const rotate = options?.rotate ?? 0;
   const img = await loadImageFile(file);
+
+  let srcW = img.naturalWidth;
+  let srcH = img.naturalHeight;
+  let drawSource: HTMLImageElement | HTMLCanvasElement = img;
+  if (rotate === 90 || rotate === 270) {
+    const c = document.createElement("canvas");
+    c.width = img.naturalHeight;
+    c.height = img.naturalWidth;
+    const cctx = c.getContext("2d")!;
+    cctx.save();
+    if (rotate === 90) {
+      cctx.translate(c.width, 0);
+      cctx.rotate(Math.PI / 2);
+    } else {
+      cctx.translate(0, c.height);
+      cctx.rotate(-Math.PI / 2);
+    }
+    cctx.drawImage(img, 0, 0);
+    cctx.restore();
+    drawSource = c;
+    srcW = c.width;
+    srcH = c.height;
+  } else if (rotate === 180) {
+    const c = document.createElement("canvas");
+    c.width = img.naturalWidth;
+    c.height = img.naturalHeight;
+    const cctx = c.getContext("2d")!;
+    cctx.translate(c.width, c.height);
+    cctx.rotate(Math.PI);
+    cctx.drawImage(img, 0, 0);
+    drawSource = c;
+  }
+
   const canvas = document.createElement("canvas");
-  canvas.width = img.naturalWidth;
-  canvas.height = img.naturalHeight;
+  canvas.width = srcW;
+  canvas.height = srcH;
   const ctx = canvas.getContext("2d", { willReadFrequently: true })!;
   ctx.fillStyle = "#fff";
   ctx.fillRect(0, 0, canvas.width, canvas.height);
-  ctx.drawImage(img, 0, 0);
+  ctx.drawImage(drawSource, 0, 0);
   const data = ctx.getImageData(0, 0, canvas.width, canvas.height);
   const d = data.data;
   let minX = canvas.width;
