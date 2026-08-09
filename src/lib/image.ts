@@ -2,6 +2,11 @@ import type { DocSpec, ProcessedImage } from "./types";
 
 const DPI = 96; // browser canvas approx for cm→px
 
+export type RotateDeg = 0 | 90 | 180 | 270;
+
+/** Crop in the rotated source pixel space */
+export type CropRect = { x: number; y: number; width: number; height: number };
+
 export function cmToPx(cm: number): number {
   return Math.round((cm / 2.54) * DPI);
 }
@@ -12,7 +17,7 @@ export function resolvePixels(spec: DocSpec): { width?: number; height?: number 
   return { width: cmToPx(spec.width), height: cmToPx(spec.height) };
 }
 
-async function loadImageFromFile(file: File): Promise<HTMLImageElement> {
+export async function loadImageFromFile(file: File): Promise<HTMLImageElement> {
   let blob: Blob = file;
   const name = file.name.toLowerCase();
   if (name.endsWith(".heic") || name.endsWith(".heif") || file.type === "image/heic") {
@@ -35,6 +40,70 @@ async function loadImageFromFile(file: File): Promise<HTMLImageElement> {
   }
 }
 
+export function rotatedSize(
+  w: number,
+  h: number,
+  rotate: RotateDeg
+): { w: number; h: number } {
+  if (rotate === 90 || rotate === 270) return { w: h, h: w };
+  return { w, h };
+}
+
+/** Draw image onto a canvas with 0/90/180/270 rotation. */
+export function rotateToCanvas(
+  img: HTMLImageElement | HTMLCanvasElement,
+  rotate: RotateDeg
+): HTMLCanvasElement {
+  const sw = img instanceof HTMLCanvasElement ? img.width : img.naturalWidth;
+  const sh = img instanceof HTMLCanvasElement ? img.height : img.naturalHeight;
+  const { w, h } = rotatedSize(sw, sh, rotate);
+  const canvas = document.createElement("canvas");
+  canvas.width = w;
+  canvas.height = h;
+  const ctx = canvas.getContext("2d", { willReadFrequently: true })!;
+  ctx.fillStyle = "#ffffff";
+  ctx.fillRect(0, 0, w, h);
+
+  if (rotate === 90) {
+    ctx.translate(w, 0);
+    ctx.rotate(Math.PI / 2);
+  } else if (rotate === 180) {
+    ctx.translate(w, h);
+    ctx.rotate(Math.PI);
+  } else if (rotate === 270) {
+    ctx.translate(0, h);
+    ctx.rotate(-Math.PI / 2);
+  }
+  ctx.drawImage(img, 0, 0);
+  return canvas;
+}
+
+export function initialCrop(
+  srcW: number,
+  srcH: number,
+  aspect?: number
+): CropRect {
+  if (!aspect || !Number.isFinite(aspect) || aspect <= 0) {
+    return { x: 0, y: 0, width: srcW, height: srcH };
+  }
+  const srcAspect = srcW / srcH;
+  let width: number;
+  let height: number;
+  if (srcAspect > aspect) {
+    height = srcH;
+    width = height * aspect;
+  } else {
+    width = srcW;
+    height = width / aspect;
+  }
+  return {
+    x: (srcW - width) / 2,
+    y: (srcH - height) / 2,
+    width,
+    height,
+  };
+}
+
 function applyScanEffect(
   ctx: CanvasRenderingContext2D,
   width: number,
@@ -43,11 +112,8 @@ function applyScanEffect(
   const imageData = ctx.getImageData(0, 0, width, height);
   const d = imageData.data;
   for (let i = 0; i < d.length; i += 4) {
-    // grayscale + contrast boost + white background cleanup
     const gray = 0.299 * d[i] + 0.587 * d[i + 1] + 0.114 * d[i + 2];
-    // stretch contrast
     let v = (gray - 128) * 1.65 + 128;
-    // threshold soft: push lights to white, darks to ink
     if (v > 200) v = 255;
     else if (v < 90) v = Math.max(0, v * 0.55);
     else v = 255 - (255 - v) * 1.2;
@@ -57,12 +123,45 @@ function applyScanEffect(
   ctx.putImageData(imageData, 0, 0);
 }
 
-function drawToCanvas(
-  img: HTMLImageElement,
+function clampCrop(crop: CropRect, srcW: number, srcH: number): CropRect {
+  let width = Math.max(1, Math.min(crop.width, srcW));
+  let height = Math.max(1, Math.min(crop.height, srcH));
+  let x = Math.max(0, Math.min(crop.x, srcW - width));
+  let y = Math.max(0, Math.min(crop.y, srcH - height));
+  return { x, y, width, height };
+}
+
+function drawCropToCanvas(
+  source: HTMLCanvasElement | HTMLImageElement,
+  crop: CropRect,
   width: number,
   height: number,
   scan: boolean
 ): HTMLCanvasElement {
+  const srcW = source instanceof HTMLCanvasElement ? source.width : source.naturalWidth;
+  const srcH = source instanceof HTMLCanvasElement ? source.height : source.naturalHeight;
+  const c = clampCrop(crop, srcW, srcH);
+
+  const canvas = document.createElement("canvas");
+  canvas.width = width;
+  canvas.height = height;
+  const ctx = canvas.getContext("2d", { willReadFrequently: true })!;
+  ctx.fillStyle = "#ffffff";
+  ctx.fillRect(0, 0, width, height);
+  ctx.drawImage(source, c.x, c.y, c.width, c.height, 0, 0, width, height);
+  if (scan) applyScanEffect(ctx, width, height);
+  return canvas;
+}
+
+/** Legacy center cover-crop when no explicit crop is passed */
+function drawCoverToCanvas(
+  img: HTMLImageElement | HTMLCanvasElement,
+  width: number,
+  height: number,
+  scan: boolean
+): HTMLCanvasElement {
+  const sw0 = img instanceof HTMLCanvasElement ? img.width : img.naturalWidth;
+  const sh0 = img instanceof HTMLCanvasElement ? img.height : img.naturalHeight;
   const canvas = document.createElement("canvas");
   canvas.width = width;
   canvas.height = height;
@@ -70,12 +169,11 @@ function drawToCanvas(
   ctx.fillStyle = "#ffffff";
   ctx.fillRect(0, 0, width, height);
 
-  // cover-fit (crop center) for passport-style photos
-  const scale = Math.max(width / img.naturalWidth, height / img.naturalHeight);
+  const scale = Math.max(width / sw0, height / sh0);
   const sw = width / scale;
   const sh = height / scale;
-  const sx = (img.naturalWidth - sw) / 2;
-  const sy = (img.naturalHeight - sh) / 2;
+  const sx = (sw0 - sw) / 2;
+  const sy = (sh0 - sh) / 2;
   ctx.drawImage(img, sx, sy, sw, sh, 0, 0, width, height);
 
   if (scan) applyScanEffect(ctx, width, height);
@@ -96,25 +194,44 @@ async function canvasToBlob(
   });
 }
 
+export type ProcessOptions = {
+  filename?: string;
+  forceScan?: boolean;
+  rotate?: RotateDeg;
+  /** Crop in rotated-source pixel space. If omitted, center-cover is used. */
+  crop?: CropRect;
+};
+
 /**
  * Binary-search JPEG quality (and slight downscale if needed) to land in [minKb, maxKb].
  */
 export async function processToSpec(
   file: File,
   spec: DocSpec,
-  options?: { filename?: string; forceScan?: boolean }
+  options?: ProcessOptions
 ): Promise<ProcessedImage> {
   const img = await loadImageFromFile(file);
   const mime = spec.format === "png" ? "image/png" : "image/jpeg";
   const scan = options?.forceScan ?? !!spec.scanEffect;
+  const rotate = options?.rotate ?? 0;
+  const rotated = rotate === 0 ? null : rotateToCanvas(img, rotate);
+  const source: HTMLImageElement | HTMLCanvasElement = rotated ?? img;
 
   let { width, height } = resolvePixels(spec);
   if (!width || !height) {
-    // size-only: start from natural dims, capped
     const maxSide = 1600;
-    const scale = Math.min(1, maxSide / Math.max(img.naturalWidth, img.naturalHeight));
-    width = Math.round(img.naturalWidth * scale);
-    height = Math.round(img.naturalHeight * scale);
+    const sw = source instanceof HTMLCanvasElement ? source.width : source.naturalWidth;
+    const sh = source instanceof HTMLCanvasElement ? source.height : source.naturalHeight;
+    if (options?.crop) {
+      const c = clampCrop(options.crop, sw, sh);
+      const scale = Math.min(1, maxSide / Math.max(c.width, c.height));
+      width = Math.max(40, Math.round(c.width * scale));
+      height = Math.max(40, Math.round(c.height * scale));
+    } else {
+      const scale = Math.min(1, maxSide / Math.max(sw, sh));
+      width = Math.round(sw * scale);
+      height = Math.round(sh * scale);
+    }
   }
 
   const minBytes = spec.minKb * 1024;
@@ -127,7 +244,9 @@ export async function processToSpec(
   for (let attempt = 0; attempt < 8; attempt++) {
     const w = Math.max(40, Math.round(width * scaleFactor));
     const h = Math.max(40, Math.round(height * scaleFactor));
-    const canvas = drawToCanvas(img, w, h, scan);
+    const canvas = options?.crop
+      ? drawCropToCanvas(source, options.crop, w, h, scan)
+      : drawCoverToCanvas(source, w, h, scan);
 
     if (mime === "image/png") {
       const blob = await canvasToBlob(canvas, mime, 1);
@@ -140,7 +259,6 @@ export async function processToSpec(
       break;
     }
 
-    // binary search quality
     let lo = 0.08;
     let hi = 0.95;
     let localBest: Blob | null = null;
@@ -155,7 +273,6 @@ export async function processToSpec(
         localBest = blob;
       } else {
         localBest = blob;
-        // nudge toward mid
         if (blob.size < targetMid) lo = q;
         else hi = q;
       }
@@ -166,7 +283,6 @@ export async function processToSpec(
       if (localBest.size >= minBytes && localBest.size <= maxBytes) break;
       if (localBest.size > maxBytes) scaleFactor *= 0.88;
       else if (localBest.size < minBytes && scaleFactor < 1.4) {
-        // too small even at high quality — upscale a bit
         scaleFactor *= 1.12;
       } else break;
     } else {
@@ -200,6 +316,11 @@ export function downloadBlob(blob: Blob, filename: string): void {
   a.download = filename;
   a.click();
   URL.revokeObjectURL(a.href);
+}
+
+export function stepRotate(current: RotateDeg, dir: 1 | -1): RotateDeg {
+  const next = (((current + dir * 90) % 360) + 360) % 360;
+  return next as RotateDeg;
 }
 
 export { formatSpecSummary } from "./format";

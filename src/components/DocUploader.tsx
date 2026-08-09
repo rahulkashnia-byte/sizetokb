@@ -1,9 +1,19 @@
 "use client";
 
-import { useCallback, useRef, useState } from "react";
+import { useCallback, useMemo, useRef, useState } from "react";
+import { ImageEditStage } from "@/components/ImageEditStage";
 import type { DocSpec, ProcessedImage } from "@/lib/types";
 import { formatSpecSummary } from "@/lib/format";
-import { downloadBlob, processToSpec } from "@/lib/image";
+import {
+  downloadBlob,
+  initialCrop,
+  loadImageFromFile,
+  processToSpec,
+  resolvePixels,
+  rotatedSize,
+  type CropRect,
+  type RotateDeg,
+} from "@/lib/image";
 
 export function DocUploader({
   spec,
@@ -18,36 +28,69 @@ export function DocUploader({
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [result, setResult] = useState<ProcessedImage | null>(null);
-  const [preview, setPreview] = useState<string | null>(null);
+  const [file, setFile] = useState<File | null>(null);
+  const [rotate, setRotate] = useState<RotateDeg>(0);
+  const [crop, setCrop] = useState<CropRect | null>(null);
 
   const summary = formatSpecSummary(spec);
   const isSign = spec.scanEffect || spec.id === "sign";
 
-  const run = useCallback(
-    async (file: File) => {
-      setError(null);
-      setBusy(true);
-      setResult(null);
-      const localPreview = URL.createObjectURL(file);
-      setPreview(localPreview);
-      try {
-        const out = await processToSpec(file, spec, {
-          forceScan: isSign ? scanOn : false,
-          filename: `${examSlug}-${spec.id}`,
-        });
-        setResult(out);
-      } catch (e) {
-        setError(e instanceof Error ? e.message : "Processing failed");
-      } finally {
-        setBusy(false);
-      }
-    },
-    [examSlug, isSign, scanOn, spec]
-  );
+  const aspect = useMemo(() => {
+    const px = resolvePixels(spec);
+    if (px.width && px.height) return px.width / px.height;
+    return undefined;
+  }, [spec]);
+
+  const resetEditor = useCallback(async (next: File) => {
+    setFile(next);
+    setRotate(0);
+    setResult(null);
+    setError(null);
+    if (result?.url) URL.revokeObjectURL(result.url);
+    try {
+      const img = await loadImageFromFile(next);
+      const { w, h } = rotatedSize(img.naturalWidth, img.naturalHeight, 0);
+      const px = resolvePixels(spec);
+      const a = px.width && px.height ? px.width / px.height : undefined;
+      setCrop(initialCrop(w, h, a));
+    } catch {
+      setCrop(null);
+    }
+  }, [result?.url, spec]);
+
+  const run = useCallback(async () => {
+    if (!file || !crop) {
+      setError("Choose an image and adjust the crop area first");
+      return;
+    }
+    setError(null);
+    setBusy(true);
+    if (result?.url) URL.revokeObjectURL(result.url);
+    setResult(null);
+    try {
+      const out = await processToSpec(file, spec, {
+        forceScan: isSign ? scanOn : false,
+        filename: `${examSlug}-${spec.id}`,
+        rotate,
+        crop,
+      });
+      setResult(out);
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "Processing failed");
+    } finally {
+      setBusy(false);
+    }
+  }, [crop, examSlug, file, isSign, result?.url, rotate, scanOn, spec]);
 
   const onFiles = (files: FileList | null) => {
-    const file = files?.[0];
-    if (file) void run(file);
+    const next = files?.[0];
+    if (next) void resetEditor(next);
+  };
+
+  const onRotate = (deg: RotateDeg) => {
+    setRotate(deg);
+    setResult(null);
+    setCrop(null); // ImageEditStage will re-init for new orientation
   };
 
   return (
@@ -87,38 +130,44 @@ export function DocUploader({
           </p>
         )}
 
-        <button
-          type="button"
-          onClick={() => inputRef.current?.click()}
-          onDragOver={(e) => {
-            e.preventDefault();
-            setDragging(true);
-          }}
-          onDragLeave={() => setDragging(false)}
-          onDrop={(e) => {
-            e.preventDefault();
-            setDragging(false);
-            onFiles(e.dataTransfer.files);
-          }}
-          className={`relative flex min-h-[180px] flex-1 flex-col items-center justify-center rounded-xl border-2 border-dashed px-4 transition ${
-            dragging
-              ? "border-[var(--accent)] bg-[var(--accent-soft)]"
-              : "border-[var(--line)] bg-[var(--wash)] hover:border-[var(--accent)]"
-          }`}
-        >
-          {(preview || result?.url) && (
-            // eslint-disable-next-line @next/next/no-img-element
-            <img
-              src={result?.url || preview || ""}
-              alt="Preview"
-              className="mb-3 max-h-36 rounded-lg object-contain shadow-sm"
-            />
-          )}
-          <p className="text-sm font-medium text-[var(--ink)]">
-            {busy ? "Compressing to KB…" : "Drop image or tap to choose"}
-          </p>
-          <p className="mt-1 text-xs text-[var(--muted)]">JPG, PNG, HEIC · Max 10 MB</p>
-        </button>
+        {!file ? (
+          <button
+            type="button"
+            onClick={() => inputRef.current?.click()}
+            onDragOver={(e) => {
+              e.preventDefault();
+              setDragging(true);
+            }}
+            onDragLeave={() => setDragging(false)}
+            onDrop={(e) => {
+              e.preventDefault();
+              setDragging(false);
+              onFiles(e.dataTransfer.files);
+            }}
+            className={`relative flex min-h-[180px] flex-1 flex-col items-center justify-center rounded-xl border-2 border-dashed px-4 transition ${
+              dragging
+                ? "border-[var(--accent)] bg-[var(--accent-soft)]"
+                : "border-[var(--line)] bg-[var(--wash)] hover:border-[var(--accent)]"
+            }`}
+          >
+            <p className="text-sm font-medium text-[var(--ink)]">Drop image or tap to choose</p>
+            <p className="mt-1 text-xs text-[var(--muted)]">
+              Then crop the area you want & rotate — JPG, PNG, HEIC
+            </p>
+          </button>
+        ) : (
+          <ImageEditStage
+            file={file}
+            aspect={aspect}
+            rotate={rotate}
+            crop={crop}
+            onRotate={onRotate}
+            onCropChange={(c) => {
+              setCrop(c);
+              setResult(null);
+            }}
+          />
+        )}
 
         <input
           ref={inputRef}
@@ -137,24 +186,45 @@ export function DocUploader({
         {error && <p className="mt-3 text-center text-xs text-rose-600">{error}</p>}
 
         {result && (
-          <div className="mt-3 rounded-xl bg-[var(--wash)] px-3 py-2 text-center text-xs">
-            <span className={result.inRange ? "text-[var(--accent-ink)]" : "text-amber-700"}>
-              Output: {result.sizeKb} KB · {result.width}×{result.height}px
-              {result.inRange ? " · Within limit" : " · Outside limit — try a larger source"}
-            </span>
+          <div className="mt-3 space-y-2">
+            <div className="overflow-hidden rounded-xl border border-[var(--line)] bg-[var(--wash)] p-2">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={result.url}
+                alt="Compressed output"
+                className="mx-auto max-h-40 rounded-lg object-contain"
+              />
+            </div>
+            <div className="rounded-xl bg-[var(--wash)] px-3 py-2 text-center text-xs">
+              <span className={result.inRange ? "text-[var(--accent-ink)]" : "text-amber-700"}>
+                Output: {result.sizeKb} KB · {result.width}×{result.height}px
+                {result.inRange ? " · Within limit" : " · Outside limit — try a larger source"}
+              </span>
+            </div>
           </div>
         )}
 
-        <div className="mt-4 flex gap-2">
+        <div className="mt-4 flex flex-wrap gap-2">
           <button
             type="button"
-            disabled={busy}
             onClick={() => inputRef.current?.click()}
+            className="rounded-xl border border-[var(--line)] px-4 py-3 text-sm font-bold text-[var(--ink)] hover:border-[var(--accent)]"
+          >
+            {file ? "Change photo" : "Choose photo"}
+          </button>
+          <button
+            type="button"
+            disabled={busy || !file || !crop}
+            onClick={() => void run()}
             className={`flex-1 rounded-xl py-3 text-sm font-bold text-white shadow-sm transition hover:brightness-95 disabled:opacity-60 ${
               isSign ? "bg-[var(--sign)]" : "bg-[var(--accent)]"
             }`}
           >
-            {isSign && scanOn ? "Clean & compress" : "Compress to KB"}
+            {busy
+              ? "Compressing…"
+              : isSign && scanOn
+                ? "Crop, clean & compress"
+                : "Crop & compress to KB"}
           </button>
           {result && (
             <button

@@ -1,17 +1,24 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
-import { downloadBlob, processToSpec } from "@/lib/image";
+import { useEffect, useMemo, useRef, useState } from "react";
+import { ImageEditStage } from "@/components/ImageEditStage";
+import {
+  cmToPx,
+  downloadBlob,
+  initialCrop,
+  loadImageFromFile,
+  processToSpec,
+  type CropRect,
+  type RotateDeg,
+} from "@/lib/image";
 import type { DocSpec, DimUnit, ProcessedImage } from "@/lib/types";
 
 const fieldClass =
   "w-full rounded-xl border border-[var(--line)] bg-[var(--wash)] px-3 py-2.5 text-sm outline-none focus:border-[var(--accent)] focus:bg-white focus:ring-2 focus:ring-[var(--accent)]/20";
 
 type Props = {
-  /** Hide outer page chrome when embedded on home */
   embedded?: boolean;
   className?: string;
-  /** Preset targets for SEO landers (e.g. compress to 50KB) */
   initialMinKb?: number;
   initialMaxKb?: number;
   defaultFilename?: string;
@@ -38,29 +45,45 @@ export function CustomResizeTool({
   const [error, setError] = useState<string | null>(null);
   const [result, setResult] = useState<ProcessedImage | null>(null);
   const [file, setFile] = useState<File | null>(null);
-  const [preview, setPreview] = useState<string | null>(null);
   const [dragging, setDragging] = useState(false);
+  const [rotate, setRotate] = useState<RotateDeg>(0);
+  const [crop, setCrop] = useState<CropRect | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     return () => {
-      if (preview) URL.revokeObjectURL(preview);
       if (result?.url) URL.revokeObjectURL(result.url);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const setSelectedFile = (next: File | null) => {
-    if (preview) URL.revokeObjectURL(preview);
+  const aspect = useMemo(() => {
+    const w = width ? Number(width) : undefined;
+    const h = height ? Number(height) : undefined;
+    if (!w || !h || w <= 0 || h <= 0) return undefined;
+    if (unit === "px") return w / h;
+    return cmToPx(w) / cmToPx(h);
+  }, [width, height, unit]);
+
+  const setSelectedFile = async (next: File | null) => {
     if (result?.url) URL.revokeObjectURL(result.url);
     setResult(null);
     setError(null);
     setFile(next);
-    setPreview(next ? URL.createObjectURL(next) : null);
+    setRotate(0);
+    if (!next) {
+      setCrop(null);
+      return;
+    }
+    try {
+      const img = await loadImageFromFile(next);
+      setCrop(initialCrop(img.naturalWidth, img.naturalHeight, aspect));
+    } catch {
+      setCrop(null);
+    }
   };
 
   const reset = () => {
-    if (preview) URL.revokeObjectURL(preview);
     if (result?.url) URL.revokeObjectURL(result.url);
     setMinKb(initialMinKb);
     setMaxKb(initialMaxKb);
@@ -69,14 +92,15 @@ export function CustomResizeTool({
     setUnit("cm");
     setOutName(defaultFilename);
     setFile(null);
-    setPreview(null);
+    setCrop(null);
+    setRotate(0);
     setResult(null);
     setError(null);
   };
 
   const resize = async () => {
-    if (!file) {
-      setError("Select an image first");
+    if (!file || !crop) {
+      setError("Select an image and set the crop area first");
       return;
     }
     if (minKb <= 0 || maxKb <= 0 || minKb > maxKb) {
@@ -101,6 +125,8 @@ export function CustomResizeTool({
       };
       const out = await processToSpec(file, spec, {
         filename: outName || "custom-resize",
+        rotate,
+        crop,
       });
       setResult(out);
     } catch (e) {
@@ -128,7 +154,7 @@ export function CustomResizeTool({
               {headline ?? "Set min / max KB and resize here"}
             </h2>
             <p className="mt-1 text-sm text-[var(--muted)]">
-              {subhead ?? "No need to open another page — upload, resize, download."}
+              {subhead ?? "Crop the area you want, rotate if needed, then hit your KB target."}
             </p>
           </div>
           <div className="flex flex-wrap gap-2">
@@ -210,87 +236,81 @@ export function CustomResizeTool({
           </Field>
         </div>
 
-        <button
-          type="button"
-          onClick={() => inputRef.current?.click()}
-          onDragOver={(e) => {
-            e.preventDefault();
-            setDragging(true);
-          }}
-          onDragLeave={() => setDragging(false)}
-          onDrop={(e) => {
-            e.preventDefault();
-            setDragging(false);
-            const dropped = e.dataTransfer.files?.[0];
-            if (dropped) setSelectedFile(dropped);
-          }}
-          className={`mt-5 flex w-full flex-col items-center justify-center rounded-2xl border-2 border-dashed px-4 py-8 text-sm transition ${
-            dragging
-              ? "border-[var(--accent)] bg-[var(--accent-soft)]"
-              : "border-[var(--line)] bg-[var(--wash)] hover:border-[var(--accent)]"
-          }`}
-        >
-          <span className="font-semibold text-[var(--ink)]">
-            {file ? file.name : "Select or Drag & Drop Image"}
-          </span>
-          <span className="mt-1 text-xs text-[var(--muted)]">JPG, PNG, HEIC · Max 10 MB</span>
-        </button>
+        {!file ? (
+          <button
+            type="button"
+            onClick={() => inputRef.current?.click()}
+            onDragOver={(e) => {
+              e.preventDefault();
+              setDragging(true);
+            }}
+            onDragLeave={() => setDragging(false)}
+            onDrop={(e) => {
+              e.preventDefault();
+              setDragging(false);
+              const dropped = e.dataTransfer.files?.[0];
+              if (dropped) void setSelectedFile(dropped);
+            }}
+            className={`mt-5 flex w-full flex-col items-center justify-center rounded-2xl border-2 border-dashed px-4 py-8 text-sm transition ${
+              dragging
+                ? "border-[var(--accent)] bg-[var(--accent-soft)]"
+                : "border-[var(--line)] bg-[var(--wash)] hover:border-[var(--accent)]"
+            }`}
+          >
+            <span className="font-semibold text-[var(--ink)]">Select or Drag & Drop Image</span>
+            <span className="mt-1 text-xs text-[var(--muted)]">
+              Then crop & rotate · JPG, PNG, HEIC · Max 10 MB
+            </span>
+          </button>
+        ) : (
+          <div className="mt-5">
+            <ImageEditStage
+              file={file}
+              aspect={aspect}
+              rotate={rotate}
+              crop={crop}
+              onRotate={(deg) => {
+                setRotate(deg);
+                setCrop(null);
+                setResult(null);
+              }}
+              onCropChange={(c) => {
+                setCrop(c);
+                setResult(null);
+              }}
+            />
+            <button
+              type="button"
+              onClick={() => inputRef.current?.click()}
+              className="mt-3 text-sm font-semibold text-[var(--accent-ink)] hover:underline"
+            >
+              Change image
+            </button>
+          </div>
+        )}
         <input
           ref={inputRef}
           type="file"
           accept="image/*,.heic,.heif"
           className="hidden"
-          onChange={(e) => setSelectedFile(e.target.files?.[0] ?? null)}
+          onChange={(e) => void setSelectedFile(e.target.files?.[0] ?? null)}
         />
 
-        {(preview || result) && (
-          <div className="mt-5 grid gap-4 sm:grid-cols-2">
-            <figure className="overflow-hidden rounded-2xl border border-[var(--line)] bg-[var(--wash)]">
-              <figcaption className="border-b border-[var(--line)] px-3 py-2 text-xs font-bold uppercase tracking-wide text-[var(--muted)]">
-                Original preview
-              </figcaption>
-              {preview ? (
-                // eslint-disable-next-line @next/next/no-img-element
-                <img
-                  src={preview}
-                  alt="Original preview"
-                  className="mx-auto max-h-56 w-full object-contain p-3"
-                />
-              ) : (
-                <div className="flex h-40 items-center justify-center text-xs text-[var(--muted)]">
-                  No image yet
-                </div>
-              )}
-              {file && (
-                <p className="border-t border-[var(--line)] px-3 py-2 text-center text-xs text-[var(--muted)]">
-                  {(file.size / 1024).toFixed(1)} KB · {file.name}
-                </p>
-              )}
-            </figure>
-
-            <figure className="overflow-hidden rounded-2xl border border-[var(--line)] bg-white">
-              <figcaption className="border-b border-[var(--line)] bg-[var(--wash)] px-3 py-2 text-xs font-bold uppercase tracking-wide text-[var(--muted)]">
-                Result preview
-              </figcaption>
-              {result ? (
-                // eslint-disable-next-line @next/next/no-img-element
-                <img
-                  src={result.url}
-                  alt="Resized preview"
-                  className="mx-auto max-h-56 w-full object-contain p-3"
-                />
-              ) : (
-                <div className="flex h-40 items-center justify-center text-xs text-[var(--muted)]">
-                  {busy ? "Resizing…" : "Click Resize Image to see output"}
-                </div>
-              )}
-              {result && (
-                <p className="border-t border-[var(--line)] px-3 py-2 text-center text-xs text-[var(--accent-ink)]">
-                  {result.sizeKb} KB · {result.width}×{result.height}px
-                  {result.inRange ? " · In range ✓" : " · Check range"}
-                </p>
-              )}
-            </figure>
+        {result && (
+          <div className="mt-5 overflow-hidden rounded-2xl border border-[var(--line)] bg-white">
+            <p className="border-b border-[var(--line)] bg-[var(--wash)] px-3 py-2 text-xs font-bold uppercase tracking-wide text-[var(--muted)]">
+              Result preview
+            </p>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={result.url}
+              alt="Resized preview"
+              className="mx-auto max-h-56 w-full object-contain p-3"
+            />
+            <p className="border-t border-[var(--line)] px-3 py-2 text-center text-xs text-[var(--accent-ink)]">
+              {result.sizeKb} KB · {result.width}×{result.height}px
+              {result.inRange ? " · In range ✓" : " · Check range"}
+            </p>
           </div>
         )}
 
@@ -303,27 +323,6 @@ export function CustomResizeTool({
               {(file.size / 1024).toFixed(1)} KB{" "}
               <span className="text-[var(--accent)]">→</span> {result.sizeKb} KB
             </p>
-            <p className="mt-1 text-center text-sm text-[var(--accent-ink)]">
-              {(() => {
-                const before = file.size / 1024;
-                const saved = Math.max(0, before - result.sizeKb);
-                const pct = before > 0 ? Math.round((saved / before) * 100) : 0;
-                return `${saved.toFixed(1)} KB smaller (${pct}% reduced)${
-                  result.inRange ? " · within your min–max ✓" : " · adjust min/max if needed"
-                }`;
-              })()}
-            </p>
-            <div className="mt-3 h-2.5 overflow-hidden rounded-full bg-white">
-              <div
-                className="h-full rounded-full bg-[var(--accent)] transition-all"
-                style={{
-                  width: `${Math.min(
-                    100,
-                    (result.sizeKb / Math.max(file.size / 1024, 0.1)) * 100
-                  )}%`,
-                }}
-              />
-            </div>
           </div>
         )}
 
@@ -332,11 +331,11 @@ export function CustomResizeTool({
         <div className="mt-5 flex flex-wrap gap-2">
           <button
             type="button"
-            disabled={busy}
+            disabled={busy || !file || !crop}
             onClick={() => void resize()}
             className="flex-1 rounded-xl bg-[var(--accent)] px-4 py-3 text-sm font-bold text-white hover:brightness-95 disabled:opacity-60"
           >
-            {busy ? "Resizing…" : "Resize Image"}
+            {busy ? "Resizing…" : "Crop & resize to KB"}
           </button>
           {result && (
             <button
