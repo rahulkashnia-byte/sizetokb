@@ -75,10 +75,10 @@ export default function HomePage() {
                 Compress to 50KB
               </Link>
               <Link
-                href="/pdf-to-jpg/"
+                href="/hi/"
                 className="inline-flex rounded-xl border border-[var(--line)] bg-white px-5 py-3 text-sm font-bold text-[var(--ink)] hover:border-[var(--accent)]"
               >
-                PDF to JPG
+                हिंदी में इस्तेमाल करें
               </Link>
             </div>
             <div className="mt-5 flex justify-center">

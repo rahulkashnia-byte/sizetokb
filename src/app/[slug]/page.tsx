@@ -8,6 +8,7 @@ import { SeoKeywordBlock } from "@/components/SeoKeywordBlock";
 import { SevaDeskPartnerStrip } from "@/components/SevaDeskPartner";
 import { ShareButtons } from "@/components/ShareButtons";
 import { EXAMS, getExam } from "@/lib/exams";
+import { examDocLabel, examSeo } from "@/lib/examSeo";
 import { formatSpecSummary } from "@/lib/format";
 import { SITE } from "@/lib/site";
 
@@ -23,33 +24,18 @@ export async function generateMetadata({
   const { slug } = await params;
   const exam = getExam(slug);
   if (!exam) return { title: "Exam not found" };
-  const year = exam.year ?? 2026;
-  const title = `Reduce ${exam.name} Photo & Signature Size ${year} | KB Online Free`;
-  const description = `Reduce ${exam.name} photo size & signature size online free. Compress image to required KB (often 20–50KB photo / 10–20KB signature) for ${year} form fill — Size to KB`;
+  const seo = examSeo(exam);
   const url = `${SITE.url}/${exam.slug}/`;
   return {
-    title,
-    description,
-    keywords: [
-      `reduce ${exam.name} photo size`,
-      `reduce ${exam.name} signature size`,
-      `${exam.name} photo size`,
-      `${exam.name} signature size`,
-      `${exam.name} photo resize`,
-      "reduce image size online",
-      "reduce signature size online",
-      "reduce image size in KB",
-      "compress image to 50kb",
-      "compress signature to 20kb",
-      "photo size kam kaise kare",
-      "signature size kam kaise kare",
-    ],
+    title: seo.title,
+    description: seo.description,
+    keywords: seo.keywords,
     alternates: { canonical: url },
     openGraph: {
-      title,
-      description,
+      title: seo.title,
+      description: seo.description,
       url,
-      siteName: SITE.name,
+      siteName: SITE.seoName,
       locale: SITE.locale,
       type: "website",
     },
@@ -62,24 +48,7 @@ export default async function ExamPage({ params }: { params: Promise<{ slug: str
   if (!exam) notFound();
 
   const year = exam.year ?? 2026;
-  const faqs = [
-    {
-      q: `Is ${exam.name} photo and signature resizer free?`,
-      a: "Yes — Size to KB is free. No registration. Processing stays in your browser.",
-    },
-    {
-      q: `What is the ${exam.name} photo size in KB?`,
-      a: `Check the quick reference table on this page for ${exam.name} ${year}. Always confirm against the official notification before submitting.`,
-    },
-    {
-      q: "Can I resize on mobile?",
-      a: "Yes. Use Chrome/Safari on Android or iPhone, upload from gallery, download the JPG, and attach it to your form.",
-    },
-    {
-      q: "Why does output show out of range?",
-      a: "Very small source images may stay under the minimum KB. Use a clearer, higher-resolution original.",
-    },
-  ];
+  const seo = examSeo(exam);
 
   return (
     <>
@@ -89,21 +58,43 @@ export default async function ExamPage({ params }: { params: Promise<{ slug: str
           { name: exam.name, path: `/${exam.slug}/` },
         ])}
       />
-      <JsonLd data={faqJsonLd(faqs)} />
+      <JsonLd data={faqJsonLd(seo.faqs)} />
 
       <section className="mx-auto max-w-6xl px-4 pb-4 pt-10 text-center sm:px-6">
-        <h1 className="font-[family-name:var(--font-display)] text-3xl font-extrabold text-[var(--ink)] sm:text-4xl">
-          {exam.name} — size photo & signature to KB{" "}
+        <p className="text-xs font-bold uppercase tracking-[0.16em] text-[var(--accent)]">
+          {exam.name} · {year} · Free
+        </p>
+        <h1 className="mt-2 font-[family-name:var(--font-display)] text-3xl font-extrabold text-[var(--ink)] sm:text-4xl">
+          {seo.h1}{" "}
           <span className="text-[var(--accent)]">{year}</span>
         </h1>
-        <p className="mx-auto mt-3 max-w-xl text-[var(--muted)]">
-          Compress {exam.name} documents to the KB window below. Need different limits?{" "}
-          <a href="/custom/" className="font-bold text-[var(--accent-ink)]">
-            Open Custom
-          </a>
-          .
-        </p>
+        <p className="mx-auto mt-3 max-w-xl text-[var(--muted)]">{seo.lead}</p>
         <TrustPills />
+        <ol className="mx-auto mt-6 flex max-w-2xl flex-wrap justify-center gap-2 text-left text-xs font-semibold text-[var(--ink)] sm:gap-3">
+          {[
+            "1 · Crop photo / sign",
+            "2 · Compress to KB",
+            "3 · Free Download",
+            "4 · Upload to portal",
+          ].map((step) => (
+            <li
+              key={step}
+              className="rounded-xl border border-[var(--line)] bg-white px-3 py-2 shadow-sm"
+            >
+              {step}
+            </li>
+          ))}
+        </ol>
+        <p className="mx-auto mt-3 max-w-xl text-sm text-[var(--muted)]">
+          Different limits?{" "}
+          <a href="/custom/" className="font-bold text-[var(--accent-ink)]">
+            Open Custom KB
+          </a>
+          {" · "}
+          <a href="/hi/" className="font-bold text-[var(--accent-ink)]">
+            हिंदी में
+          </a>
+        </p>
       </section>
 
       <div className="mx-auto max-w-5xl px-4 pb-6 sm:px-6">
@@ -117,9 +108,14 @@ export default async function ExamPage({ params }: { params: Promise<{ slug: str
       <section className="mx-auto max-w-5xl px-4 pb-10 sm:px-6">
         <div className="overflow-hidden rounded-3xl border border-[var(--line)] bg-white shadow-[var(--card-shadow)]">
           <div className="flex flex-wrap items-center justify-between gap-2 border-b border-[var(--line)] bg-[var(--wash)] px-5 py-3">
-            <h2 className="font-[family-name:var(--font-display)] text-xl text-[var(--ink)]">
-              {exam.name}
-            </h2>
+            <div>
+              <h2 className="font-[family-name:var(--font-display)] text-xl text-[var(--ink)]">
+                Resize tools
+              </h2>
+              <p className="text-xs text-[var(--muted)]">
+                After compress, tap <strong className="text-[var(--accent-ink)]">Free Download</strong>
+              </p>
+            </div>
             <span className="rounded-full bg-white px-3 py-1 text-xs font-bold text-[var(--muted)]">
               {exam.documents.length} Docs
             </span>
@@ -127,7 +123,11 @@ export default async function ExamPage({ params }: { params: Promise<{ slug: str
 
           <div className="grid gap-4 p-4 sm:grid-cols-2 sm:p-6">
             {exam.documents.map((doc) => (
-              <DocUploader key={doc.id} spec={doc} examSlug={exam.slug} />
+              <DocUploader
+                key={doc.id}
+                spec={{ ...doc, label: examDocLabel(doc) }}
+                examSlug={exam.slug}
+              />
             ))}
           </div>
         </div>
@@ -135,7 +135,7 @@ export default async function ExamPage({ params }: { params: Promise<{ slug: str
         <div className="mt-10 overflow-hidden rounded-2xl border border-[var(--line)] bg-white">
           <div className="border-b border-[var(--line)] bg-[var(--wash)] px-4 py-3">
             <p className="text-xs font-bold uppercase tracking-wide text-[var(--muted)]">
-              {exam.name} Quick Reference Table {year}
+              {exam.name} photo & signature size table {year}
             </p>
           </div>
           <div className="overflow-x-auto">
@@ -153,7 +153,7 @@ export default async function ExamPage({ params }: { params: Promise<{ slug: str
                   const s = formatSpecSummary(doc);
                   return (
                     <tr key={doc.id} className="border-b border-[var(--line)] last:border-0">
-                      <td className="px-4 py-3 font-semibold">{doc.label}</td>
+                      <td className="px-4 py-3 font-semibold">{examDocLabel(doc)}</td>
                       <td className="px-4 py-3">{s.size}</td>
                       <td className="px-4 py-3">{s.fmt}</td>
                       <td className="px-4 py-3">{s.dim}</td>
@@ -163,23 +163,27 @@ export default async function ExamPage({ params }: { params: Promise<{ slug: str
               </tbody>
             </table>
           </div>
+          <p className="border-t border-[var(--line)] px-4 py-3 text-xs text-[var(--muted)]">
+            Always verify against the latest official {exam.name} notification before submitting.
+          </p>
         </div>
       </section>
 
-      <Faq items={faqs} />
+      <Faq items={seo.faqs} />
 
       <SevaDeskPartnerStrip examSlug={exam.slug} examName={exam.name} />
 
       <SeoKeywordBlock
-        heading={`Reduce ${exam.name} image size & signature size online free`}
+        heading={`${exam.name} photo size and signature size in KB`}
         paragraphs={[
-          `Use this free tool to reduce ${exam.name} photo size and reduce ${exam.name} signature size to the KB limits in the table above. Aspirants search “${exam.name} photo size”, “${exam.name} signature size”, reduce image size in KB, reduce signature size online, compress image to 50KB, compress signature to 20KB, photo size kam kaise kare, and signature size kam kaise kare before form upload.`,
-          `Processing stays on your device. After download, upload the JPG to the official ${exam.name} portal. Re-check the latest notification — boards may change dimensions and min–max KB.`,
+          `Aspirants search “${exam.name} photo size”, “${exam.name} signature size”, and “${exam.name} photo and signature size” before form fill. Use this free Size to KB page to crop, compress to the KB table above, Free Download, then upload to the official portal.`,
+          `Processing stays on your device — we don’t save your photos. Re-check the latest notification; boards may change dimensions and min–max KB.`,
         ]}
         links={[
-          { href: "/custom/", label: "Reduce to any custom KB" },
-          { href: "/image-resizer/", label: "Image size reducer" },
-          { href: "/", label: "All exam presets" },
+          { href: "/custom/", label: "Custom KB tool" },
+          { href: "/compress-to-50kb/", label: "Compress to 50KB" },
+          { href: "/signature-cleaner/", label: "Signature 10–20KB" },
+          { href: "/hi/", label: "हिंदी में इस्तेमाल करें" },
           { href: "/disclaimer/", label: "Disclaimer" },
         ]}
       />

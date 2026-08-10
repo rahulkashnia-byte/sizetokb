@@ -10,6 +10,7 @@ const QUICK = [
   { href: "/compress-to-50kb/", label: "50KB" },
   { href: "/pdf-to-jpg/", label: "PDF to JPG" },
   { href: "/pdf-unlock/", label: "Unlock PDF" },
+  { href: "/hi/", label: "हिंदी" },
   { href: "/#tools", label: "All tools" },
 ];
 
@@ -46,6 +47,12 @@ export function Header() {
         </nav>
 
         <div className="flex items-center gap-2">
+          <Link
+            href="/hi/"
+            className="hidden rounded-lg border border-[var(--line)] bg-white px-2.5 py-2 text-xs font-bold text-[var(--ink)] hover:border-[var(--accent)] sm:inline-flex"
+          >
+            हिंदी
+          </Link>
           <Link
             href="/#custom-tool"
             className="inline-flex items-center rounded-lg bg-[var(--ink)] px-3 py-2 text-xs font-bold text-white hover:bg-[var(--accent)] sm:text-sm"
