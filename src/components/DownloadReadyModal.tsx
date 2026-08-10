@@ -63,7 +63,7 @@ export function DownloadReadyModal({
               onDownload();
               onClose();
             }}
-            className="w-full rounded-2xl bg-[var(--accent)] py-4 text-base font-extrabold tracking-wide text-white shadow-[0_8px_24px_rgba(0,0,0,0.12)] hover:brightness-95 active:scale-[0.99]"
+            className="w-full rounded-2xl bg-[var(--download)] py-4 text-base font-extrabold tracking-wide text-white shadow-[0_10px_28px_rgba(45,138,104,0.32)] hover:brightness-105 active:scale-[0.99]"
           >
             Free Download
           </button>

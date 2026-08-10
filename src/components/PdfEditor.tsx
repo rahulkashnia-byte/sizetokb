@@ -18,7 +18,7 @@ import {
   type PdfTool,
 } from "@/lib/pdfEditor";
 
-const COLORS = ["#111827", "#e85d04", "#dc2626", "#2563eb", "#16a34a", "#ca8a04", "#ffffff"];
+const COLORS = ["#111827", "#3d9b78", "#dc2626", "#2563eb", "#16a34a", "#ca8a04", "#ffffff"];
 const HIGHLIGHT = "#facc15";
 
 type PdfJsDoc = Awaited<ReturnType<typeof loadPdfDocument>>["pdf"];
@@ -199,7 +199,7 @@ export function PdfEditor() {
           sel.kind === "highlight")
       ) {
         ctx.save();
-        ctx.strokeStyle = "#e85d04";
+        ctx.strokeStyle = "#3d9b78";
         ctx.setLineDash([4, 3]);
         ctx.lineWidth = 1.5;
         ctx.strokeRect(sel.x - 2, sel.y - 2, sel.w + 4, sel.h + 4);

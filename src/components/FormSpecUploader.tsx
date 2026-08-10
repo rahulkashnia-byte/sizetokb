@@ -188,7 +188,7 @@ export function FormSpecUploader({
         <button
           type="button"
           onClick={() => setDownloadOpen(true)}
-          className="mt-5 w-full rounded-2xl bg-[var(--accent)] py-4 text-base font-extrabold text-white shadow-[0_8px_24px_rgba(0,0,0,0.12)] hover:brightness-95"
+          className="btn-download mt-5 w-full"
         >
           Free Download
         </button>
@@ -199,7 +199,7 @@ export function FormSpecUploader({
           type="button"
           disabled={busy || !file || !crop}
           onClick={() => void run()}
-          className="flex-1 rounded-xl border border-[var(--line)] bg-[var(--wash)] py-3 text-sm font-bold text-[var(--ink)] disabled:opacity-60"
+          className="btn-primary flex-1"
         >
           {busy ? "Compressing…" : result ? "Compress again" : actionLabel}
         </button>

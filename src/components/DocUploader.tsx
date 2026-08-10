@@ -214,7 +214,7 @@ export function DocUploader({
             <button
               type="button"
               onClick={() => setDownloadOpen(true)}
-              className="w-full rounded-2xl bg-[var(--accent)] py-4 text-base font-extrabold text-white shadow-[0_8px_24px_rgba(0,0,0,0.12)] hover:brightness-95"
+              className="btn-download w-full"
             >
               Free Download
             </button>
@@ -223,7 +223,7 @@ export function DocUploader({
             <button
               type="button"
               onClick={() => inputRef.current?.click()}
-              className="rounded-xl border border-[var(--line)] px-4 py-3 text-sm font-bold text-[var(--ink)] hover:border-[var(--accent)]"
+              className="rounded-xl border border-[var(--line)] bg-white/80 px-4 py-3 text-sm font-bold text-[var(--ink)] hover:border-[var(--accent)]"
             >
               {file ? "Change photo" : "Choose photo"}
             </button>
@@ -231,12 +231,10 @@ export function DocUploader({
               type="button"
               disabled={busy || !file || !crop}
               onClick={() => void run()}
-              className={`flex-1 rounded-xl py-3 text-sm font-bold shadow-sm transition hover:brightness-95 disabled:opacity-60 ${
-                result
-                  ? "border border-[var(--line)] bg-[var(--wash)] text-[var(--ink)]"
-                  : isSign
-                    ? "bg-[var(--sign)] text-white"
-                    : "bg-[var(--accent)] text-white"
+              className={`flex-1 ${
+                isSign && !result
+                  ? "rounded-2xl bg-[var(--sign)] py-3.5 text-sm font-extrabold text-white shadow-[0_8px_22px_rgba(90,143,158,0.3)] hover:brightness-105 disabled:opacity-55"
+                  : "btn-primary"
               }`}
             >
               {busy

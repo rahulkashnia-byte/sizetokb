@@ -45,7 +45,7 @@ export default function HomePage() {
           aria-hidden
           style={{
             background:
-              "radial-gradient(ellipse 90% 70% at 50% -30%, rgba(232, 93, 4, 0.18), transparent 55%), linear-gradient(180deg, #fff 0%, transparent 65%)",
+              "radial-gradient(ellipse 90% 70% at 50% -30%, rgba(61, 155, 120, 0.2), transparent 55%), linear-gradient(180deg, #f7fcfa 0%, transparent 65%)",
           }}
         />
         <div className="relative mx-auto max-w-6xl px-4 pb-8 pt-10 sm:px-6 sm:pb-10 sm:pt-14">
