@@ -195,6 +195,18 @@ export function Footer() {
             © {SITE.year} {SITE.name} ({SITE.domain} · {SITE.altDomain}). Always verify specs against
             the latest official notification. Not affiliated with any exam body.
           </p>
+          <p className="flex flex-col gap-1 sm:flex-row sm:flex-wrap sm:items-center sm:gap-x-3 sm:gap-y-1 text-white/55">
+            <span>
+              <span className="text-[var(--accent)]" aria-hidden>
+                ♥
+              </span>{" "}
+              Made in India
+            </span>
+            <span className="hidden text-white/25 sm:inline" aria-hidden>
+              ·
+            </span>
+            <span>Files stay on your device · We don’t save your photos or PDFs</span>
+          </p>
         </div>
       </div>
     </footer>

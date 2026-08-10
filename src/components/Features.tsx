@@ -5,7 +5,7 @@ const FEATURES = [
   },
   {
     title: "Stays on your device",
-    body: "Photos and signatures are processed in the browser. Nothing is uploaded for resizing.",
+    body: "Photos and signatures are processed in the browser. We don’t upload or save your files.",
   },
   {
     title: "Custom when presets miss",
@@ -59,13 +59,13 @@ export function TrustPills() {
   return (
     <div className="mt-6 flex flex-wrap gap-x-4 gap-y-2 text-xs font-semibold text-[var(--muted)]">
       <span className="inline-flex items-center gap-1.5">
-        <span className="h-1.5 w-1.5 rounded-full bg-[var(--accent)]" /> On-device processing
+        <span className="h-1.5 w-1.5 rounded-full bg-[var(--accent)]" /> Private · nothing saved
+      </span>
+      <span className="inline-flex items-center gap-1.5">
+        <span className="h-1.5 w-1.5 rounded-full bg-[var(--accent)]" /> On-device · no upload
       </span>
       <span className="inline-flex items-center gap-1.5">
         <span className="h-1.5 w-1.5 rounded-full bg-[var(--accent)]" /> Free · no signup
-      </span>
-      <span className="inline-flex items-center gap-1.5">
-        <span className="h-1.5 w-1.5 rounded-full bg-[var(--accent)]" /> Custom always available
       </span>
     </div>
   );

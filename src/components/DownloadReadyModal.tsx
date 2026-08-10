@@ -67,6 +67,9 @@ export function DownloadReadyModal({
           >
             Free Download
           </button>
+          <p className="text-center text-xs text-[var(--muted)]">
+            Processed in your browser. We don’t store this file.
+          </p>
           <button
             type="button"
             onClick={onClose}
