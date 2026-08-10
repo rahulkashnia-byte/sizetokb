@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo, useRef, useState } from "react";
+import { DownloadReadyModal } from "@/components/DownloadReadyModal";
 import { ImageEditStage } from "@/components/ImageEditStage";
 import {
   downloadBlob,
@@ -38,6 +39,7 @@ export function FormSpecUploader({
   const [crop, setCrop] = useState<CropRect | null>(null);
   const [busy, setBusy] = useState(false);
   const [result, setResult] = useState<ProcessedImage | null>(null);
+  const [downloadOpen, setDownloadOpen] = useState(false);
   const [origKb, setOrigKb] = useState<number | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [dragging, setDragging] = useState(false);
@@ -51,6 +53,7 @@ export function FormSpecUploader({
   const setSelected = async (next: File | null) => {
     if (result?.url) URL.revokeObjectURL(result.url);
     setResult(null);
+    setDownloadOpen(false);
     setError(null);
     setFile(next);
     setRotate(0);
@@ -85,6 +88,7 @@ export function FormSpecUploader({
         crop,
       });
       setResult(out);
+      setDownloadOpen(true);
     } catch (e) {
       setError(e instanceof Error ? e.message : "Failed");
     } finally {
@@ -138,10 +142,12 @@ export function FormSpecUploader({
               setRotate(deg);
               setCrop(null);
               setResult(null);
+              setDownloadOpen(false);
             }}
             onCropChange={(c) => {
               setCrop(c);
               setResult(null);
+              setDownloadOpen(false);
             }}
           />
           <button
@@ -178,25 +184,43 @@ export function FormSpecUploader({
 
       {error && <p className="mt-3 text-center text-sm text-amber-700">{error}</p>}
 
-      <div className="mt-5 flex flex-wrap gap-2">
+      {result && (
+        <button
+          type="button"
+          onClick={() => setDownloadOpen(true)}
+          className="mt-5 w-full rounded-2xl bg-[var(--accent)] py-4 text-base font-extrabold text-white shadow-[0_8px_24px_rgba(0,0,0,0.12)] hover:brightness-95"
+        >
+          Free Download
+        </button>
+      )}
+
+      <div className="mt-3 flex flex-wrap gap-2">
         <button
           type="button"
           disabled={busy || !file || !crop}
           onClick={() => void run()}
-          className="flex-1 rounded-xl bg-[var(--accent)] py-3 text-sm font-bold text-white disabled:opacity-60"
+          className="flex-1 rounded-xl border border-[var(--line)] bg-[var(--wash)] py-3 text-sm font-bold text-[var(--ink)] disabled:opacity-60"
         >
-          {busy ? "Compressing…" : actionLabel}
+          {busy ? "Compressing…" : result ? "Compress again" : actionLabel}
         </button>
-        {result && (
-          <button
-            type="button"
-            onClick={() => downloadBlob(result.blob, result.filename)}
-            className="rounded-xl border border-[var(--line)] px-4 py-3 text-sm font-bold"
-          >
-            Download
-          </button>
-        )}
       </div>
+
+      <DownloadReadyModal
+        open={downloadOpen && !!result}
+        onClose={() => setDownloadOpen(false)}
+        onDownload={() => {
+          if (result) downloadBlob(result.blob, result.filename);
+        }}
+        previewUrl={result?.url}
+        meta={
+          result
+            ? `${result.sizeKb} KB · ${result.width}×${result.height}px${
+                result.inRange ? " · In range" : ""
+              }`
+            : null
+        }
+        filename={result?.filename}
+      />
     </div>
   );
 }

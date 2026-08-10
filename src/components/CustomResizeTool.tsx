@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
+import { DownloadReadyModal } from "@/components/DownloadReadyModal";
 import { ImageEditStage } from "@/components/ImageEditStage";
 import {
   cmToPx,
@@ -44,6 +45,7 @@ export function CustomResizeTool({
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [result, setResult] = useState<ProcessedImage | null>(null);
+  const [downloadOpen, setDownloadOpen] = useState(false);
   const [file, setFile] = useState<File | null>(null);
   const [dragging, setDragging] = useState(false);
   const [rotate, setRotate] = useState<RotateDeg>(0);
@@ -68,6 +70,7 @@ export function CustomResizeTool({
   const setSelectedFile = async (next: File | null) => {
     if (result?.url) URL.revokeObjectURL(result.url);
     setResult(null);
+    setDownloadOpen(false);
     setError(null);
     setFile(next);
     setRotate(0);
@@ -95,6 +98,7 @@ export function CustomResizeTool({
     setCrop(null);
     setRotate(0);
     setResult(null);
+    setDownloadOpen(false);
     setError(null);
   };
 
@@ -129,6 +133,7 @@ export function CustomResizeTool({
         crop,
       });
       setResult(out);
+      setDownloadOpen(true);
     } catch (e) {
       setError(e instanceof Error ? e.message : "Failed");
     } finally {
@@ -328,24 +333,25 @@ export function CustomResizeTool({
 
         {error && <p className="mt-3 text-center text-sm text-rose-600">{error}</p>}
 
-        <div className="mt-5 flex flex-wrap gap-2">
+        {result && (
+          <button
+            type="button"
+            onClick={() => setDownloadOpen(true)}
+            className="mt-5 w-full rounded-2xl bg-[var(--accent)] py-4 text-base font-extrabold text-white shadow-[0_8px_24px_rgba(0,0,0,0.12)] hover:brightness-95"
+          >
+            Free Download
+          </button>
+        )}
+
+        <div className="mt-3 flex flex-wrap gap-2">
           <button
             type="button"
             disabled={busy || !file || !crop}
             onClick={() => void resize()}
-            className="flex-1 rounded-xl bg-[var(--accent)] px-4 py-3 text-sm font-bold text-white hover:brightness-95 disabled:opacity-60"
+            className="flex-1 rounded-xl border border-[var(--line)] bg-[var(--wash)] px-4 py-3 text-sm font-bold text-[var(--ink)] hover:border-[var(--accent)] disabled:opacity-60"
           >
-            {busy ? "Resizing…" : "Crop & resize to KB"}
+            {busy ? "Resizing…" : result ? "Resize again" : "Crop & resize to KB"}
           </button>
-          {result && (
-            <button
-              type="button"
-              onClick={() => downloadBlob(result.blob, result.filename)}
-              className="rounded-xl border border-[var(--line)] px-4 py-3 text-sm font-bold"
-            >
-              Download
-            </button>
-          )}
           <button
             type="button"
             onClick={reset}
@@ -355,6 +361,23 @@ export function CustomResizeTool({
           </button>
         </div>
       </div>
+
+      <DownloadReadyModal
+        open={downloadOpen && !!result}
+        onClose={() => setDownloadOpen(false)}
+        onDownload={() => {
+          if (result) downloadBlob(result.blob, result.filename);
+        }}
+        previewUrl={result?.url}
+        meta={
+          result
+            ? `${result.sizeKb} KB · ${result.width}×${result.height}px${
+                result.inRange ? " · In range" : ""
+              }`
+            : null
+        }
+        filename={result?.filename}
+      />
     </div>
   );
 }

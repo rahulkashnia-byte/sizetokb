@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useMemo, useRef, useState } from "react";
+import { DownloadReadyModal } from "@/components/DownloadReadyModal";
 import { ImageEditStage } from "@/components/ImageEditStage";
 import type { DocSpec, ProcessedImage } from "@/lib/types";
 import { formatSpecSummary } from "@/lib/format";
@@ -28,6 +29,7 @@ export function DocUploader({
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [result, setResult] = useState<ProcessedImage | null>(null);
+  const [downloadOpen, setDownloadOpen] = useState(false);
   const [file, setFile] = useState<File | null>(null);
   const [rotate, setRotate] = useState<RotateDeg>(0);
   const [crop, setCrop] = useState<CropRect | null>(null);
@@ -45,6 +47,7 @@ export function DocUploader({
     setFile(next);
     setRotate(0);
     setResult(null);
+    setDownloadOpen(false);
     setError(null);
     if (result?.url) URL.revokeObjectURL(result.url);
     try {
@@ -75,6 +78,7 @@ export function DocUploader({
         crop,
       });
       setResult(out);
+      setDownloadOpen(true);
     } catch (e) {
       setError(e instanceof Error ? e.message : "Processing failed");
     } finally {
@@ -90,6 +94,7 @@ export function DocUploader({
   const onRotate = (deg: RotateDeg) => {
     setRotate(deg);
     setResult(null);
+    setDownloadOpen(false);
     setCrop(null); // ImageEditStage will re-init for new orientation
   };
 
@@ -204,39 +209,64 @@ export function DocUploader({
           </div>
         )}
 
-        <div className="mt-4 flex flex-wrap gap-2">
-          <button
-            type="button"
-            onClick={() => inputRef.current?.click()}
-            className="rounded-xl border border-[var(--line)] px-4 py-3 text-sm font-bold text-[var(--ink)] hover:border-[var(--accent)]"
-          >
-            {file ? "Change photo" : "Choose photo"}
-          </button>
-          <button
-            type="button"
-            disabled={busy || !file || !crop}
-            onClick={() => void run()}
-            className={`flex-1 rounded-xl py-3 text-sm font-bold text-white shadow-sm transition hover:brightness-95 disabled:opacity-60 ${
-              isSign ? "bg-[var(--sign)]" : "bg-[var(--accent)]"
-            }`}
-          >
-            {busy
-              ? "Compressing…"
-              : isSign && scanOn
-                ? "Crop, clean & compress"
-                : "Crop & compress to KB"}
-          </button>
+        <div className="mt-4 flex flex-col gap-2">
           {result && (
             <button
               type="button"
-              onClick={() => downloadBlob(result.blob, result.filename)}
-              className="rounded-xl border border-[var(--line)] px-4 py-3 text-sm font-bold text-[var(--ink)] hover:border-[var(--accent)]"
+              onClick={() => setDownloadOpen(true)}
+              className="w-full rounded-2xl bg-[var(--accent)] py-4 text-base font-extrabold text-white shadow-[0_8px_24px_rgba(0,0,0,0.12)] hover:brightness-95"
             >
-              Download
+              Free Download
             </button>
           )}
+          <div className="flex flex-wrap gap-2">
+            <button
+              type="button"
+              onClick={() => inputRef.current?.click()}
+              className="rounded-xl border border-[var(--line)] px-4 py-3 text-sm font-bold text-[var(--ink)] hover:border-[var(--accent)]"
+            >
+              {file ? "Change photo" : "Choose photo"}
+            </button>
+            <button
+              type="button"
+              disabled={busy || !file || !crop}
+              onClick={() => void run()}
+              className={`flex-1 rounded-xl py-3 text-sm font-bold shadow-sm transition hover:brightness-95 disabled:opacity-60 ${
+                result
+                  ? "border border-[var(--line)] bg-[var(--wash)] text-[var(--ink)]"
+                  : isSign
+                    ? "bg-[var(--sign)] text-white"
+                    : "bg-[var(--accent)] text-white"
+              }`}
+            >
+              {busy
+                ? "Compressing…"
+                : isSign && scanOn
+                  ? "Crop, clean & compress"
+                  : result
+                    ? "Compress again"
+                    : "Crop & compress to KB"}
+            </button>
+          </div>
         </div>
       </div>
+
+      <DownloadReadyModal
+        open={downloadOpen && !!result}
+        onClose={() => setDownloadOpen(false)}
+        onDownload={() => {
+          if (result) downloadBlob(result.blob, result.filename);
+        }}
+        previewUrl={result?.url}
+        meta={
+          result
+            ? `${result.sizeKb} KB · ${result.width}×${result.height}px${
+                result.inRange ? " · Within limit" : ""
+              }`
+            : null
+        }
+        filename={result?.filename}
+      />
     </div>
   );
 }
