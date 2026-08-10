@@ -5,6 +5,8 @@ import {
   CATEGORY_OPTIONS,
   datesForPreset,
   formatDayLabel,
+  formatHourLabel,
+  formatIstDateTime,
   formatMinutes,
   istDateKey,
   loadToolsForDates,
@@ -299,7 +301,8 @@ export function AdminStatsPanel() {
         </ul>
         <p className="mt-2 text-xs text-[var(--muted)]">
           <strong>Opens</strong> = times the page was opened · <strong>Uses</strong> = times the
-          tool was actually used · <strong>Time</strong> = time spent on that page.
+          tool was actually used · <strong>Time</strong> = time spent on that page · clocks are{" "}
+          <strong>IST</strong>.
         </p>
       </section>
 
@@ -409,11 +412,147 @@ export function AdminStatsPanel() {
       <div className="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-6">
         <Kpi label="Pages opened" value={String(summary.opens)} hint="Total opens" />
         <Kpi label="Tool uses" value={String(summary.uses)} hint="Downloads / actions" />
-        <Kpi label="Time" value={formatMinutes(summary.seconds)} hint="On pages" />
+        <Kpi label="Time on site" value={formatMinutes(summary.seconds)} hint="Dwell time" />
+        <Kpi
+          label="Conversion"
+          value={snap ? `${snap.conversionPct}%` : "—"}
+          hint="Uses ÷ opens"
+        />
+        <Kpi
+          label="Avg / open"
+          value={snap ? formatMinutes(snap.avgSecondsPerOpen) : "—"}
+          hint="Time per visit"
+        />
+        <Kpi
+          label="Peak hour"
+          value={
+            snap?.peakHour != null ? formatHourLabel(snap.peakHour) : "—"
+          }
+          hint="Busiest IST hour"
+        />
+      </div>
+
+      <div className="mt-3 grid grid-cols-3 gap-3">
         <Kpi label="Used" value={String(summary.used)} hint="Opened + downloaded" />
         <Kpi label="Opened only" value={String(summary.openedOnly)} hint="No download yet" />
         <Kpi label="Not used" value={String(summary.notUsed)} hint="Never opened" />
       </div>
+
+      {/* Recent activity with clock time */}
+      <section className="mt-8">
+        <h2 className="text-sm font-bold uppercase tracking-wide text-[var(--muted)]">
+          Recent activity (with time)
+        </h2>
+        <p className="mt-1 text-xs text-[var(--muted)]">
+          Latest opens & uses with exact IST timestamp (from this browser’s event log + live
+          tracking).
+        </p>
+        <div className="mt-3 overflow-x-auto rounded-2xl border border-[var(--line)] bg-white">
+          {!snap?.recent?.length ? (
+            <p className="px-4 py-6 text-sm text-[var(--muted)]">
+              No timed events yet. Open a tool page or download something, then Refresh.
+            </p>
+          ) : (
+            <table className="w-full min-w-[560px] text-left text-sm">
+              <thead className="border-b border-[var(--line)] bg-[var(--wash)] text-xs uppercase text-[var(--muted)]">
+                <tr>
+                  <th className="px-4 py-3">When (IST)</th>
+                  <th className="px-4 py-3">Event</th>
+                  <th className="px-4 py-3">Page</th>
+                </tr>
+              </thead>
+              <tbody>
+                {snap.recent.slice(0, 40).map((e, i) => (
+                  <tr key={`${e.t}-${e.path}-${i}`} className="border-b border-[var(--line)] last:border-0">
+                    <td className="px-4 py-3 font-semibold text-[var(--ink)]">
+                      {formatIstDateTime(e.t)}
+                    </td>
+                    <td className="px-4 py-3">
+                      <span
+                        className={`rounded-full px-2.5 py-0.5 text-[11px] font-bold ${
+                          e.type === "use"
+                            ? "bg-emerald-100 text-emerald-800"
+                            : "bg-sky-100 text-sky-900"
+                        }`}
+                      >
+                        {e.type === "use" ? "Used tool" : "Opened page"}
+                      </span>
+                    </td>
+                    <td className="px-4 py-3">
+                      <div className="font-semibold">{e.label}</div>
+                      <div className="text-xs text-[var(--muted)]">{e.path}</div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          )}
+        </div>
+      </section>
+
+      {/* Hour of day */}
+      <section className="mt-8">
+        <h2 className="text-sm font-bold uppercase tracking-wide text-[var(--muted)]">
+          Activity by hour (IST)
+        </h2>
+        <div className="mt-3 rounded-2xl border border-[var(--line)] bg-white p-4">
+          {snap && Math.max(...snap.hourly) > 0 ? (
+            <div className="flex h-36 items-end gap-1">
+              {snap.hourly.map((v, h) => {
+                const max = Math.max(...snap.hourly, 1);
+                const pct = Math.round((v / max) * 100);
+                return (
+                  <div key={h} className="flex flex-1 flex-col items-center gap-1">
+                    <div
+                      className="w-full rounded-t bg-[var(--accent)]"
+                      style={{ height: `${Math.max(v ? 8 : 2, pct)}%` }}
+                      title={`${formatHourLabel(h)}: ${v} events`}
+                    />
+                    {(h % 3 === 0 || h === 23) && (
+                      <span className="text-[9px] text-[var(--muted)]">{h}</span>
+                    )}
+                  </div>
+                );
+              })}
+            </div>
+          ) : (
+            <p className="text-sm text-[var(--muted)]">No hourly data yet.</p>
+          )}
+          <p className="mt-2 text-[11px] text-[var(--muted)]">
+            Bars = opens + uses per clock hour (0–23 IST). Hover a bar for detail.
+          </p>
+        </div>
+      </section>
+
+      {/* Weekday */}
+      <section className="mt-8">
+        <h2 className="text-sm font-bold uppercase tracking-wide text-[var(--muted)]">
+          By weekday (IST)
+        </h2>
+        <div className="mt-3 grid grid-cols-7 gap-2">
+          {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map((name, i) => {
+            const v = snap?.weekday?.[i] ?? 0;
+            const max = Math.max(1, ...(snap?.weekday ?? [1]));
+            return (
+              <div
+                key={name}
+                className="rounded-xl border border-[var(--line)] bg-white px-2 py-3 text-center"
+              >
+                <p className="text-[10px] font-bold uppercase text-[var(--muted)]">{name}</p>
+                <p className="mt-1 font-[family-name:var(--font-display)] text-lg text-[var(--ink)]">
+                  {v}
+                </p>
+                <div className="mx-auto mt-2 h-1.5 w-full overflow-hidden rounded-full bg-[var(--wash)]">
+                  <div
+                    className="h-full rounded-full bg-[var(--accent)]"
+                    style={{ width: `${Math.round((v / max) * 100)}%` }}
+                  />
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      </section>
 
       {/* Pages opened — clearest list */}
       <section className="mt-8">
@@ -426,7 +565,7 @@ export function AdminStatsPanel() {
               No pages opened in this period yet. After you deploy, visits will show here.
             </p>
           ) : (
-            <table className="w-full min-w-[640px] text-left text-sm">
+            <table className="w-full min-w-[780px] text-left text-sm">
               <thead className="border-b border-[var(--line)] bg-[var(--wash)] text-xs uppercase text-[var(--muted)]">
                 <tr>
                   <th className="px-4 py-3">#</th>
@@ -435,6 +574,8 @@ export function AdminStatsPanel() {
                   <th className="px-4 py-3">Opens</th>
                   <th className="px-4 py-3">Uses</th>
                   <th className="px-4 py-3">Time</th>
+                  <th className="px-4 py-3">Avg / open</th>
+                  <th className="px-4 py-3">Last active</th>
                 </tr>
               </thead>
               <tbody>
@@ -451,6 +592,14 @@ export function AdminStatsPanel() {
                     <td className="px-4 py-3 font-bold">{t.opens}</td>
                     <td className="px-4 py-3 font-bold">{t.uses}</td>
                     <td className="px-4 py-3">{formatMinutes(t.seconds)}</td>
+                    <td className="px-4 py-3">
+                      {t.opens ? formatMinutes(Math.round(t.seconds / t.opens)) : "—"}
+                    </td>
+                    <td className="px-4 py-3 text-xs text-[var(--muted)]">
+                      {t.lastAt
+                        ? formatIstDateTime(Math.floor(new Date(t.lastAt).getTime() / 1000))
+                        : "—"}
+                    </td>
                   </tr>
                 ))}
               </tbody>

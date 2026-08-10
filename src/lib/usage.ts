@@ -15,6 +15,8 @@ export type ToolStat = {
   /** Times someone completed a download / tool action */
   uses: number;
   seconds: number;
+  /** Last activity ISO timestamp (when known) */
+  lastAt?: string | null;
 };
 
 export type ToolStatus = "used" | "opened" | "not_used";
@@ -26,14 +28,30 @@ export type DayStat = {
   seconds: number;
 };
 
+export type RecentEvent = {
+  t: number; // unix seconds
+  type: "open" | "use" | "time";
+  path: string;
+  label: string;
+  seconds?: number;
+};
+
 export type UsageSnapshot = {
   tools: ToolStat[];
   days: DayStat[];
   dailyTools: Record<string, Record<string, ToolCounters>>;
+  hourly: number[]; // 24 IST hours — opens+uses activity
+  hourlyOpens: number[];
+  hourlyUses: number[];
+  weekday: number[]; // 0=Sun..6=Sat
+  recent: RecentEvent[];
   totalOpens: number;
   totalUses: number;
   totalSeconds: number;
   totalMinutes: number;
+  conversionPct: number;
+  avgSecondsPerOpen: number;
+  peakHour: number | null;
   fetchedAt: string;
   source: "network" | "local";
 };
@@ -53,12 +71,19 @@ export const CATEGORY_OPTIONS = [
   { id: "other", label: "Other / exam pages" },
 ];
 
-export type ToolCounters = { opens: number; uses: number; seconds: number };
+export type ToolCounters = { opens: number; uses: number; seconds: number; lastAt?: string };
 
 type LocalStore = {
   version: 2;
   tools: Record<string, ToolCounters>;
-  daily: Record<string, { opens: number; uses: number; seconds: number; tools: Record<string, ToolCounters> }>;
+  daily: Record<
+    string,
+    { opens: number; uses: number; seconds: number; tools: Record<string, ToolCounters> }
+  >;
+  hourlyOpens: number[];
+  hourlyUses: number[];
+  weekday: number[];
+  recent: RecentEvent[];
 };
 
 function emptyCounters(): ToolCounters {
@@ -70,11 +95,20 @@ function normalizeCounters(raw?: Partial<ToolCounters> | null): ToolCounters {
     opens: Number(raw?.opens) || 0,
     uses: Number(raw?.uses) || 0,
     seconds: Number(raw?.seconds) || 0,
+    lastAt: raw?.lastAt || undefined,
   };
 }
 
 function emptyLocal(): LocalStore {
-  return { version: 2, tools: {}, daily: {} };
+  return {
+    version: 2,
+    tools: {},
+    daily: {},
+    hourlyOpens: Array.from({ length: 24 }, () => 0),
+    hourlyUses: Array.from({ length: 24 }, () => 0),
+    weekday: Array.from({ length: 7 }, () => 0),
+    recent: [],
+  };
 }
 
 export function toolStatus(t: Pick<ToolStat, "opens" | "uses">): ToolStatus {
@@ -87,6 +121,59 @@ export function statusLabel(s: ToolStatus): string {
   if (s === "used") return "Used";
   if (s === "opened") return "Opened only";
   return "Not used";
+}
+
+/** Hour 0–23 in Asia/Kolkata */
+export function istHour(d = new Date()): number {
+  const parts = new Intl.DateTimeFormat("en-GB", {
+    timeZone: "Asia/Kolkata",
+    hour: "numeric",
+    hour12: false,
+  }).formatToParts(d);
+  const h = Number(parts.find((p) => p.type === "hour")?.value ?? "0");
+  return h === 24 ? 0 : h;
+}
+
+/** Weekday 0=Sun … 6=Sat in Asia/Kolkata */
+export function istWeekday(d = new Date()): number {
+  // en-US weekday short in IST
+  const w = new Intl.DateTimeFormat("en-US", {
+    timeZone: "Asia/Kolkata",
+    weekday: "short",
+  }).format(d);
+  const map: Record<string, number> = {
+    Sun: 0,
+    Mon: 1,
+    Tue: 2,
+    Wed: 3,
+    Thu: 4,
+    Fri: 5,
+    Sat: 6,
+  };
+  return map[w] ?? 0;
+}
+
+export function formatIstDateTime(unixSec: number): string {
+  try {
+    return new Date(unixSec * 1000).toLocaleString("en-IN", {
+      timeZone: "Asia/Kolkata",
+      day: "numeric",
+      month: "short",
+      year: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+      second: "2-digit",
+      hour12: true,
+    });
+  } catch {
+    return String(unixSec);
+  }
+}
+
+export function formatHourLabel(h: number): string {
+  const ampm = h >= 12 ? "PM" : "AM";
+  const hr = h % 12 === 0 ? 12 : h % 12;
+  return `${hr} ${ampm}`;
 }
 
 /** Calendar date in Asia/Kolkata as YYYY-MM-DD */
@@ -167,8 +254,19 @@ function readLocal(): LocalStore {
       return emptyLocal();
     }
     const parsed = JSON.parse(raw) as LocalStore;
-    if (!parsed.tools) parsed.tools = {};
-    if (!parsed.daily) parsed.daily = {};
+    const base = emptyLocal();
+    parsed.tools = parsed.tools || {};
+    parsed.daily = parsed.daily || {};
+    parsed.hourlyOpens = Array.isArray(parsed.hourlyOpens)
+      ? [...parsed.hourlyOpens, ...Array(24).fill(0)].slice(0, 24).map(Number)
+      : base.hourlyOpens;
+    parsed.hourlyUses = Array.isArray(parsed.hourlyUses)
+      ? [...parsed.hourlyUses, ...Array(24).fill(0)].slice(0, 24).map(Number)
+      : base.hourlyUses;
+    parsed.weekday = Array.isArray(parsed.weekday)
+      ? [...parsed.weekday, ...Array(7).fill(0)].slice(0, 7).map(Number)
+      : base.weekday;
+    parsed.recent = Array.isArray(parsed.recent) ? parsed.recent.slice(-100) : [];
     for (const id of Object.keys(parsed.tools)) {
       parsed.tools[id] = normalizeCounters(parsed.tools[id]);
     }
@@ -194,21 +292,62 @@ function writeLocal(store: LocalStore) {
     if (dates.length > 90) {
       for (const d of dates.slice(0, dates.length - 90)) delete store.daily[d];
     }
+    if (store.recent?.length > 100) store.recent = store.recent.slice(-100);
     localStorage.setItem(LOCAL_KEY, JSON.stringify(store));
   } catch {
     /* ignore */
   }
 }
 
-function bumpLocal(id: string, field: keyof ToolCounters, by: number) {
+function pushRecent(
+  store: LocalStore,
+  type: RecentEvent["type"],
+  path: string,
+  label: string,
+  seconds?: number
+) {
+  store.recent.push({
+    t: Math.floor(Date.now() / 1000),
+    type,
+    path,
+    label,
+    seconds,
+  });
+  if (store.recent.length > 100) store.recent = store.recent.slice(-100);
+}
+
+function bumpLocal(
+  id: string,
+  field: "opens" | "uses" | "seconds",
+  by: number,
+  meta?: { path?: string; type?: RecentEvent["type"]; seconds?: number }
+) {
   const store = readLocal();
   const day = istDateKey();
+  const hour = istHour();
+  const weekday = istWeekday();
+  const nowIso = new Date().toISOString();
   if (!store.tools[id]) store.tools[id] = emptyCounters();
   store.tools[id][field] += by;
+  store.tools[id].lastAt = nowIso;
   if (!store.daily[day]) store.daily[day] = { opens: 0, uses: 0, seconds: 0, tools: {} };
   if (!store.daily[day].tools[id]) store.daily[day].tools[id] = emptyCounters();
   store.daily[day].tools[id][field] += by;
+  store.daily[day].tools[id].lastAt = nowIso;
   store.daily[day][field] += by;
+
+  if (field === "opens") {
+    store.hourlyOpens[hour] = (store.hourlyOpens[hour] || 0) + by;
+    store.weekday[weekday] = (store.weekday[weekday] || 0) + by;
+  } else if (field === "uses") {
+    store.hourlyUses[hour] = (store.hourlyUses[hour] || 0) + by;
+    store.weekday[weekday] = (store.weekday[weekday] || 0) + by;
+  }
+
+  if (meta?.type) {
+    const path = meta.path || pathFromToolId(id);
+    pushRecent(store, meta.type, path, labelForPath(path), meta.seconds);
+  }
   writeLocal(store);
 }
 
@@ -261,12 +400,14 @@ export function trackPageOpen(path?: string) {
   if (p.startsWith("/admin")) return;
   const id = toolIdFromPath(p);
   const day = istDateKey();
-  bumpLocal(id, "opens", 1);
+  const hour = istHour();
+  bumpLocal(id, "opens", 1, { path: p, type: "open" });
   void countHit(`${PREFIX}tool_${id}_opens`).catch(() => {});
   void countHit(`${PREFIX}total_opens`).catch(() => {});
   void countHit(`${PREFIX}day_${day}_opens`).catch(() => {});
   void countHit(`${PREFIX}day_${day}_tool_${id}_opens`).catch(() => {});
-  gtagTool("page_open", { tool_id: id, tool_path: p });
+  void countHit(`${PREFIX}hour_${hour}_opens`).catch(() => {});
+  gtagTool("page_open", { tool_id: id, tool_path: p, hour });
 }
 
 /** Record one successful tool run / download. */
@@ -276,12 +417,14 @@ export function trackToolUse(path?: string) {
   if (p.startsWith("/admin")) return;
   const id = toolIdFromPath(p);
   const day = istDateKey();
-  bumpLocal(id, "uses", 1);
+  const hour = istHour();
+  bumpLocal(id, "uses", 1, { path: p, type: "use" });
   void countHit(`${PREFIX}tool_${id}_uses`).catch(() => {});
   void countHit(`${PREFIX}total_uses`).catch(() => {});
   void countHit(`${PREFIX}day_${day}_uses`).catch(() => {});
   void countHit(`${PREFIX}day_${day}_tool_${id}_uses`).catch(() => {});
-  gtagTool("tool_use", { tool_id: id, tool_path: p });
+  void countHit(`${PREFIX}hour_${hour}_uses`).catch(() => {});
+  gtagTool("tool_use", { tool_id: id, tool_path: p, hour });
 }
 
 /** Add dwell time for a tool page (seconds). */
@@ -342,17 +485,54 @@ function sortTools(a: ToolStat, b: ToolStat) {
   return b.uses - a.uses || b.opens - a.opens || b.seconds - a.seconds;
 }
 
+function enrichSnapshot(base: {
+  tools: ToolStat[];
+  days: DayStat[];
+  dailyTools: UsageSnapshot["dailyTools"];
+  hourlyOpens: number[];
+  hourlyUses: number[];
+  weekday: number[];
+  recent: RecentEvent[];
+  source: "network" | "local";
+}): UsageSnapshot {
+  const totalOpens = base.tools.reduce((s, t) => s + t.opens, 0);
+  const totalUses = base.tools.reduce((s, t) => s + t.uses, 0);
+  const totalSeconds = base.tools.reduce((s, t) => s + t.seconds, 0);
+  const hourly = base.hourlyOpens.map((o, i) => o + (base.hourlyUses[i] || 0));
+  let peakHour: number | null = null;
+  let peakVal = 0;
+  hourly.forEach((v, i) => {
+    if (v > peakVal) {
+      peakVal = v;
+      peakHour = i;
+    }
+  });
+  return {
+    ...base,
+    hourly,
+    totalOpens,
+    totalUses,
+    totalSeconds,
+    totalMinutes: Math.round((totalSeconds / 60) * 10) / 10,
+    conversionPct: totalOpens > 0 ? Math.round((totalUses / totalOpens) * 1000) / 10 : 0,
+    avgSecondsPerOpen: totalOpens > 0 ? Math.round(totalSeconds / totalOpens) : 0,
+    peakHour: peakVal > 0 ? peakHour : null,
+    fetchedAt: new Date().toISOString(),
+  };
+}
+
 function snapshotFromLocal(): UsageSnapshot {
   const store = readLocal();
   const catalog = catalogPaths();
   const byId = new Map<string, ToolStat>();
   for (const c of catalog) {
     const v = normalizeCounters(store.tools[c.id]);
-    byId.set(c.id, { ...c, ...v });
+    byId.set(c.id, { ...c, ...v, lastAt: v.lastAt ?? null });
   }
   for (const [id, val] of Object.entries(store.tools)) {
     if (byId.has(id)) continue;
-    byId.set(id, { ...metaForId(id), ...normalizeCounters(val) });
+    const v = normalizeCounters(val);
+    byId.set(id, { ...metaForId(id), ...v, lastAt: v.lastAt ?? null });
   }
   const tools = [...byId.values()].sort(sortTools);
   const days: DayStat[] = Object.entries(store.daily)
@@ -367,20 +547,16 @@ function snapshotFromLocal(): UsageSnapshot {
   for (const [date, v] of Object.entries(store.daily)) {
     dailyTools[date] = v.tools;
   }
-  const totalOpens = tools.reduce((s, t) => s + t.opens, 0);
-  const totalUses = tools.reduce((s, t) => s + t.uses, 0);
-  const totalSeconds = tools.reduce((s, t) => s + t.seconds, 0);
-  return {
+  return enrichSnapshot({
     tools,
     days,
     dailyTools,
-    totalOpens,
-    totalUses,
-    totalSeconds,
-    totalMinutes: Math.round((totalSeconds / 60) * 10) / 10,
-    fetchedAt: new Date().toISOString(),
+    hourlyOpens: store.hourlyOpens,
+    hourlyUses: store.hourlyUses,
+    weekday: store.weekday,
+    recent: [...store.recent].reverse(),
     source: "local",
-  };
+  });
 }
 
 async function mapPool<T, R>(items: T[], concurrency: number, fn: (item: T) => Promise<R>): Promise<R[]> {
@@ -421,6 +597,18 @@ export async function loadUsageSnapshot(): Promise<UsageSnapshot> {
       return { date, opens, uses, seconds } satisfies DayStat;
     });
 
+    const hourResults = await mapPool(
+      Array.from({ length: 24 }, (_, h) => h),
+      6,
+      async (h) => {
+        const [opens, uses] = await Promise.all([
+          countGet(`${PREFIX}hour_${h}_opens`),
+          countGet(`${PREFIX}hour_${h}_uses`),
+        ]);
+        return { h, opens, uses };
+      }
+    );
+
     const byId = new Map<string, ToolStat>();
     for (const row of toolResults) {
       const loc = local.tools.find((t) => t.id === row.id);
@@ -429,6 +617,7 @@ export async function loadUsageSnapshot(): Promise<UsageSnapshot> {
         opens: Math.max(row.opens, loc?.opens ?? 0),
         uses: Math.max(row.uses, loc?.uses ?? 0),
         seconds: Math.max(row.seconds, loc?.seconds ?? 0),
+        lastAt: loc?.lastAt ?? null,
       });
     }
     for (const loc of local.tools) {
@@ -449,24 +638,29 @@ export async function loadUsageSnapshot(): Promise<UsageSnapshot> {
       if (!dayMap.has(loc.date)) dayMap.set(loc.date, loc);
     }
 
+    const hourlyOpens = Array.from({ length: 24 }, (_, h) => {
+      const net = hourResults.find((x) => x.h === h)?.opens ?? 0;
+      return Math.max(net, local.hourlyOpens[h] || 0);
+    });
+    const hourlyUses = Array.from({ length: 24 }, (_, h) => {
+      const net = hourResults.find((x) => x.h === h)?.uses ?? 0;
+      return Math.max(net, local.hourlyUses[h] || 0);
+    });
+
     const tools = [...byId.values()].sort(sortTools);
     const days = [...dayMap.values()].sort((a, b) => b.date.localeCompare(a.date));
-    const totalOpens = tools.reduce((s, t) => s + t.opens, 0);
-    const totalUses = tools.reduce((s, t) => s + t.uses, 0);
-    const totalSeconds = tools.reduce((s, t) => s + t.seconds, 0);
     const anyNetwork = toolResults.some((r) => r.opens > 0 || r.uses > 0 || r.seconds > 0);
 
-    return {
+    return enrichSnapshot({
       tools,
       days,
       dailyTools: local.dailyTools,
-      totalOpens,
-      totalUses,
-      totalSeconds,
-      totalMinutes: Math.round((totalSeconds / 60) * 10) / 10,
-      fetchedAt: new Date().toISOString(),
+      hourlyOpens,
+      hourlyUses,
+      weekday: local.weekday,
+      recent: local.recent,
       source: anyNetwork || toolResults.length ? "network" : "local",
-    };
+    });
   } catch {
     return local;
   }
