@@ -122,6 +122,68 @@ export const TOOLS: ToolDef[] = [
     featured: true,
   },
   {
+    href: "/compress-to-10kb/",
+    label: "Compress to 10KB",
+    blurb: "Tight signature / portal limit",
+    category: "size",
+    seoTitle: "Compress Image to 10KB Online Free — Reduce Photo Size to 10KB",
+    seoDescription:
+      "Compress image to 10KB online free. Reduce photo or signature size to 10KB for strict form uploads — Size to KB",
+    keywords: [
+      "compress image to 10kb",
+      "reduce photo size to 10kb",
+      "compress photo to 10KB",
+      "image compressor 10KB",
+    ],
+    featured: true,
+  },
+  {
+    href: "/compress-to-200kb/",
+    label: "Compress to 200KB",
+    blurb: "Docs / marksheet style max",
+    category: "size",
+    seoTitle: "Compress Image to 200KB Online Free — Reduce Photo Size to 200KB",
+    seoDescription:
+      "Compress image to 200KB online free. Reduce photo size to 200KB for documents and form uploads — Size to KB",
+    keywords: [
+      "compress image to 200kb",
+      "reduce photo size to 200kb",
+      "compress photo to 200KB",
+      "image compressor 200KB",
+    ],
+  },
+  {
+    href: "/compress-to-500kb/",
+    label: "Compress to 500KB",
+    blurb: "Larger scan / certificate max",
+    category: "size",
+    seoTitle: "Compress Image to 500KB Online Free — Reduce Photo Size to 500KB",
+    seoDescription:
+      "Compress image to 500KB online free. Reduce photo or scan size to 500KB for form uploads — Size to KB",
+    keywords: [
+      "compress image to 500kb",
+      "reduce photo size to 500kb",
+      "compress photo to 500KB",
+      "image compressor 500KB",
+    ],
+  },
+  {
+    href: "/min-kb-padder/",
+    label: "Min KB padder",
+    blurb: "File too small? Pad into min–max KB",
+    category: "size",
+    seoTitle: "Increase Image Size to Min KB Online Free — Pad Photo to Exact KB Band",
+    seoDescription:
+      "Portal says file too small? Increase photo or signature size into a min–max KB range online free — Size to KB",
+    keywords: [
+      "increase image size to KB",
+      "file too small upload",
+      "pad image to minimum KB",
+      "increase photo size online",
+    ],
+    featured: true,
+  },
+  {
     href: "/signature-cleaner/",
     label: "Reduce signature size",
     blurb: "Clean ink and hit 10–20 KB",
@@ -618,6 +680,38 @@ export const TOOLS: ToolDef[] = [
       "resume maker online free",
       "biodata format for government job",
       "bio data maker with photo",
+    ],
+    featured: true,
+  },
+  {
+    href: "/photo-name-date/",
+    label: "Name & date on photo",
+    blurb: "Stamp name + date on exam photo",
+    category: "photo",
+    seoTitle: "Add Name and Date on Photo Online Free — Exam Form Photo Stamp",
+    seoDescription:
+      "Add candidate name and date on photo online free for SSC, Bank, Railway form uploads — Size to KB",
+    keywords: [
+      "name and date on photo",
+      "write name on photo online",
+      "exam photo name date",
+      "stamp name on photograph",
+    ],
+    featured: true,
+  },
+  {
+    href: "/age-calculator/",
+    label: "Age as on date",
+    blurb: "Exam cut-off age calculator",
+    category: "extra",
+    seoTitle: "Age Calculator As On Date Online Free — Exam Form Cut-off Age",
+    seoDescription:
+      "Calculate age as on date for SSC, Bank, Railway and government exam forms — Size to KB",
+    keywords: [
+      "age calculator as on date",
+      "age as on date calculator",
+      "exam age calculator",
+      "SSC age calculator",
     ],
     featured: true,
   },

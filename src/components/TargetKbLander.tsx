@@ -5,11 +5,14 @@ import { ShareButtons } from "@/components/ShareButtons";
 import Link from "next/link";
 
 const RELATED = [
+  { href: "/compress-to-10kb/", label: "Compress to 10KB" },
   { href: "/compress-to-20kb/", label: "Compress to 20KB" },
   { href: "/compress-to-50kb/", label: "Compress to 50KB" },
   { href: "/compress-to-100kb/", label: "Compress to 100KB" },
+  { href: "/compress-to-200kb/", label: "Compress to 200KB" },
+  { href: "/compress-to-500kb/", label: "Compress to 500KB" },
   { href: "/signature-cleaner/", label: "Signature 10–20KB" },
-  { href: "/size-kam-kaise-kare/", label: "Size kam kaise kare" },
+  { href: "/min-kb-padder/", label: "Min KB padder" },
   { href: "/#custom-tool", label: "Custom KB" },
 ];
 

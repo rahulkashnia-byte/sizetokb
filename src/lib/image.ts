@@ -1,5 +1,6 @@
 import type { DocSpec, ProcessedImage } from "./types";
 import { trackToolUse } from "./usage";
+import { triggerSharePrompt } from "./sharePrompt";
 
 const DPI = 96; // browser canvas approx for cm→px
 
@@ -322,6 +323,11 @@ export function downloadBlob(blob: Blob, filename: string): void {
   a.download = filename;
   a.click();
   URL.revokeObjectURL(a.href);
+  try {
+    triggerSharePrompt();
+  } catch {
+    /* ignore */
+  }
 }
 
 export function stepRotate(current: RotateDeg, dir: 1 | -1): RotateDeg {

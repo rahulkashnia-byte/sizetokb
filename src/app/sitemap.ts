@@ -44,9 +44,15 @@ export default function sitemap(): MetadataRoute.Sitemap {
     "/size-kam-kaise-kare",
     "/signature-size-kam-kaise-kare",
     "/pdf-size-kam-kaise-kare",
+    "/compress-to-10kb",
     "/compress-to-20kb",
     "/compress-to-50kb",
     "/compress-to-100kb",
+    "/compress-to-200kb",
+    "/compress-to-500kb",
+    "/min-kb-padder",
+    "/photo-name-date",
+    "/age-calculator",
     "/biodata",
     "/about-us",
     "/contact-us",
@@ -77,9 +83,15 @@ export default function sitemap(): MetadataRoute.Sitemap {
             path === "/pdf-merge" ||
             path === "/pdf-to-word" ||
             path === "/word-to-pdf" ||
+            path === "/compress-to-10kb" ||
             path === "/compress-to-20kb" ||
             path === "/compress-to-50kb" ||
             path === "/compress-to-100kb" ||
+            path === "/compress-to-200kb" ||
+            path === "/compress-to-500kb" ||
+            path === "/min-kb-padder" ||
+            path === "/photo-name-date" ||
+            path === "/age-calculator" ||
             path === "/biodata" ||
             path === "/signature-size-kam-kaise-kare" ||
             path === "/pdf-size-kam-kaise-kare"

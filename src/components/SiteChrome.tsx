@@ -3,6 +3,7 @@
 import { usePathname } from "next/navigation";
 import { Footer } from "@/components/Footer";
 import { Header } from "@/components/Header";
+import { ShareAfterDownload } from "@/components/ShareAfterDownload";
 import { UsageTracker } from "@/components/UsageTracker";
 
 /** Hides marketing chrome on /admin — stats page only. */
@@ -16,6 +17,7 @@ export function SiteChrome({ children }: { children: React.ReactNode }) {
       {!isAdmin && <Header />}
       <main className="flex-1">{children}</main>
       {!isAdmin && <Footer />}
+      {!isAdmin && <ShareAfterDownload />}
     </>
   );
 }

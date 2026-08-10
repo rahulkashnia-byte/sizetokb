@@ -21,6 +21,24 @@ export const HOT_TOOLS = [
     badge: null,
   },
   {
+    href: "/compress-to-10kb/",
+    label: "Compress to 10KB",
+    blurb: "Tight signature / portal limit",
+    badge: "New",
+  },
+  {
+    href: "/min-kb-padder/",
+    label: "Min KB padder",
+    blurb: "Portal says file too small",
+    badge: "New",
+  },
+  {
+    href: "/age-calculator/",
+    label: "Age as on date",
+    blurb: "Exam cut-off age calculator",
+    badge: "New",
+  },
+  {
     href: "/pdf-to-jpg/",
     label: "PDF to JPG",
     blurb: "Huge search demand — pages → images",
@@ -48,6 +66,12 @@ export const HOT_TOOLS = [
     href: "/biodata/",
     label: "Biodata maker",
     blurb: "Sarkari resume → print PDF",
+    badge: "New",
+  },
+  {
+    href: "/photo-name-date/",
+    label: "Name & date on photo",
+    blurb: "Stamp name + date for forms",
     badge: "New",
   },
   {
