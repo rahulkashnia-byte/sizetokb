@@ -2,20 +2,27 @@
 
 import { useEffect, useRef } from "react";
 import { usePathname } from "next/navigation";
-import { trackToolTime } from "@/lib/usage";
+import { trackPageOpen, trackToolTime } from "@/lib/usage";
 
 /**
- * Tracks time spent on each tool/page (for admin minutes stats).
- * Flushes on route change, tab hide, and page unload.
+ * Tracks page opens + time spent on each page (for admin stats).
  */
 export function UsageTracker() {
   const pathname = usePathname();
   const startedAt = useRef<number>(Date.now());
   const pathRef = useRef<string>(pathname || "/");
+  const openedPath = useRef<string | null>(null);
 
   useEffect(() => {
-    pathRef.current = pathname || "/";
+    const path = pathname || "/";
+    pathRef.current = path;
     startedAt.current = Date.now();
+
+    // Count each navigation / first load as a page open
+    if (openedPath.current !== path) {
+      openedPath.current = path;
+      trackPageOpen(path);
+    }
 
     const flush = () => {
       const secs = (Date.now() - startedAt.current) / 1000;

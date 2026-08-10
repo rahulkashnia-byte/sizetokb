@@ -1,6 +1,6 @@
 /**
- * Tool usage stats (uses + time + daily) for /admin.
- * All-time + per-day counters via CountAPI; mirrored in localStorage.
+ * Tool / page usage stats for /admin.
+ * Tracks: page opens, tool uses (downloads), time on page.
  */
 
 import { TOOLS, TOOL_CATEGORIES } from "@/lib/toolsCatalog";
@@ -10,12 +10,18 @@ export type ToolStat = {
   path: string;
   label: string;
   category: string;
+  /** Times the page was opened */
+  opens: number;
+  /** Times someone completed a download / tool action */
   uses: number;
   seconds: number;
 };
 
+export type ToolStatus = "used" | "opened" | "not_used";
+
 export type DayStat = {
   date: string; // YYYY-MM-DD (IST)
+  opens: number;
   uses: number;
   seconds: number;
 };
@@ -23,8 +29,8 @@ export type DayStat = {
 export type UsageSnapshot = {
   tools: ToolStat[];
   days: DayStat[];
-  /** Per-day tool breakdown when available (local + fetched network days) */
-  dailyTools: Record<string, Record<string, { uses: number; seconds: number }>>;
+  dailyTools: Record<string, Record<string, ToolCounters>>;
+  totalOpens: number;
   totalUses: number;
   totalSeconds: number;
   totalMinutes: number;
@@ -47,15 +53,40 @@ export const CATEGORY_OPTIONS = [
   { id: "other", label: "Other / exam pages" },
 ];
 
-type ToolCounters = { uses: number; seconds: number };
+export type ToolCounters = { opens: number; uses: number; seconds: number };
+
 type LocalStore = {
   version: 2;
   tools: Record<string, ToolCounters>;
-  daily: Record<string, { uses: number; seconds: number; tools: Record<string, ToolCounters> }>;
+  daily: Record<string, { opens: number; uses: number; seconds: number; tools: Record<string, ToolCounters> }>;
 };
+
+function emptyCounters(): ToolCounters {
+  return { opens: 0, uses: 0, seconds: 0 };
+}
+
+function normalizeCounters(raw?: Partial<ToolCounters> | null): ToolCounters {
+  return {
+    opens: Number(raw?.opens) || 0,
+    uses: Number(raw?.uses) || 0,
+    seconds: Number(raw?.seconds) || 0,
+  };
+}
 
 function emptyLocal(): LocalStore {
   return { version: 2, tools: {}, daily: {} };
+}
+
+export function toolStatus(t: Pick<ToolStat, "opens" | "uses">): ToolStatus {
+  if (t.uses > 0) return "used";
+  if (t.opens > 0) return "opened";
+  return "not_used";
+}
+
+export function statusLabel(s: ToolStatus): string {
+  if (s === "used") return "Used";
+  if (s === "opened") return "Opened only";
+  return "Not used";
 }
 
 /** Calendar date in Asia/Kolkata as YYYY-MM-DD */
@@ -116,18 +147,19 @@ function readLocal(): LocalStore {
   try {
     const raw = localStorage.getItem(LOCAL_KEY);
     if (!raw) {
-      // migrate v1 if present
       const v1 = localStorage.getItem("stk_tool_stats_v1");
       if (v1) {
-        const old = JSON.parse(v1) as Record<string, ToolCounters>;
+        const old = JSON.parse(v1) as Record<string, Partial<ToolCounters>>;
         const store = emptyLocal();
-        store.tools = old;
         const day = istDateKey();
-        store.daily[day] = { uses: 0, seconds: 0, tools: {} };
+        store.daily[day] = { opens: 0, uses: 0, seconds: 0, tools: {} };
         for (const [id, val] of Object.entries(old)) {
-          store.daily[day].tools[id] = { ...val };
-          store.daily[day].uses += val.uses;
-          store.daily[day].seconds += val.seconds;
+          const c = normalizeCounters(val);
+          store.tools[id] = c;
+          store.daily[day].tools[id] = { ...c };
+          store.daily[day].opens += c.opens;
+          store.daily[day].uses += c.uses;
+          store.daily[day].seconds += c.seconds;
         }
         writeLocal(store);
         return store;
@@ -137,6 +169,19 @@ function readLocal(): LocalStore {
     const parsed = JSON.parse(raw) as LocalStore;
     if (!parsed.tools) parsed.tools = {};
     if (!parsed.daily) parsed.daily = {};
+    for (const id of Object.keys(parsed.tools)) {
+      parsed.tools[id] = normalizeCounters(parsed.tools[id]);
+    }
+    for (const day of Object.keys(parsed.daily)) {
+      const d = parsed.daily[day];
+      d.opens = Number(d.opens) || 0;
+      d.uses = Number(d.uses) || 0;
+      d.seconds = Number(d.seconds) || 0;
+      if (!d.tools) d.tools = {};
+      for (const id of Object.keys(d.tools)) {
+        d.tools[id] = normalizeCounters(d.tools[id]);
+      }
+    }
     return parsed;
   } catch {
     return emptyLocal();
@@ -145,7 +190,6 @@ function readLocal(): LocalStore {
 
 function writeLocal(store: LocalStore) {
   try {
-    // Keep ~90 days locally
     const dates = Object.keys(store.daily).sort();
     if (dates.length > 90) {
       for (const d of dates.slice(0, dates.length - 90)) delete store.daily[d];
@@ -156,13 +200,13 @@ function writeLocal(store: LocalStore) {
   }
 }
 
-function bumpLocal(id: string, field: "uses" | "seconds", by: number) {
+function bumpLocal(id: string, field: keyof ToolCounters, by: number) {
   const store = readLocal();
   const day = istDateKey();
-  if (!store.tools[id]) store.tools[id] = { uses: 0, seconds: 0 };
+  if (!store.tools[id]) store.tools[id] = emptyCounters();
   store.tools[id][field] += by;
-  if (!store.daily[day]) store.daily[day] = { uses: 0, seconds: 0, tools: {} };
-  if (!store.daily[day].tools[id]) store.daily[day].tools[id] = { uses: 0, seconds: 0 };
+  if (!store.daily[day]) store.daily[day] = { opens: 0, uses: 0, seconds: 0, tools: {} };
+  if (!store.daily[day].tools[id]) store.daily[day].tools[id] = emptyCounters();
   store.daily[day].tools[id][field] += by;
   store.daily[day][field] += by;
   writeLocal(store);
@@ -210,7 +254,22 @@ function currentPath(): string {
   return p;
 }
 
-/** Record one successful tool run / action. */
+/** Record a page open / visit. */
+export function trackPageOpen(path?: string) {
+  if (typeof window === "undefined") return;
+  const p = path ?? currentPath();
+  if (p.startsWith("/admin")) return;
+  const id = toolIdFromPath(p);
+  const day = istDateKey();
+  bumpLocal(id, "opens", 1);
+  void countHit(`${PREFIX}tool_${id}_opens`).catch(() => {});
+  void countHit(`${PREFIX}total_opens`).catch(() => {});
+  void countHit(`${PREFIX}day_${day}_opens`).catch(() => {});
+  void countHit(`${PREFIX}day_${day}_tool_${id}_opens`).catch(() => {});
+  gtagTool("page_open", { tool_id: id, tool_path: p });
+}
+
+/** Record one successful tool run / download. */
 export function trackToolUse(path?: string) {
   if (typeof window === "undefined") return;
   const p = path ?? currentPath();
@@ -279,35 +338,43 @@ function metaForId(id: string) {
   };
 }
 
+function sortTools(a: ToolStat, b: ToolStat) {
+  return b.uses - a.uses || b.opens - a.opens || b.seconds - a.seconds;
+}
+
 function snapshotFromLocal(): UsageSnapshot {
   const store = readLocal();
   const catalog = catalogPaths();
   const byId = new Map<string, ToolStat>();
   for (const c of catalog) {
-    byId.set(c.id, {
-      ...c,
-      uses: store.tools[c.id]?.uses ?? 0,
-      seconds: store.tools[c.id]?.seconds ?? 0,
-    });
+    const v = normalizeCounters(store.tools[c.id]);
+    byId.set(c.id, { ...c, ...v });
   }
   for (const [id, val] of Object.entries(store.tools)) {
     if (byId.has(id)) continue;
-    byId.set(id, { ...metaForId(id), uses: val.uses, seconds: val.seconds });
+    byId.set(id, { ...metaForId(id), ...normalizeCounters(val) });
   }
-  const tools = [...byId.values()].sort((a, b) => b.uses - a.uses || b.seconds - a.seconds);
+  const tools = [...byId.values()].sort(sortTools);
   const days: DayStat[] = Object.entries(store.daily)
-    .map(([date, v]) => ({ date, uses: v.uses, seconds: v.seconds }))
+    .map(([date, v]) => ({
+      date,
+      opens: Number(v.opens) || 0,
+      uses: Number(v.uses) || 0,
+      seconds: Number(v.seconds) || 0,
+    }))
     .sort((a, b) => b.date.localeCompare(a.date));
   const dailyTools: UsageSnapshot["dailyTools"] = {};
   for (const [date, v] of Object.entries(store.daily)) {
     dailyTools[date] = v.tools;
   }
+  const totalOpens = tools.reduce((s, t) => s + t.opens, 0);
   const totalUses = tools.reduce((s, t) => s + t.uses, 0);
   const totalSeconds = tools.reduce((s, t) => s + t.seconds, 0);
   return {
     tools,
     days,
     dailyTools,
+    totalOpens,
     totalUses,
     totalSeconds,
     totalMinutes: Math.round((totalSeconds / 60) * 10) / 10,
@@ -337,19 +404,21 @@ export async function loadUsageSnapshot(): Promise<UsageSnapshot> {
 
   try {
     const toolResults = await mapPool(catalog, 6, async (c) => {
-      const [uses, seconds] = await Promise.all([
+      const [opens, uses, seconds] = await Promise.all([
+        countGet(`${PREFIX}tool_${c.id}_opens`),
         countGet(`${PREFIX}tool_${c.id}_uses`),
         countGet(`${PREFIX}tool_${c.id}_secs`),
       ]);
-      return { ...c, uses, seconds };
+      return { ...c, opens, uses, seconds };
     });
 
     const dayResults = await mapPool(dateKeys, 6, async (date) => {
-      const [uses, seconds] = await Promise.all([
+      const [opens, uses, seconds] = await Promise.all([
+        countGet(`${PREFIX}day_${date}_opens`),
         countGet(`${PREFIX}day_${date}_uses`),
         countGet(`${PREFIX}day_${date}_secs`),
       ]);
-      return { date, uses, seconds } satisfies DayStat;
+      return { date, opens, uses, seconds } satisfies DayStat;
     });
 
     const byId = new Map<string, ToolStat>();
@@ -357,6 +426,7 @@ export async function loadUsageSnapshot(): Promise<UsageSnapshot> {
       const loc = local.tools.find((t) => t.id === row.id);
       byId.set(row.id, {
         ...row,
+        opens: Math.max(row.opens, loc?.opens ?? 0),
         uses: Math.max(row.uses, loc?.uses ?? 0),
         seconds: Math.max(row.seconds, loc?.seconds ?? 0),
       });
@@ -370,6 +440,7 @@ export async function loadUsageSnapshot(): Promise<UsageSnapshot> {
       const loc = local.days.find((x) => x.date === d.date);
       dayMap.set(d.date, {
         date: d.date,
+        opens: Math.max(d.opens, loc?.opens ?? 0),
         uses: Math.max(d.uses, loc?.uses ?? 0),
         seconds: Math.max(d.seconds, loc?.seconds ?? 0),
       });
@@ -378,16 +449,18 @@ export async function loadUsageSnapshot(): Promise<UsageSnapshot> {
       if (!dayMap.has(loc.date)) dayMap.set(loc.date, loc);
     }
 
-    const tools = [...byId.values()].sort((a, b) => b.uses - a.uses || b.seconds - a.seconds);
+    const tools = [...byId.values()].sort(sortTools);
     const days = [...dayMap.values()].sort((a, b) => b.date.localeCompare(a.date));
+    const totalOpens = tools.reduce((s, t) => s + t.opens, 0);
     const totalUses = tools.reduce((s, t) => s + t.uses, 0);
     const totalSeconds = tools.reduce((s, t) => s + t.seconds, 0);
-    const anyNetwork = toolResults.some((r) => r.uses > 0 || r.seconds > 0);
+    const anyNetwork = toolResults.some((r) => r.opens > 0 || r.uses > 0 || r.seconds > 0);
 
     return {
       tools,
       days,
       dailyTools: local.dailyTools,
+      totalOpens,
       totalUses,
       totalSeconds,
       totalMinutes: Math.round((totalSeconds / 60) * 10) / 10,
@@ -399,10 +472,7 @@ export async function loadUsageSnapshot(): Promise<UsageSnapshot> {
   }
 }
 
-/**
- * Fetch per-tool stats for a set of IST dates (network + local merge).
- * Used when admin filters to a date range (not all-time).
- */
+/** Fetch per-tool stats for a set of IST dates. */
 export async function loadToolsForDates(
   dates: string[],
   toolIds: string[]
@@ -411,54 +481,53 @@ export async function loadToolsForDates(
   const ids = toolIds.length ? toolIds : catalogPaths().map((c) => c.id);
   const agg = new Map<string, ToolCounters>();
 
-  for (const id of ids) agg.set(id, { uses: 0, seconds: 0 });
+  for (const id of ids) agg.set(id, emptyCounters());
 
   for (const date of dates) {
     const localDay = local.dailyTools[date];
     if (localDay) {
       for (const id of ids) {
         const cur = agg.get(id)!;
-        cur.uses += localDay[id]?.uses ?? 0;
-        cur.seconds += localDay[id]?.seconds ?? 0;
+        const loc = normalizeCounters(localDay[id]);
+        cur.opens += loc.opens;
+        cur.uses += loc.uses;
+        cur.seconds += loc.seconds;
       }
     }
   }
 
-  // Network fill for active / catalog tools (capped)
   const fetchIds = ids.slice(0, 50);
   try {
     await mapPool(
       dates.flatMap((date) => fetchIds.map((id) => ({ date, id }))),
       6,
       async ({ date, id }) => {
-        const [uses, seconds] = await Promise.all([
+        const [opens, uses, seconds] = await Promise.all([
+          countGet(`${PREFIX}day_${date}_tool_${id}_opens`),
           countGet(`${PREFIX}day_${date}_tool_${id}_uses`),
           countGet(`${PREFIX}day_${date}_tool_${id}_secs`),
         ]);
         const cur = agg.get(id)!;
-        // Prefer max of local-sum-so-far vs network for this day alone is hard;
-        // add network day values, then we'll reconcile with local below by taking max per field overall.
-        // Simpler: if local already counted this day, skip adding network for that day/tool.
         const hadLocal = !!local.dailyTools[date]?.[id];
         if (!hadLocal) {
+          cur.opens += opens;
           cur.uses += uses;
           cur.seconds += seconds;
         } else {
-          // local already included; bump if network higher for that day
-          const lu = local.dailyTools[date][id]?.uses ?? 0;
-          const ls = local.dailyTools[date][id]?.seconds ?? 0;
-          if (uses > lu) cur.uses += uses - lu;
-          if (seconds > ls) cur.seconds += seconds - ls;
+          const loc = normalizeCounters(local.dailyTools[date][id]);
+          if (opens > loc.opens) cur.opens += opens - loc.opens;
+          if (uses > loc.uses) cur.uses += uses - loc.uses;
+          if (seconds > loc.seconds) cur.seconds += seconds - loc.seconds;
         }
       }
     );
   } catch {
-    /* keep local aggregate */
+    /* keep local */
   }
 
   return [...agg.entries()]
-    .map(([id, v]) => ({ ...metaForId(id), uses: v.uses, seconds: v.seconds }))
-    .sort((a, b) => b.uses - a.uses || b.seconds - a.seconds);
+    .map(([id, v]) => ({ ...metaForId(id), ...v }))
+    .sort(sortTools);
 }
 
 export function formatMinutes(seconds: number): string {
@@ -487,7 +556,6 @@ export function formatDayLabel(date: string): string {
 export type DatePreset = "today" | "yesterday" | "7d" | "30d" | "all" | "custom";
 
 export function datesForPreset(preset: DatePreset, from?: string, to?: string): string[] | null {
-  // null => all-time (no day filter)
   const today = istDateKey();
   if (preset === "all") return null;
   if (preset === "today") return [today];

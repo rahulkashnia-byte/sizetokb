@@ -9,16 +9,20 @@ import {
   istDateKey,
   loadToolsForDates,
   loadUsageSnapshot,
+  statusLabel,
+  toolStatus,
   verifyAdminPassword,
   type DatePreset,
   type DayStat,
   type ToolStat,
+  type ToolStatus,
   type UsageSnapshot,
 } from "@/lib/usage";
 
 const SESSION_KEY = "stk_admin_ok";
 
-type SortKey = "uses" | "time" | "name";
+type SortKey = "opens" | "uses" | "time" | "name";
+type StatusFilter = "all" | ToolStatus;
 
 export function AdminStatsPanel() {
   const [authed, setAuthed] = useState(false);
@@ -32,8 +36,8 @@ export function AdminStatsPanel() {
   const [customTo, setCustomTo] = useState(istDateKey());
   const [category, setCategory] = useState("all");
   const [query, setQuery] = useState("");
-  const [sort, setSort] = useState<SortKey>("uses");
-  const [hideZero, setHideZero] = useState(true);
+  const [sort, setSort] = useState<SortKey>("opens");
+  const [statusFilter, setStatusFilter] = useState<StatusFilter>("all");
 
   const [rangeTools, setRangeTools] = useState<ToolStat[] | null>(null);
   const [rangeBusy, setRangeBusy] = useState(false);
@@ -67,7 +71,6 @@ export function AdminStatsPanel() {
     [preset, customFrom, customTo]
   );
 
-  // Load per-tool breakdown when a date range is selected
   useEffect(() => {
     if (!authed || !snap) return;
     if (selectedDates === null) {
@@ -80,7 +83,9 @@ export function AdminStatsPanel() {
     }
     let cancelled = false;
     setRangeBusy(true);
-    const ids = snap.tools.filter((t) => t.uses > 0 || t.seconds > 0).map((t) => t.id);
+    const ids = snap.tools
+      .filter((t) => t.opens > 0 || t.uses > 0 || t.seconds > 0)
+      .map((t) => t.id);
     const fetchIds = ids.length ? ids : snap.tools.slice(0, 40).map((t) => t.id);
     void loadToolsForDates(selectedDates, fetchIds)
       .then((rows) => {
@@ -109,9 +114,7 @@ export function AdminStatsPanel() {
 
   const filteredTools = useMemo(() => {
     let rows = [...baseTools];
-    if (category !== "all") {
-      rows = rows.filter((t) => t.category === category);
-    }
+    if (category !== "all") rows = rows.filter((t) => t.category === category);
     const q = query.trim().toLowerCase();
     if (q) {
       rows = rows.filter(
@@ -121,55 +124,48 @@ export function AdminStatsPanel() {
           t.id.toLowerCase().includes(q)
       );
     }
-    if (hideZero) {
-      rows = rows.filter((t) => t.uses > 0 || t.seconds > 0);
+    if (statusFilter !== "all") {
+      rows = rows.filter((t) => toolStatus(t) === statusFilter);
     }
     rows.sort((a, b) => {
       if (sort === "name") return a.label.localeCompare(b.label);
-      if (sort === "time") return b.seconds - a.seconds || b.uses - a.uses;
-      return b.uses - a.uses || b.seconds - a.seconds;
+      if (sort === "time") return b.seconds - a.seconds || b.opens - a.opens || b.uses - a.uses;
+      if (sort === "uses") return b.uses - a.uses || b.opens - a.opens || b.seconds - a.seconds;
+      return b.opens - a.opens || b.uses - a.uses || b.seconds - a.seconds;
     });
     return rows;
-  }, [baseTools, category, query, hideZero, sort]);
+  }, [baseTools, category, query, statusFilter, sort]);
 
-  const kpis = useMemo(() => {
-    if (!snap) return { uses: 0, seconds: 0, tools: 0, minutes: 0 };
-    if (selectedDates === null) {
-      return {
-        uses: snap.totalUses,
-        seconds: snap.totalSeconds,
-        tools: snap.tools.filter((t) => t.uses > 0 || t.seconds > 0).length,
-        minutes: snap.totalMinutes,
-      };
-    }
-    const uses = filteredDays.reduce((s, d) => s + d.uses, 0);
-    const seconds = filteredDays.reduce((s, d) => s + d.seconds, 0);
-    const tools = filteredTools.filter((t) => t.uses > 0 || t.seconds > 0).length;
-    return {
-      uses,
-      seconds,
-      tools,
-      minutes: Math.round((seconds / 60) * 10) / 10,
-    };
-  }, [snap, selectedDates, filteredDays, filteredTools]);
+  const summary = useMemo(() => {
+    const pool = baseTools;
+    const used = pool.filter((t) => t.uses > 0).length;
+    const openedOnly = pool.filter((t) => t.opens > 0 && t.uses === 0).length;
+    const notUsed = pool.filter((t) => t.opens === 0 && t.uses === 0).length;
+    const opens =
+      selectedDates === null
+        ? snap?.totalOpens ?? 0
+        : filteredDays.reduce((s, d) => s + d.opens, 0);
+    const uses =
+      selectedDates === null
+        ? snap?.totalUses ?? 0
+        : filteredDays.reduce((s, d) => s + d.uses, 0);
+    const seconds =
+      selectedDates === null
+        ? snap?.totalSeconds ?? 0
+        : filteredDays.reduce((s, d) => s + d.seconds, 0);
+    return { used, openedOnly, notUsed, opens, uses, seconds };
+  }, [baseTools, snap, selectedDates, filteredDays]);
 
-  const byCategory = useMemo(() => {
-    const map = new Map<string, { uses: number; seconds: number; tools: number }>();
-    for (const t of filteredTools) {
-      if (t.uses === 0 && t.seconds === 0) continue;
-      const cur = map.get(t.category) ?? { uses: 0, seconds: 0, tools: 0 };
-      cur.uses += t.uses;
-      cur.seconds += t.seconds;
-      cur.tools += 1;
-      map.set(t.category, cur);
-    }
-    return [...map.entries()]
-      .map(([cat, v]) => ({ category: cat, ...v }))
-      .sort((a, b) => b.uses - a.uses);
-  }, [filteredTools]);
+  const pagesOpened = useMemo(
+    () =>
+      [...baseTools]
+        .filter((t) => t.opens > 0)
+        .sort((a, b) => b.opens - a.opens || b.uses - a.uses),
+    [baseTools]
+  );
 
-  const maxDayUses = useMemo(
-    () => Math.max(1, ...filteredDays.map((d) => d.uses)),
+  const maxDayOpens = useMemo(
+    () => Math.max(1, ...filteredDays.map((d) => d.opens || d.uses)),
     [filteredDays]
   );
 
@@ -245,6 +241,13 @@ export function AdminStatsPanel() {
     { id: "custom", label: "Custom" },
   ];
 
+  const statusFilters: { id: StatusFilter; label: string }[] = [
+    { id: "all", label: "All pages" },
+    { id: "used", label: "Used" },
+    { id: "opened", label: "Opened only" },
+    { id: "not_used", label: "Not used" },
+  ];
+
   return (
     <div className="mx-auto max-w-5xl px-4 py-8 sm:px-6">
       <div className="flex flex-wrap items-center justify-between gap-3">
@@ -254,7 +257,7 @@ export function AdminStatsPanel() {
           </h1>
           <p className="mt-1 text-xs text-[var(--muted)]">
             {snap
-              ? `Updated ${new Date(snap.fetchedAt).toLocaleString("en-IN")} · ${snap.source} · dates IST`
+              ? `Updated ${new Date(snap.fetchedAt).toLocaleString("en-IN")} · ${snap.source} · IST`
               : "Loading…"}
           </p>
         </div>
@@ -277,10 +280,33 @@ export function AdminStatsPanel() {
         </div>
       </div>
 
+      {/* Plain-language guide */}
+      <section className="mt-5 rounded-2xl border border-[var(--line)] bg-[var(--wash)] p-4 text-sm text-[var(--ink)]">
+        <p className="font-bold">How to read this</p>
+        <ul className="mt-2 space-y-1 text-[var(--muted)]">
+          <li>
+            <StatusPill status="used" /> <strong className="text-[var(--ink)]">Used</strong> —
+            someone opened the page and completed the tool (download / action).
+          </li>
+          <li>
+            <StatusPill status="opened" /> <strong className="text-[var(--ink)]">Opened only</strong> —
+            page was visited, but no download yet.
+          </li>
+          <li>
+            <StatusPill status="not_used" /> <strong className="text-[var(--ink)]">Not used</strong> —
+            page was never opened in this period.
+          </li>
+        </ul>
+        <p className="mt-2 text-xs text-[var(--muted)]">
+          <strong>Opens</strong> = times the page was opened · <strong>Uses</strong> = times the
+          tool was actually used · <strong>Time</strong> = time spent on that page.
+        </p>
+      </section>
+
       {/* Filters */}
       <section className="mt-6 rounded-2xl border border-[var(--line)] bg-white p-4 shadow-sm">
-        <p className="text-[11px] font-bold uppercase tracking-wide text-[var(--muted)]">Filters</p>
-        <div className="mt-3 flex flex-wrap gap-2">
+        <p className="text-[11px] font-bold uppercase tracking-wide text-[var(--muted)]">Date</p>
+        <div className="mt-2 flex flex-wrap gap-2">
           {presets.map((p) => (
             <button
               key={p.id}
@@ -318,7 +344,28 @@ export function AdminStatsPanel() {
             </label>
           </div>
         )}
-        <div className="mt-3 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+
+        <p className="mt-4 text-[11px] font-bold uppercase tracking-wide text-[var(--muted)]">
+          Status
+        </p>
+        <div className="mt-2 flex flex-wrap gap-2">
+          {statusFilters.map((s) => (
+            <button
+              key={s.id}
+              type="button"
+              onClick={() => setStatusFilter(s.id)}
+              className={`rounded-lg px-3 py-1.5 text-xs font-bold ${
+                statusFilter === s.id
+                  ? "bg-[var(--ink)] text-white"
+                  : "border border-[var(--line)] bg-[var(--wash)] text-[var(--ink)]"
+              }`}
+            >
+              {s.label}
+            </button>
+          ))}
+        </div>
+
+        <div className="mt-4 grid gap-3 sm:grid-cols-3">
           <label className="text-xs font-semibold text-[var(--muted)]">
             Category
             <select
@@ -334,7 +381,7 @@ export function AdminStatsPanel() {
             </select>
           </label>
           <label className="text-xs font-semibold text-[var(--muted)]">
-            Search tool
+            Search page
             <input
               type="search"
               value={query}
@@ -350,29 +397,67 @@ export function AdminStatsPanel() {
               onChange={(e) => setSort(e.target.value as SortKey)}
               className="mt-1 w-full rounded-lg border border-[var(--line)] bg-[var(--wash)] px-3 py-2 text-sm text-[var(--ink)]"
             >
+              <option value="opens">Most opens</option>
               <option value="uses">Most uses</option>
               <option value="time">Most time</option>
               <option value="name">Name A–Z</option>
             </select>
           </label>
-          <label className="flex items-center gap-2 pt-6 text-sm font-semibold text-[var(--ink)]">
-            <input
-              type="checkbox"
-              checked={hideZero}
-              onChange={(e) => setHideZero(e.target.checked)}
-              className="size-4 accent-[var(--accent)]"
-            />
-            Hide unused tools
-          </label>
         </div>
       </section>
 
-      <div className="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-4">
-        <Kpi label="Uses" value={String(kpis.uses)} />
-        <Kpi label="Time" value={formatMinutes(kpis.seconds)} />
-        <Kpi label="Minutes" value={String(kpis.minutes)} />
-        <Kpi label="Tools used" value={String(kpis.tools)} />
+      <div className="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-6">
+        <Kpi label="Pages opened" value={String(summary.opens)} hint="Total opens" />
+        <Kpi label="Tool uses" value={String(summary.uses)} hint="Downloads / actions" />
+        <Kpi label="Time" value={formatMinutes(summary.seconds)} hint="On pages" />
+        <Kpi label="Used" value={String(summary.used)} hint="Opened + downloaded" />
+        <Kpi label="Opened only" value={String(summary.openedOnly)} hint="No download yet" />
+        <Kpi label="Not used" value={String(summary.notUsed)} hint="Never opened" />
       </div>
+
+      {/* Pages opened — clearest list */}
+      <section className="mt-8">
+        <h2 className="text-sm font-bold uppercase tracking-wide text-[var(--muted)]">
+          Which pages were opened
+        </h2>
+        <div className="mt-3 overflow-x-auto rounded-2xl border border-[var(--line)] bg-white">
+          {pagesOpened.length === 0 ? (
+            <p className="px-4 py-6 text-sm text-[var(--muted)]">
+              No pages opened in this period yet. After you deploy, visits will show here.
+            </p>
+          ) : (
+            <table className="w-full min-w-[640px] text-left text-sm">
+              <thead className="border-b border-[var(--line)] bg-[var(--wash)] text-xs uppercase text-[var(--muted)]">
+                <tr>
+                  <th className="px-4 py-3">#</th>
+                  <th className="px-4 py-3">Status</th>
+                  <th className="px-4 py-3">Page</th>
+                  <th className="px-4 py-3">Opens</th>
+                  <th className="px-4 py-3">Uses</th>
+                  <th className="px-4 py-3">Time</th>
+                </tr>
+              </thead>
+              <tbody>
+                {pagesOpened.map((t, i) => (
+                  <tr key={t.id} className="border-b border-[var(--line)] last:border-0">
+                    <td className="px-4 py-3 text-[var(--muted)]">{i + 1}</td>
+                    <td className="px-4 py-3">
+                      <StatusPill status={toolStatus(t)} />
+                    </td>
+                    <td className="px-4 py-3">
+                      <div className="font-semibold text-[var(--ink)]">{t.label}</div>
+                      <div className="text-xs text-[var(--muted)]">{t.path}</div>
+                    </td>
+                    <td className="px-4 py-3 font-bold">{t.opens}</td>
+                    <td className="px-4 py-3 font-bold">{t.uses}</td>
+                    <td className="px-4 py-3">{formatMinutes(t.seconds)}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          )}
+        </div>
+      </section>
 
       {/* Date-wise */}
       <section className="mt-8">
@@ -382,19 +467,18 @@ export function AdminStatsPanel() {
           </h2>
           <p className="text-xs text-[var(--muted)]">
             {filteredDays.length} day{filteredDays.length === 1 ? "" : "s"}
-            {rangeBusy ? " · loading tools…" : ""}
+            {rangeBusy ? " · loading…" : ""}
           </p>
         </div>
         <div className="mt-3 overflow-x-auto rounded-2xl border border-[var(--line)] bg-white">
           {filteredDays.length === 0 ? (
-            <p className="px-4 py-6 text-sm text-[var(--muted)]">
-              No daily data in this range yet.
-            </p>
+            <p className="px-4 py-6 text-sm text-[var(--muted)]">No daily data in this range yet.</p>
           ) : (
-            <table className="w-full min-w-[480px] text-left text-sm">
+            <table className="w-full min-w-[520px] text-left text-sm">
               <thead className="border-b border-[var(--line)] bg-[var(--wash)] text-xs uppercase text-[var(--muted)]">
                 <tr>
                   <th className="px-4 py-3">Date</th>
+                  <th className="px-4 py-3">Opens</th>
                   <th className="px-4 py-3">Uses</th>
                   <th className="px-4 py-3">Time</th>
                   <th className="px-4 py-3">Trend</th>
@@ -407,13 +491,16 @@ export function AdminStatsPanel() {
                       <div className="font-semibold text-[var(--ink)]">{formatDayLabel(d.date)}</div>
                       <div className="text-xs text-[var(--muted)]">{d.date}</div>
                     </td>
+                    <td className="px-4 py-3 font-bold">{d.opens}</td>
                     <td className="px-4 py-3 font-bold">{d.uses}</td>
                     <td className="px-4 py-3">{formatMinutes(d.seconds)}</td>
                     <td className="px-4 py-3">
                       <div className="h-2 w-28 overflow-hidden rounded-full bg-[var(--wash)] sm:w-40">
                         <div
                           className="h-full rounded-full bg-[var(--accent)]"
-                          style={{ width: `${Math.round((d.uses / maxDayUses) * 100)}%` }}
+                          style={{
+                            width: `${Math.round(((d.opens || d.uses) / maxDayOpens) * 100)}%`,
+                          }}
                         />
                       </div>
                     </td>
@@ -425,80 +512,46 @@ export function AdminStatsPanel() {
         </div>
       </section>
 
-      {byCategory.length > 0 && (
-        <section className="mt-8">
-          <h2 className="text-sm font-bold uppercase tracking-wide text-[var(--muted)]">
-            By category
-          </h2>
-          <div className="mt-3 overflow-x-auto rounded-2xl border border-[var(--line)] bg-white">
-            <table className="w-full min-w-[420px] text-left text-sm">
-              <thead className="border-b border-[var(--line)] bg-[var(--wash)] text-xs uppercase text-[var(--muted)]">
-                <tr>
-                  <th className="px-4 py-3">Category</th>
-                  <th className="px-4 py-3">Tools</th>
-                  <th className="px-4 py-3">Uses</th>
-                  <th className="px-4 py-3">Time</th>
-                </tr>
-              </thead>
-              <tbody>
-                {byCategory.map((c) => (
-                  <tr key={c.category} className="border-b border-[var(--line)] last:border-0">
-                    <td className="px-4 py-3 font-semibold capitalize">{c.category}</td>
-                    <td className="px-4 py-3">{c.tools}</td>
-                    <td className="px-4 py-3">{c.uses}</td>
-                    <td className="px-4 py-3">{formatMinutes(c.seconds)}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </section>
-      )}
-
+      {/* Full list with filters applied */}
       <section className="mt-8 mb-10">
         <h2 className="text-sm font-bold uppercase tracking-wide text-[var(--muted)]">
-          Each tool
+          All pages ({filteredTools.length})
         </h2>
         <div className="mt-3 overflow-x-auto rounded-2xl border border-[var(--line)] bg-white">
-          <table className="w-full min-w-[560px] text-left text-sm">
+          <table className="w-full min-w-[680px] text-left text-sm">
             <thead className="border-b border-[var(--line)] bg-[var(--wash)] text-xs uppercase text-[var(--muted)]">
               <tr>
                 <th className="px-4 py-3">#</th>
-                <th className="px-4 py-3">Tool</th>
+                <th className="px-4 py-3">Status</th>
+                <th className="px-4 py-3">Page</th>
+                <th className="px-4 py-3">Opens</th>
                 <th className="px-4 py-3">Uses</th>
                 <th className="px-4 py-3">Time</th>
-                <th className="px-4 py-3">Avg / use</th>
-                <th className="px-4 py-3">Share</th>
               </tr>
             </thead>
             <tbody>
               {filteredTools.map((t, i) => {
-                const share =
-                  kpis.uses > 0 ? Math.round((t.uses / kpis.uses) * 1000) / 10 : 0;
-                const avg = t.uses > 0 ? Math.round(t.seconds / t.uses) : 0;
+                const status = toolStatus(t);
                 return (
-                  <tr key={t.id} className="border-b border-[var(--line)] last:border-0">
+                  <tr
+                    key={t.id}
+                    className={`border-b border-[var(--line)] last:border-0 ${
+                      status === "not_used" ? "opacity-60" : ""
+                    }`}
+                  >
                     <td className="px-4 py-3 text-[var(--muted)]">{i + 1}</td>
+                    <td className="px-4 py-3">
+                      <StatusPill status={status} />
+                    </td>
                     <td className="px-4 py-3">
                       <div className="font-semibold text-[var(--ink)]">{t.label}</div>
                       <div className="text-xs text-[var(--muted)]">
                         {t.path} · {t.category}
                       </div>
                     </td>
+                    <td className="px-4 py-3 font-bold">{t.opens}</td>
                     <td className="px-4 py-3 font-bold">{t.uses}</td>
                     <td className="px-4 py-3">{formatMinutes(t.seconds)}</td>
-                    <td className="px-4 py-3">{t.uses ? formatMinutes(avg) : "—"}</td>
-                    <td className="px-4 py-3">
-                      <div className="flex items-center gap-2">
-                        <div className="h-1.5 w-16 overflow-hidden rounded-full bg-[var(--wash)]">
-                          <div
-                            className="h-full rounded-full bg-[var(--accent)]"
-                            style={{ width: `${Math.min(100, share)}%` }}
-                          />
-                        </div>
-                        <span className="text-xs text-[var(--muted)]">{share}%</span>
-                      </div>
-                    </td>
                   </tr>
                 );
               })}
@@ -507,9 +560,7 @@ export function AdminStatsPanel() {
         </div>
         {filteredTools.length === 0 && (
           <p className="mt-3 text-sm text-[var(--muted)]">
-            {rangeBusy
-              ? "Loading tool stats for this date range…"
-              : "No matching usage for these filters."}
+            {rangeBusy ? "Loading…" : "No pages match these filters."}
           </p>
         )}
       </section>
@@ -517,13 +568,30 @@ export function AdminStatsPanel() {
   );
 }
 
-function Kpi({ label, value }: { label: string; value: string }) {
+function StatusPill({ status }: { status: ToolStatus }) {
+  const styles =
+    status === "used"
+      ? "bg-emerald-100 text-emerald-800"
+      : status === "opened"
+        ? "bg-amber-100 text-amber-900"
+        : "bg-zinc-100 text-zinc-600";
   return (
-    <div className="rounded-2xl border border-[var(--line)] bg-white px-4 py-4 shadow-sm">
-      <p className="text-[11px] font-bold uppercase tracking-wide text-[var(--muted)]">{label}</p>
-      <p className="mt-1 font-[family-name:var(--font-display)] text-2xl text-[var(--ink)]">
+    <span className={`inline-block rounded-full px-2.5 py-0.5 text-[11px] font-bold ${styles}`}>
+      {statusLabel(status)}
+    </span>
+  );
+}
+
+function Kpi({ label, value, hint }: { label: string; value: string; hint?: string }) {
+  return (
+    <div className="rounded-2xl border border-[var(--line)] bg-white px-3 py-3 shadow-sm sm:px-4 sm:py-4">
+      <p className="text-[10px] font-bold uppercase tracking-wide text-[var(--muted)] sm:text-[11px]">
+        {label}
+      </p>
+      <p className="mt-1 font-[family-name:var(--font-display)] text-xl text-[var(--ink)] sm:text-2xl">
         {value}
       </p>
+      {hint && <p className="mt-0.5 text-[10px] text-[var(--muted)]">{hint}</p>}
     </div>
   );
 }
