@@ -6,7 +6,7 @@ import { pageMeta } from "@/lib/seo";
 export const metadata: Metadata = pageMeta({
   title: "Signature Size Kam Kaise Kare — 10KB 20KB Online Free",
   description:
-    "Signature size kam kaise kare? SizeToKB.in par free — signature ko 10KB–20KB mein compress karein SSC, Bank, Railway forms ke liye. Private browser tool.",
+    "Signature size kam kaise kare? Size to KB par free — signature ko 10KB–20KB mein compress karein SSC, Bank, Railway forms ke liye. Private browser tool.",
   path: "/signature-size-kam-kaise-kare/",
   keywords: [
     "signature size kam kaise kare",

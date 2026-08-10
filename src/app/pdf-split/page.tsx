@@ -76,7 +76,7 @@ export default function PdfSplitPage() {
         </button>
         <p className="mt-3 text-center text-xs text-[var(--muted)]">Browsers may block multiple downloads — allow pop-ups if needed.</p>
       </div>
-      <ShareButtons className="mt-6" title="Split PDF online free — SizeToKB" text="Split PDFs free on SizeToKB.in" path="/pdf-split/" />
+      <ShareButtons className="mt-6" title="Split PDF online free — Size to KB" text="Split PDFs free on Size to KB" path="/pdf-split/" />
       <SeoKeywordBlock
         heading="Split PDF online free"
         paragraphs={["Pull out single pages from multi-page certificate scans."]}

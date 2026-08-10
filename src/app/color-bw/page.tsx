@@ -75,7 +75,7 @@ export default function ColorBwPage() {
           {busy ? "Converting…" : "Convert & Download"}
         </button>
       </div>
-      <ShareButtons className="mt-6" title="Color to black and white — SizeToKB" text="Convert photos to B&W free on SizeToKB.in" path="/color-bw/" />
+      <ShareButtons className="mt-6" title="Color to black and white — Size to KB" text="Convert photos to B&W free on Size to KB" path="/color-bw/" />
       <SeoKeywordBlock
         heading="Color to black and white online free"
         paragraphs={["Useful when a notification asks for black-and-white photograph or signature."]}

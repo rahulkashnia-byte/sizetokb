@@ -12,8 +12,8 @@ type ShareButtonsProps = {
 };
 
 export function ShareButtons({
-  title = SITE.name,
-  text = "Free tool to reduce photo & signature size to exact KB for exam forms — SizeToKB.in",
+  title = SITE.seoName,
+  text = "Free tool to reduce photo & signature size to exact KB for exam forms — Size to KB",
   path,
   className = "",
 }: ShareButtonsProps) {

@@ -85,7 +85,7 @@ export default function BulkReducePage() {
           {busy ? "Reducing…" : "Reduce all & Download ZIP"}
         </button>
       </div>
-      <ShareButtons className="mt-6" title="Bulk reduce image size to KB — SizeToKB" text="Bulk compress photos to exact KB free on SizeToKB.in" path="/bulk-reduce/" />
+      <ShareButtons className="mt-6" title="Bulk reduce image size to KB — Size to KB" text="Bulk compress photos to exact KB free on Size to KB" path="/bulk-reduce/" />
       <SeoKeywordBlock
         heading="Bulk reduce image size online free to KB"
         paragraphs={[

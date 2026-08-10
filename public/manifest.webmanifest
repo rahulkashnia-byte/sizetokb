@@ -1,6 +1,6 @@
 {
-  "name": "SizeToKB — Reduce Image & Signature Size to KB",
-  "short_name": "SizeToKB",
+  "name": "Size to KB — Reduce Image & Signature Size to KB",
+  "short_name": "Size to KB",
   "description": "Reduce photo and signature size to exact KB for SSC, UPSC, Bank & exam forms. Works offline after first visit.",
   "start_url": "/",
   "scope": "/",

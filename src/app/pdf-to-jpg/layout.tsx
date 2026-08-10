@@ -4,7 +4,7 @@ import { pageMeta } from "@/lib/seo";
 export const metadata: Metadata = pageMeta({
   title: "PDF to JPG Online Free — Convert PDF to Image / PNG",
   description:
-    "PDF to JPG converter online free. Convert PDF pages to JPG or PNG images, download ZIP. Private browser tool — also unlock PDF then convert. SizeToKB.in",
+    "PDF to JPG converter online free. Convert PDF pages to JPG or PNG images, download ZIP. Private browser tool — also unlock PDF then convert. Size to KB",
   path: "/pdf-to-jpg/",
   keywords: [
     "pdf to jpg",

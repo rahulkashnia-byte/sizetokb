@@ -3,7 +3,7 @@ import { pageMeta } from "@/lib/seo";
 
 export const metadata: Metadata = pageMeta({
   title: "HEIC to JPG Online Free — Then Reduce Image Size to KB",
-  description: "Convert iPhone HEIC/HEIF to JPG online free, then reduce image size to the KB your form needs — SizeToKB.in",
+  description: "Convert iPhone HEIC/HEIF to JPG online free, then reduce image size to the KB your form needs — Size to KB",
   path: "/heic-to-jpg/",
   keywords: ["HEIC to JPG online free","convert HEIC to JPEG","iPhone photo to JPG"],
 });

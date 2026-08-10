@@ -51,7 +51,7 @@ export default function HomePage() {
         <div className="relative mx-auto max-w-6xl px-4 pb-8 pt-10 sm:px-6 sm:pb-10 sm:pt-14">
           <div className="animate-rise mx-auto max-w-4xl text-center">
             <p className="font-[family-name:var(--font-display)] text-sm font-bold uppercase tracking-[0.2em] text-[var(--accent)]">
-              SizeToKB.in · Free · Private
+              Size to KB · Free · Private
             </p>
             <h1 className="mt-3 font-[family-name:var(--font-display)] text-[2.25rem] font-extrabold leading-[1.06] tracking-tight text-[var(--ink)] sm:text-5xl lg:text-[3.35rem]">
               Reduce image & signature size to the{" "}
@@ -100,8 +100,8 @@ export default function HomePage() {
           <CustomResizeTool embedded />
           <ShareButtons
             className="mt-6"
-            title="Reduce image & signature size to exact KB — SizeToKB"
-            text="Free tool to reduce photo & signature size to the exact KB your exam form needs — SizeToKB.in"
+            title="Reduce image & signature size to exact KB — Size to KB"
+            text="Free tool to reduce photo & signature size to the exact KB your exam form needs — Size to KB"
             path="/"
           />
         </div>

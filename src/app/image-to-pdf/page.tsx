@@ -142,8 +142,8 @@ export default function ImageToPdfPage() {
 
       <ShareButtons
         className="mt-6"
-        title="Image to PDF converter — SizeToKB"
-        text="Convert photos to PDF free for exam documents on SizeToKB.in"
+        title="Image to PDF converter — Size to KB"
+        text="Convert photos to PDF free for exam documents on Size to KB"
         path="/image-to-pdf/"
       />
 

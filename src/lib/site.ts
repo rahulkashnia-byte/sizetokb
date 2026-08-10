@@ -1,5 +1,8 @@
 export const SITE = {
+  /** Product / UI mark (matches domain styling) */
   name: "SizeToKB",
+  /** SERP & meta titles — spaced for search intent */
+  seoName: "Size to KB",
   domain: "sizetokb.in",
   url: "https://sizetokb.in",
   altDomain: "sizetokb.com",

@@ -25,8 +25,8 @@ export default function PassportPhotoPage() {
 
       <div className="mx-auto mt-10 max-w-3xl">
         <ShareButtons
-          title="Passport size photo maker — SizeToKB"
-          text="Make passport photos free on SizeToKB.in"
+          title="Passport size photo maker — Size to KB"
+          text="Make passport photos free on Size to KB"
           path="/passport-photo/"
         />
         <SeoKeywordBlock

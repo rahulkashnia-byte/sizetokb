@@ -133,8 +133,8 @@ export default function ImageReversePage() {
 
       <ShareButtons
         className="mt-6"
-        title="Flip rotate image online free — SizeToKB"
-        text="Flip or rotate photos free on SizeToKB.in"
+        title="Flip rotate image online free — Size to KB"
+        text="Flip or rotate photos free on Size to KB"
         path="/image-reverse/"
       />
       <SeoKeywordBlock

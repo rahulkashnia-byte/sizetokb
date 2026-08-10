@@ -25,7 +25,7 @@ export async function generateMetadata({
   if (!exam) return { title: "Exam not found" };
   const year = exam.year ?? 2026;
   const title = `Reduce ${exam.name} Photo & Signature Size ${year} | KB Online Free`;
-  const description = `Reduce ${exam.name} photo size & signature size online free. Compress image to required KB (often 20–50KB photo / 10–20KB signature) for ${year} form fill — SizeToKB.in`;
+  const description = `Reduce ${exam.name} photo size & signature size online free. Compress image to required KB (often 20–50KB photo / 10–20KB signature) for ${year} form fill — Size to KB`;
   const url = `${SITE.url}/${exam.slug}/`;
   return {
     title,
@@ -65,7 +65,7 @@ export default async function ExamPage({ params }: { params: Promise<{ slug: str
   const faqs = [
     {
       q: `Is ${exam.name} photo and signature resizer free?`,
-      a: "Yes — SizeToKB is free. No registration. Processing stays in your browser.",
+      a: "Yes — Size to KB is free. No registration. Processing stays in your browser.",
     },
     {
       q: `What is the ${exam.name} photo size in KB?`,
@@ -108,8 +108,8 @@ export default async function ExamPage({ params }: { params: Promise<{ slug: str
 
       <div className="mx-auto max-w-5xl px-4 pb-6 sm:px-6">
         <ShareButtons
-          title={`${exam.name} photo & signature size — SizeToKB`}
-          text={`Reduce ${exam.name} photo & signature size to exact KB free on SizeToKB.in`}
+          title={`${exam.name} photo & signature size — Size to KB`}
+          text={`Reduce ${exam.name} photo & signature size to exact KB free on Size to KB`}
           path={`/${exam.slug}/`}
         />
       </div>

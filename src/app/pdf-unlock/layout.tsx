@@ -4,7 +4,7 @@ import { pageMeta } from "@/lib/seo";
 export const metadata: Metadata = pageMeta({
   title: "Unlock PDF Online Free — Remove PDF Password",
   description:
-    "Unlock PDF online free. Remove PDF password and download an unlocked copy in your browser. PDF password remover — private, no upload. SizeToKB.in",
+    "Unlock PDF online free. Remove PDF password and download an unlocked copy in your browser. PDF password remover — private, no upload. Size to KB",
   path: "/pdf-unlock/",
   keywords: [
     "unlock PDF",

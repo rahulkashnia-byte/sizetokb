@@ -117,8 +117,8 @@ export default function PdfCompressorPage() {
 
       <ShareButtons
         className="mt-6"
-        title="PDF compressor / shrink online free — SizeToKB"
-        text="Shrink PDF size in KB free for exam uploads on SizeToKB.in"
+        title="PDF compressor / shrink online free — Size to KB"
+        text="Shrink PDF size in KB free for exam uploads on Size to KB"
         path="/pdf-compressor/"
       />
 

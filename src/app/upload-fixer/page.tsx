@@ -68,7 +68,7 @@ export default function UploadFixerPage() {
           </ul>
         )}
       </div>
-      <ShareButtons className="mt-6" title="Fix exam portal upload errors — SizeToKB" text="Fix photo upload reject errors on SizeToKB.in" path="/upload-fixer/" />
+      <ShareButtons className="mt-6" title="Fix exam portal upload errors — Size to KB" text="Fix photo upload reject errors on Size to KB" path="/upload-fixer/" />
       <SeoKeywordBlock
         heading="Fix photo upload error file size too large"
         paragraphs={[

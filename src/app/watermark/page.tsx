@@ -91,7 +91,7 @@ export default function WatermarkPage() {
           {busy ? "Stamping…" : "Add watermark & Download"}
         </button>
       </div>
-      <ShareButtons className="mt-6" title="Watermark FOR UPLOAD ONLY — SizeToKB" text="Stamp photos & PDFs free on SizeToKB.in" path="/watermark/" />
+      <ShareButtons className="mt-6" title="Watermark FOR UPLOAD ONLY — Size to KB" text="Stamp photos & PDFs free on Size to KB" path="/watermark/" />
       <SeoKeywordBlock
         heading="Add watermark online free for upload documents"
         paragraphs={["Mark certificates and photos as FOR UPLOAD ONLY before sharing on WhatsApp."]}

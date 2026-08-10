@@ -190,8 +190,8 @@ export default function PdfToJpgPage() {
 
       <ShareButtons
         className="mt-6"
-        title="PDF to JPG online free — SizeToKB"
-        text="Convert PDF to JPG free on SizeToKB.in"
+        title="PDF to JPG online free — Size to KB"
+        text="Convert PDF to JPG free on Size to KB"
         path="/pdf-to-jpg/"
       />
       <SeoKeywordBlock

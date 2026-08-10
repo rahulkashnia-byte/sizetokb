@@ -25,8 +25,8 @@ export default function PdfEditorPage() {
 
       <div className="mx-auto mt-10 max-w-3xl">
         <ShareButtons
-          title="Edit PDF online free — SizeToKB"
-          text="Free PDF editor: add text, highlight, draw & images on SizeToKB.in"
+          title="Edit PDF online free — Size to KB"
+          text="Free PDF editor: add text, highlight, draw & images on Size to KB"
           path="/pdf-editor/"
         />
         <SeoKeywordBlock

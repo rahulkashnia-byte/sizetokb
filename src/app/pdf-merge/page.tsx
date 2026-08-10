@@ -75,7 +75,7 @@ export default function PdfMergePage() {
           {busy ? "Merging…" : "Merge & Download"}
         </button>
       </div>
-      <ShareButtons className="mt-6" title="Merge PDF online free — SizeToKB" text="Merge PDFs free on SizeToKB.in" path="/pdf-merge/" />
+      <ShareButtons className="mt-6" title="Merge PDF online free — Size to KB" text="Merge PDFs free on Size to KB" path="/pdf-merge/" />
       <SeoKeywordBlock
         heading="Merge PDF online free"
         paragraphs={["Join marksheets, caste certificates, and ID scans into one upload-ready PDF."]}

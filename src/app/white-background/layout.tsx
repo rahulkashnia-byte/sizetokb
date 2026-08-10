@@ -3,7 +3,7 @@ import { pageMeta } from "@/lib/seo";
 
 export const metadata: Metadata = pageMeta({
   title: "White Background Photo Maker — Reduce BG Noise for Passport Photos",
-  description: "Replace plain photo backgrounds with white for passport and exam form photos — SizeToKB.in",
+  description: "Replace plain photo backgrounds with white for passport and exam form photos — Size to KB",
   path: "/white-background/",
   keywords: ["white background photo maker","passport white background","remove background white online"],
 });

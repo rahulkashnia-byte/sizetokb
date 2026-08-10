@@ -13,7 +13,7 @@ export function websiteJsonLd() {
   return {
     "@context": "https://schema.org",
     "@type": "WebSite",
-    name: SITE.name,
+    name: SITE.seoName,
     url: SITE.url,
     description: SITE.tagline,
     inLanguage: "en-IN",
@@ -29,7 +29,7 @@ export function webAppJsonLd() {
   return {
     "@context": "https://schema.org",
     "@type": "WebApplication",
-    name: SITE.name,
+    name: SITE.seoName,
     url: SITE.url,
     applicationCategory: "UtilitiesApplication",
     operatingSystem: "Any",

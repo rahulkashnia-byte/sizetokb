@@ -182,8 +182,8 @@ export default function ImageCropperPage() {
 
       <ShareButtons
         className="mt-6"
-        title="Image cropper online free — SizeToKB"
-        text="Crop photos for exam forms free on SizeToKB.in"
+        title="Image cropper online free — Size to KB"
+        text="Crop photos for exam forms free on Size to KB"
         path="/image-cropper/"
       />
       <SeoKeywordBlock

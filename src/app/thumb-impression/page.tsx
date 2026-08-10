@@ -32,8 +32,8 @@ export default function ThumbImpressionPage() {
       </div>
       <ShareButtons
         className="mt-6"
-        title="Reduce thumb impression size to KB — SizeToKB"
-        text="Compress thumb impression free on SizeToKB.in"
+        title="Reduce thumb impression size to KB — Size to KB"
+        text="Compress thumb impression free on Size to KB"
         path="/thumb-impression/"
       />
       <SeoKeywordBlock

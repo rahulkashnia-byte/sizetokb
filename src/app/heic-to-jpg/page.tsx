@@ -59,7 +59,7 @@ export default function HeicToJpgPage() {
           {busy ? "Converting…" : "Convert & Download JPG"}
         </button>
       </div>
-      <ShareButtons className="mt-6" title="HEIC to JPG converter — SizeToKB" text="Convert HEIC to JPG free on SizeToKB.in" path="/heic-to-jpg/" />
+      <ShareButtons className="mt-6" title="HEIC to JPG converter — Size to KB" text="Convert HEIC to JPG free on Size to KB" path="/heic-to-jpg/" />
       <SeoKeywordBlock
         heading="HEIC to JPG online free"
         paragraphs={["Many Indian exam portals reject HEIC. Convert first, then resize to the required KB."]}

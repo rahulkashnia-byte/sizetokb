@@ -5,9 +5,9 @@ import { SITE } from "@/lib/site";
 import { pageMeta } from "@/lib/seo";
 
 export const metadata: Metadata = pageMeta({
-  title: "Disclaimer — SizeToKB",
+  title: "Disclaimer — Size to KB",
   description:
-    "Disclaimer for SizeToKB.in — always verify official SSC, UPSC, NEET, IBPS photo and signature size requirements before submitting forms.",
+    "Disclaimer for Size to KB — always verify official SSC, UPSC, NEET, IBPS photo and signature size requirements before submitting forms.",
   path: "/disclaimer",
 });
 

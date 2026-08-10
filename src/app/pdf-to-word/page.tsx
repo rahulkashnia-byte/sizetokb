@@ -89,8 +89,8 @@ export default function PdfToWordPage() {
 
       <ShareButtons
         className="mt-6"
-        title="PDF to Word online free — SizeToKB"
-        text="Convert PDF to Word free on SizeToKB.in"
+        title="PDF to Word online free — Size to KB"
+        text="Convert PDF to Word free on Size to KB"
         path="/pdf-to-word/"
       />
       <SeoKeywordBlock

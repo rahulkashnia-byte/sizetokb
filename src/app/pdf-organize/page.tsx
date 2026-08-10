@@ -100,7 +100,7 @@ export default function PdfOrganizePage() {
           {busy ? "Saving…" : "Download organized PDF"}
         </button>
       </div>
-      <ShareButtons className="mt-6" title="PDF reorder delete pages — SizeToKB" text="Reorder PDF pages free on SizeToKB.in" path="/pdf-organize/" />
+      <ShareButtons className="mt-6" title="PDF reorder delete pages — Size to KB" text="Reorder PDF pages free on Size to KB" path="/pdf-organize/" />
       <SeoKeywordBlock
         heading="Reorder PDF pages online free"
         paragraphs={["Delete blank pages and rearrange certificates before portal upload."]}

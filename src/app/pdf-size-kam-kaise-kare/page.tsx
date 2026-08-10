@@ -6,7 +6,7 @@ import { pageMeta } from "@/lib/seo";
 export const metadata: Metadata = pageMeta({
   title: "PDF Size Kam Kaise Kare — 100KB 200KB 500KB Online Free",
   description:
-    "PDF size kam kaise kare? SizeToKB.in par free — marksheet/certificate PDF ko 100KB, 200KB, 500KB tak compress karein. Unlock PDF, PDF to JPG bhi available.",
+    "PDF size kam kaise kare? Size to KB par free — marksheet/certificate PDF ko 100KB, 200KB, 500KB tak compress karein. Unlock PDF, PDF to JPG bhi available.",
   path: "/pdf-size-kam-kaise-kare/",
   keywords: [
     "pdf size kam kaise kare",

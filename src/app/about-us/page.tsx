@@ -5,12 +5,12 @@ import { SITE } from "@/lib/site";
 import { pageMeta } from "@/lib/seo";
 
 export const metadata: Metadata = pageMeta({
-  title: "About Us — SizeToKB",
+  title: "About Us — Size to KB",
   description:
-    "About SizeToKB.in — free photo resize to KB, signature compressor, and exam form document tools built for Indian aspirants.",
+    "About Size to KB — free photo resize to KB, signature compressor, and exam form document tools built for Indian aspirants.",
   path: "/about-us",
   keywords: [
-    "about SizeToKB",
+    "about Size to KB",
     "photo resize online India",
     "exam photo resizer",
     "compress image to KB free",

@@ -78,7 +78,7 @@ export default function ImageCheckerPage() {
           </ul>
         ) : null}
       </div>
-      <ShareButtons className="mt-6" title="Image DPI pixel checker — SizeToKB" text="Check photo size before upload on SizeToKB.in" path="/image-checker/" />
+      <ShareButtons className="mt-6" title="Image DPI pixel checker — Size to KB" text="Check photo size before upload on Size to KB" path="/image-checker/" />
       <SeoKeywordBlock
         heading="Check photo pixels and KB before upload"
         paragraphs={["JPG files do not store true DPI reliably — we estimate print size from pixel count at 300 DPI."]}

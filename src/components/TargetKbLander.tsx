@@ -67,8 +67,8 @@ export function TargetKbLander({
 
       <ShareButtons
         className="mt-6"
-        title={`Compress image to ${targetKb}KB online free — SizeToKB`}
-        text={`Reduce photo size to ${targetKb}KB free on SizeToKB.in`}
+        title={`Compress image to ${targetKb}KB online free — Size to KB`}
+        text={`Reduce photo size to ${targetKb}KB free on Size to KB`}
         path={path}
       />
       <SeoKeywordBlock heading={seoHeading} paragraphs={paragraphs} links={RELATED} />

@@ -142,8 +142,8 @@ export default function ImageMergerPage() {
 
       <ShareButtons
         className="mt-6"
-        title="Image merger online free — SizeToKB"
-        text="Merge photos online free on SizeToKB.in"
+        title="Image merger online free — Size to KB"
+        text="Merge photos online free on Size to KB"
         path="/image-merger/"
       />
       <SeoKeywordBlock

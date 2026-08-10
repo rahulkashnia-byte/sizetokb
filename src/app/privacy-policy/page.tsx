@@ -5,9 +5,9 @@ import { SITE } from "@/lib/site";
 import { pageMeta } from "@/lib/seo";
 
 export const metadata: Metadata = pageMeta({
-  title: "Privacy Policy — SizeToKB",
+  title: "Privacy Policy — Size to KB",
   description:
-    "Privacy Policy for SizeToKB.in — free photo resize and signature compress tools. We process images in your browser and do not store your files.",
+    "Privacy Policy for Size to KB — free photo resize and signature compress tools. We process images in your browser and do not store your files.",
   path: "/privacy-policy",
 });
 

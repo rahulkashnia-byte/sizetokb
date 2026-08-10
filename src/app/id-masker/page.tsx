@@ -141,7 +141,7 @@ export default function IdMaskerPage() {
         </button>
         <p className="mt-3 text-center text-xs text-[var(--muted)]">For sharing only — do not use to forge documents.</p>
       </div>
-      <ShareButtons className="mt-6" title="Aadhaar ID masker — SizeToKB" text="Mask ID numbers privately on SizeToKB.in" path="/id-masker/" />
+      <ShareButtons className="mt-6" title="Aadhaar ID masker — Size to KB" text="Mask ID numbers privately on Size to KB" path="/id-masker/" />
       <SeoKeywordBlock
         heading="Mask Aadhaar numbers before sharing"
         paragraphs={["Draw over sensitive digits; we blur and darken those regions locally."]}

@@ -27,8 +27,8 @@ export default function CustomPage() {
 
       <div className="mx-auto max-w-3xl px-4 pb-6 sm:px-6">
         <ShareButtons
-          title="Custom reduce photo & signature size — SizeToKB"
-          text="Reduce photo & signature size to any custom KB free on SizeToKB.in"
+          title="Custom reduce photo & signature size — Size to KB"
+          text="Reduce photo & signature size to any custom KB free on Size to KB"
           path="/custom/"
         />
       </div>

@@ -121,8 +121,8 @@ export default function PdfUnlockPage() {
 
       <ShareButtons
         className="mt-6"
-        title="Unlock PDF remove password online free — SizeToKB"
-        text="Unlock PDF password free on SizeToKB.in"
+        title="Unlock PDF remove password online free — Size to KB"
+        text="Unlock PDF password free on Size to KB"
         path="/pdf-unlock/"
       />
       <SeoKeywordBlock

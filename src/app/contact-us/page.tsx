@@ -5,9 +5,9 @@ import { SITE } from "@/lib/site";
 import { pageMeta } from "@/lib/seo";
 
 export const metadata: Metadata = pageMeta({
-  title: "Contact Us — SizeToKB",
+  title: "Contact Us — Size to KB",
   description:
-    "Contact SizeToKB.in support for photo resize, signature compress, exam form KB issues, and feedback.",
+    "Contact Size to KB support for photo resize, signature compress, exam form KB issues, and feedback.",
   path: "/contact-us",
 });
 

@@ -25,8 +25,8 @@ export default function BiodataPage() {
 
       <ShareButtons
         className="mt-8"
-        title="Free sarkari biodata & resume maker — SizeToKB"
-        text="Make print-ready biodata free on SizeToKB.in"
+        title="Free sarkari biodata & resume maker — Size to KB"
+        text="Make print-ready biodata free on Size to KB"
         path="/biodata/"
       />
       <SeoKeywordBlock

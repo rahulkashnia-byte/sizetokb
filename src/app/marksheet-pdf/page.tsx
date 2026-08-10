@@ -87,7 +87,7 @@ export default function MarksheetPdfPage() {
           {busy ? "Reducing…" : "Reduce PDF & Download"}
         </button>
       </div>
-      <ShareButtons className="mt-6" title="Reduce marksheet PDF size to KB — SizeToKB" text="Compress marksheet PDF free on SizeToKB.in" path="/marksheet-pdf/" />
+      <ShareButtons className="mt-6" title="Reduce marksheet PDF size to KB — Size to KB" text="Compress marksheet PDF free on Size to KB" path="/marksheet-pdf/" />
       <SeoKeywordBlock
         heading="Reduce marksheet PDF size online free to 200KB 500KB"
         paragraphs={["Compress certificate PDF for scholarship and job portals. Scanned marksheets shrink best."]}

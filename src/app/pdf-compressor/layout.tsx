@@ -4,7 +4,7 @@ import { pageMeta } from "@/lib/seo";
 export const metadata: Metadata = pageMeta({
   title: "Compress PDF Online Free — Reduce PDF Size to KB",
   description:
-    "Compress PDF online free. Reduce PDF size to 100KB, 200KB, 500KB for exam and government uploads — SizeToKB.in",
+    "Compress PDF online free. Reduce PDF size to 100KB, 200KB, 500KB for exam and government uploads — Size to KB",
   path: "/pdf-compressor/",
   keywords: [
     "compress pdf",

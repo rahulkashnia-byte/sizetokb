@@ -5,6 +5,7 @@ import { JsonLd, webAppJsonLd, websiteJsonLd } from "@/components/JsonLd";
 import { PwaRegister } from "@/components/PwaRegister";
 import { SiteChrome } from "@/components/SiteChrome";
 import { defaultMetadata } from "@/lib/seo";
+import { SITE } from "@/lib/site";
 import "./globals.css";
 
 const lato = Lato({
@@ -15,10 +16,10 @@ const lato = Lato({
 
 export const metadata: Metadata = {
   ...defaultMetadata,
-  applicationName: "SizeToKB",
+  applicationName: SITE.seoName,
   appleWebApp: {
     capable: true,
-    title: "SizeToKB",
+    title: SITE.seoName,
     statusBarStyle: "default",
   },
   manifest: "/manifest.webmanifest",

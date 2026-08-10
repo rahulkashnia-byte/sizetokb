@@ -81,7 +81,7 @@ export default function PhotoGuidePage() {
           </div>
         )}
       </div>
-      <ShareButtons className="mt-6" title="Photo guidelines checker — SizeToKB" text="Check exam photo quality free on SizeToKB.in" path="/photo-guide/" />
+      <ShareButtons className="mt-6" title="Photo guidelines checker — Size to KB" text="Check exam photo quality free on Size to KB" path="/photo-guide/" />
       <SeoKeywordBlock
         heading="Check passport photo quality online free"
         paragraphs={["Validate form photo before upload — then reduce image size to the exact KB."]}

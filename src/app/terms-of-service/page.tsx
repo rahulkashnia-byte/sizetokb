@@ -5,9 +5,9 @@ import { SITE } from "@/lib/site";
 import { pageMeta } from "@/lib/seo";
 
 export const metadata: Metadata = pageMeta({
-  title: "Terms of Service — SizeToKB",
+  title: "Terms of Service — Size to KB",
   description:
-    "Terms of Service for SizeToKB.in free online image compressor, photo resize to KB, and exam form document tools.",
+    "Terms of Service for Size to KB free online image compressor, photo resize to KB, and exam form document tools.",
   path: "/terms-of-service",
 });
 

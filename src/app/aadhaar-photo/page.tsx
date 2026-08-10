@@ -31,8 +31,8 @@ export default function AadhaarPhotoPage() {
       </div>
       <ShareButtons
         className="mt-6"
-        title="Reduce Aadhaar photo size to KB — SizeToKB"
-        text="Reduce Aadhaar photo size free on SizeToKB.in"
+        title="Reduce Aadhaar photo size to KB — Size to KB"
+        text="Reduce Aadhaar photo size free on Size to KB"
         path="/aadhaar-photo/"
       />
       <SeoKeywordBlock

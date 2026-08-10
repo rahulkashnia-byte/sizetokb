@@ -49,7 +49,7 @@ function SpecTool({
       <ShareButtons
         className="mt-6"
         title={seoHeading}
-        text={`${seoHeading} free on SizeToKB.in`}
+        text={`${seoHeading} free on Size to KB`}
         path={path}
       />
       <SeoKeywordBlock heading={seoHeading} paragraphs={seoParagraphs} links={links} />

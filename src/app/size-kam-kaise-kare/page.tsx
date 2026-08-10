@@ -6,7 +6,7 @@ import { pageMeta } from "@/lib/seo";
 export const metadata: Metadata = pageMeta({
   title: "Photo Size Kam Kaise Kare — 20KB 50KB Photo Online Free",
   description:
-    "Photo size kam kaise kare? SizeToKB.in par free — photo ko 20KB, 50KB, 100KB mein compress karein. Signature size kam kaise kare (10–20KB). SSC, Bank, Railway forms.",
+    "Photo size kam kaise kare? Size to KB par free — photo ko 20KB, 50KB, 100KB mein compress karein. Signature size kam kaise kare (10–20KB). SSC, Bank, Railway forms.",
   path: "/size-kam-kaise-kare/",
   keywords: [
     "photo size kam kaise kare",
@@ -35,7 +35,7 @@ export default function SizeKamKaiseKarePage() {
   return (
     <LegalLayout title="Photo Size Kam Kaise Kare (20KB / 50KB / 100KB)">
       <p>
-        <strong>Photo size kam kaise kare</strong> — SizeToKB.in par free tool se aap photo ko exact{" "}
+        <strong>Photo size kam kaise kare</strong> — Size to KB par free tool se aap photo ko exact{" "}
         <strong>20KB, 50KB ya 100KB</strong> tak compress kar sakte ho. Processing browser mein hoti
         hai; file server par upload nahi hoti.
       </p>

@@ -71,7 +71,7 @@ export default function ImageConvertPage() {
           {busy ? "Converting…" : "Convert & Download"}
         </button>
       </div>
-      <ShareButtons className="mt-6" title="JPG PNG WebP converter — SizeToKB" text="Convert image formats free on SizeToKB.in" path="/image-convert/" />
+      <ShareButtons className="mt-6" title="JPG PNG WebP converter — Size to KB" text="Convert image formats free on Size to KB" path="/image-convert/" />
       <SeoKeywordBlock
         heading="JPG PNG WebP converter online free"
         paragraphs={["Convert formats for portals that only accept JPG, or keep PNG for transparency."]}

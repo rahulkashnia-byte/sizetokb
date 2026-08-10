@@ -9,10 +9,10 @@ import { toolsForNav } from "@/lib/toolsCatalog";
 export const metadata: Metadata = pageMeta({
   title: "Sitemap — Reduce Image Size Tools & Exam Photo Resizers",
   description:
-    "Complete sitemap of SizeToKB.in — reduce image size to KB, reduce signature size, PDF tools, and exam photo resizers for Indian aspirants.",
+    "Complete sitemap of Size to KB — reduce image size to KB, reduce signature size, PDF tools, and exam photo resizers for Indian aspirants.",
   path: "/sitemap",
   keywords: [
-    "SizeToKB sitemap",
+    "Size to KB sitemap",
     "reduce image size tools",
     "SSC photo resizer list",
     "compress image to KB",

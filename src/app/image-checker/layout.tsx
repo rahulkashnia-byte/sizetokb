@@ -3,7 +3,7 @@ import { pageMeta } from "@/lib/seo";
 
 export const metadata: Metadata = pageMeta({
   title: "Check Photo Size Online Free — Pixels, KB & DPI Before Upload",
-  description: "Check photo width, height, KB size and estimated print size before you reduce or upload — SizeToKB.in",
+  description: "Check photo width, height, KB size and estimated print size before you reduce or upload — Size to KB",
   path: "/image-checker/",
   keywords: ["image DPI checker","check photo pixels KB","photo size checker online"],
 });

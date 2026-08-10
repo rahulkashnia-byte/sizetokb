@@ -63,7 +63,7 @@ export default function WhiteBackgroundPage() {
           {busy ? "Processing…" : "Whitened Download"}
         </button>
       </div>
-      <ShareButtons className="mt-6" title="White background photo maker — SizeToKB" text="White background photos free on SizeToKB.in" path="/white-background/" />
+      <ShareButtons className="mt-6" title="White background photo maker — Size to KB" text="White background photos free on Size to KB" path="/white-background/" />
       <SeoKeywordBlock
         heading="White background for passport photos"
         paragraphs={["Not a full AI cutout — edge flood works well on uniform backgrounds common in form photos."]}

@@ -77,7 +77,7 @@ export default function SignatureCleanerPage() {
           {busy ? "Cleaning…" : "Clean & Download"}
         </button>
       </div>
-      <ShareButtons className="mt-6" title="Signature cleaner — SizeToKB" text="Clean signatures to 10–20KB on SizeToKB.in" path="/signature-cleaner/" />
+      <ShareButtons className="mt-6" title="Signature cleaner — Size to KB" text="Clean signatures to 10–20KB on Size to KB" path="/signature-cleaner/" />
       <SeoKeywordBlock
         heading="Signature cleaner for SSC Bank Railway"
         paragraphs={["Push paper noise to white, keep ink dark, crop empty margins, then land near 10–20 KB."]}

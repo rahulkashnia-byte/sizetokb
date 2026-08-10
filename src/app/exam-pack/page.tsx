@@ -83,7 +83,7 @@ export default function ExamPackPage() {
           {busy ? "Building…" : "Download ZIP"}
         </button>
       </div>
-      <ShareButtons className="mt-6" title="Exam photo signature ZIP — SizeToKB" text="Download exam photo pack on SizeToKB.in" path="/exam-pack/" />
+      <ShareButtons className="mt-6" title="Exam photo signature ZIP — Size to KB" text="Download exam photo pack on Size to KB" path="/exam-pack/" />
       <SeoKeywordBlock
         heading="Bulk photo + signature for form fill"
         paragraphs={["One ZIP with resized photo and cleaned signature — useful when portals ask for both files."]}

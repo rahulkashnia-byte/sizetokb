@@ -33,7 +33,7 @@ export const TOOLS: ToolDef[] = [
     category: "size",
     seoTitle: "Reduce Image & Signature Size to Exact KB Online Free",
     seoDescription:
-      "Reduce photo and signature size to the exact KB your form needs. Free browser tool for SSC, UPSC, Bank & more — SizeToKB.in",
+      "Reduce photo and signature size to the exact KB your form needs. Free browser tool for SSC, UPSC, Bank & more — Size to KB",
     keywords: [
       "reduce image size to KB",
       "reduce signature size online",
@@ -48,7 +48,7 @@ export const TOOLS: ToolDef[] = [
     category: "size",
     seoTitle: "Reduce Photo & Signature Size to Any Custom KB Online Free",
     seoDescription:
-      "Reduce image size and reduce signature size to any min–max KB with optional cm/px. Free for exam form fill — SizeToKB.in",
+      "Reduce image size and reduce signature size to any min–max KB with optional cm/px. Free for exam form fill — Size to KB",
     keywords: [
       "reduce signature size to 20KB",
       "reduce photo size to 50KB",
@@ -64,7 +64,7 @@ export const TOOLS: ToolDef[] = [
     category: "size",
     seoTitle: "Reduce Image Size Online Free — Compress Photo to 20KB, 50KB, 100KB",
     seoDescription:
-      "Reduce image size online free in KB. Compress photo to 20KB, 50KB or 100KB for SSC, UPSC, NEET & form fill — SizeToKB.in",
+      "Reduce image size online free in KB. Compress photo to 20KB, 50KB or 100KB for SSC, UPSC, NEET & form fill — Size to KB",
     keywords: [
       "reduce image size online free",
       "reduce photo size online",
@@ -80,7 +80,7 @@ export const TOOLS: ToolDef[] = [
     category: "size",
     seoTitle: "Compress Image to 50KB Online Free — Reduce Photo Size to 50KB",
     seoDescription:
-      "Compress image to 50KB online free. Reduce photo size to 50KB for SSC, UPSC, IBPS, Railway form uploads — SizeToKB.in",
+      "Compress image to 50KB online free. Reduce photo size to 50KB for SSC, UPSC, IBPS, Railway form uploads — Size to KB",
     keywords: [
       "compress image to 50kb",
       "reduce photo size to 50kb",
@@ -96,7 +96,7 @@ export const TOOLS: ToolDef[] = [
     category: "size",
     seoTitle: "Compress Image to 20KB Online Free — Reduce Photo Size to 20KB",
     seoDescription:
-      "Compress image to 20KB online free. Reduce photo size to 20KB for SSC, Railway, Bank uploads — SizeToKB.in",
+      "Compress image to 20KB online free. Reduce photo size to 20KB for SSC, Railway, Bank uploads — Size to KB",
     keywords: [
       "compress image to 20kb",
       "reduce photo size to 20kb",
@@ -112,7 +112,7 @@ export const TOOLS: ToolDef[] = [
     category: "size",
     seoTitle: "Compress Image to 100KB Online Free — Reduce Photo Size to 100KB",
     seoDescription:
-      "Compress image to 100KB online free. Reduce photo size to 100KB for UPSC, NEET, JEE uploads — SizeToKB.in",
+      "Compress image to 100KB online free. Reduce photo size to 100KB for UPSC, NEET, JEE uploads — Size to KB",
     keywords: [
       "compress image to 100kb",
       "reduce photo size to 100kb",
@@ -128,7 +128,7 @@ export const TOOLS: ToolDef[] = [
     category: "size",
     seoTitle: "Reduce Signature Size Online Free — Compress Signature to 10KB–20KB",
     seoDescription:
-      "Reduce signature size online free. Clean, crop and compress signature to 10–20 KB for SSC, Bank, Railway forms — SizeToKB.in",
+      "Reduce signature size online free. Clean, crop and compress signature to 10–20 KB for SSC, Bank, Railway forms — Size to KB",
     keywords: [
       "reduce signature size online",
       "compress signature to 20KB",
@@ -144,7 +144,7 @@ export const TOOLS: ToolDef[] = [
     category: "size",
     seoTitle: "Reduce Exam Photo & Signature Size to KB — Download ZIP Pack",
     seoDescription:
-      "Reduce photo size and signature size to exam KB specs, then download both in one ZIP — SizeToKB.in",
+      "Reduce photo size and signature size to exam KB specs, then download both in one ZIP — Size to KB",
     keywords: [
       "exam photo signature zip",
       "reduce photo and signature size",
@@ -158,7 +158,7 @@ export const TOOLS: ToolDef[] = [
     category: "size",
     seoTitle: "Bulk Reduce Image Size to KB Online Free — Compress Many Photos at Once",
     seoDescription:
-      "Bulk reduce photo size to exact KB online free. Compress many images to 20KB/50KB for SSC, Bank & exam forms — ZIP download. SizeToKB.in",
+      "Bulk reduce photo size to exact KB online free. Compress many images to 20KB/50KB for SSC, Bank & exam forms — ZIP download. Size to KB",
     keywords: [
       "bulk reduce image size to KB",
       "compress multiple photos to 50kb",
@@ -174,7 +174,7 @@ export const TOOLS: ToolDef[] = [
     category: "size",
     seoTitle: "Form Photo Pack Wizard — Reduce Photo & Signature Size to KB",
     seoDescription:
-      "Admit card / form photo pack wizard. Reduce photo and signature size to portal KB limits for SSC, IBPS, PAN, Aadhaar — SizeToKB.in",
+      "Admit card / form photo pack wizard. Reduce photo and signature size to portal KB limits for SSC, IBPS, PAN, Aadhaar — Size to KB",
     keywords: [
       "form photo size wizard",
       "admit card photo size",
@@ -190,7 +190,7 @@ export const TOOLS: ToolDef[] = [
     category: "size",
     seoTitle: "Portal Upload Error Fixer — Reduce File Size to Match KB Limit",
     seoDescription:
-      "Paste portal upload error text and get exact fix: reduce photo/signature/PDF size to the KB limit your form needs — SizeToKB.in",
+      "Paste portal upload error text and get exact fix: reduce photo/signature/PDF size to the KB limit your form needs — Size to KB",
     keywords: [
       "file size exceeds maximum limit fix",
       "photo upload error fix",
@@ -206,7 +206,7 @@ export const TOOLS: ToolDef[] = [
     category: "size",
     seoTitle: "Reduce PAN Card Photo Size Online Free to KB",
     seoDescription:
-      "Reduce PAN card photo size online free to typical 10–50 KB portal limits. Private browser compressor — SizeToKB.in",
+      "Reduce PAN card photo size online free to typical 10–50 KB portal limits. Private browser compressor — Size to KB",
     keywords: [
       "reduce PAN photo size",
       "PAN card photo size KB",
@@ -221,7 +221,7 @@ export const TOOLS: ToolDef[] = [
     category: "size",
     seoTitle: "Reduce Aadhaar Photo Size Online Free to KB",
     seoDescription:
-      "Reduce Aadhaar / UIDAI photo size online free toward common KB limits for update forms — SizeToKB.in",
+      "Reduce Aadhaar / UIDAI photo size online free toward common KB limits for update forms — Size to KB",
     keywords: [
       "reduce Aadhaar photo size",
       "Aadhaar photo size KB",
@@ -236,7 +236,7 @@ export const TOOLS: ToolDef[] = [
     category: "size",
     seoTitle: "Reduce Thumb Impression Size Online Free to KB",
     seoDescription:
-      "Reduce thumb impression size online free to 10–40 KB for police, bank and exam forms — SizeToKB.in",
+      "Reduce thumb impression size online free to 10–40 KB for police, bank and exam forms — Size to KB",
     keywords: [
       "reduce thumb impression size",
       "thumb impression size KB",
@@ -251,7 +251,7 @@ export const TOOLS: ToolDef[] = [
     category: "pdf",
     seoTitle: "Compress PDF Online Free — Reduce PDF Size to KB",
     seoDescription:
-      "Compress PDF online free. Reduce PDF size to 100KB, 200KB, 500KB for exam and government uploads — SizeToKB.in",
+      "Compress PDF online free. Reduce PDF size to 100KB, 200KB, 500KB for exam and government uploads — Size to KB",
     keywords: [
       "compress pdf",
       "compress PDF online free",
@@ -268,7 +268,7 @@ export const TOOLS: ToolDef[] = [
     category: "pdf",
     seoTitle: "Reduce Marksheet PDF Size Online Free to 200KB 500KB",
     seoDescription:
-      "Reduce marksheet / certificate PDF size online free toward 200KB, 500KB or 1MB for scholarship and job portals — SizeToKB.in",
+      "Reduce marksheet / certificate PDF size online free toward 200KB, 500KB or 1MB for scholarship and job portals — Size to KB",
     keywords: [
       "reduce marksheet PDF size",
       "compress certificate PDF 200KB",
@@ -284,7 +284,7 @@ export const TOOLS: ToolDef[] = [
     category: "pdf",
     seoTitle: "Reorder Delete PDF Pages Online Free — Then Reduce PDF Size to KB",
     seoDescription:
-      "Reorder and delete PDF pages online free, then compress toward target KB for exam and government uploads — SizeToKB.in",
+      "Reorder and delete PDF pages online free, then compress toward target KB for exam and government uploads — Size to KB",
     keywords: [
       "reorder PDF pages online free",
       "delete PDF pages online",
@@ -299,7 +299,7 @@ export const TOOLS: ToolDef[] = [
     category: "extra",
     seoTitle: "Watermark Photo & PDF Online Free — FOR UPLOAD ONLY Stamp",
     seoDescription:
-      "Add FOR UPLOAD ONLY watermark on photos or PDFs before sharing. Private browser watermark tool — SizeToKB.in",
+      "Add FOR UPLOAD ONLY watermark on photos or PDFs before sharing. Private browser watermark tool — Size to KB",
     keywords: [
       "watermark photo online free",
       "FOR UPLOAD ONLY watermark",
@@ -314,7 +314,7 @@ export const TOOLS: ToolDef[] = [
     category: "extra",
     seoTitle: "Photo Guidelines Checker Online Free — Before Reduce Size to KB",
     seoDescription:
-      "Check photo guidelines: face framing, brightness, blur and background tips before you reduce size to KB for forms — SizeToKB.in",
+      "Check photo guidelines: face framing, brightness, blur and background tips before you reduce size to KB for forms — Size to KB",
     keywords: [
       "photo guidelines checker",
       "passport photo quality check",
@@ -329,7 +329,7 @@ export const TOOLS: ToolDef[] = [
     category: "extra",
     seoTitle: "Photo Size Kam Kaise Kare — 20KB 50KB Photo Online Free",
     seoDescription:
-      "Photo size kam kaise kare — compress to 20KB/50KB/100KB free. Signature & PDF size kam kaise kare guides — SizeToKB.in",
+      "Photo size kam kaise kare — compress to 20KB/50KB/100KB free. Signature & PDF size kam kaise kare guides — Size to KB",
     keywords: [
       "photo size kam kaise kare",
       "signature size kam kaise kare",
@@ -345,7 +345,7 @@ export const TOOLS: ToolDef[] = [
     category: "extra",
     seoTitle: "Signature Size Kam Kaise Kare — 10KB 20KB Online Free",
     seoDescription:
-      "Signature size kam kaise kare — compress signature to 10–20KB for SSC, Bank, Railway — SizeToKB.in",
+      "Signature size kam kaise kare — compress signature to 10–20KB for SSC, Bank, Railway — Size to KB",
     keywords: [
       "signature size kam kaise kare",
       "signature 10kb 20kb kaise banaye",
@@ -359,7 +359,7 @@ export const TOOLS: ToolDef[] = [
     category: "extra",
     seoTitle: "PDF Size Kam Kaise Kare — 100KB 200KB 500KB Online Free",
     seoDescription:
-      "PDF size kam kaise kare — compress marksheet PDF to 100/200/500KB free — SizeToKB.in",
+      "PDF size kam kaise kare — compress marksheet PDF to 100/200/500KB free — Size to KB",
     keywords: [
       "pdf size kam kaise kare",
       "PDF size 100KB kaise kare",
@@ -374,7 +374,7 @@ export const TOOLS: ToolDef[] = [
     category: "pdf",
     seoTitle: "Edit PDF Online Free — Add Text, Images, Highlight & Draw",
     seoDescription:
-      "Advanced PDF editor online free: add text, images, highlights, shapes and drawings, then download. Private browser tool — SizeToKB.in",
+      "Advanced PDF editor online free: add text, images, highlights, shapes and drawings, then download. Private browser tool — Size to KB",
     keywords: [
       "edit PDF online free",
       "PDF editor online",
@@ -391,7 +391,7 @@ export const TOOLS: ToolDef[] = [
     category: "photo",
     seoTitle: "Passport Size Photo Maker Online Free — Reduce Photo to Form Size",
     seoDescription:
-      "Make India 3.5×4.5 cm or 2×2 inch passport photos. Crop, change background, download JPG or A4 sheet — SizeToKB.in",
+      "Make India 3.5×4.5 cm or 2×2 inch passport photos. Crop, change background, download JPG or A4 sheet — Size to KB",
     keywords: [
       "passport size photo maker",
       "reduce photo to passport size",
@@ -407,7 +407,7 @@ export const TOOLS: ToolDef[] = [
     category: "photo",
     seoTitle: "White Background Photo Maker — Reduce BG Noise for Passport Photos",
     seoDescription:
-      "Replace plain photo backgrounds with white for passport and exam form photos — SizeToKB.in",
+      "Replace plain photo backgrounds with white for passport and exam form photos — Size to KB",
     keywords: [
       "white background photo maker",
       "passport white background",
@@ -421,7 +421,7 @@ export const TOOLS: ToolDef[] = [
     category: "photo",
     seoTitle: "Crop Photo Online Free — Then Reduce Image Size to KB",
     seoDescription:
-      "Crop images online free for passport and exam forms, then reduce size to the required KB — SizeToKB.in",
+      "Crop images online free for passport and exam forms, then reduce size to the required KB — Size to KB",
     keywords: ["image cropper online free", "crop photo online", "exam photo crop India"],
   },
   {
@@ -431,7 +431,7 @@ export const TOOLS: ToolDef[] = [
     category: "photo",
     seoTitle: "Merge Images Online Free — Combine Photos Before Reduce to KB",
     seoDescription:
-      "Merge multiple images into one JPG online free. Horizontal, vertical or grid — SizeToKB.in",
+      "Merge multiple images into one JPG online free. Horizontal, vertical or grid — Size to KB",
     keywords: ["image merger online free", "combine photos online", "join images side by side"],
   },
   {
@@ -441,7 +441,7 @@ export const TOOLS: ToolDef[] = [
     category: "photo",
     seoTitle: "Flip & Rotate Photo Online Free — Fix Image Before Reduce to KB",
     seoDescription:
-      "Flip image horizontally/vertically or rotate 90° online free, then reduce size to KB for forms — SizeToKB.in",
+      "Flip image horizontally/vertically or rotate 90° online free, then reduce size to KB for forms — Size to KB",
     keywords: ["flip image online free", "rotate photo online", "mirror image reverse"],
   },
   {
@@ -451,7 +451,7 @@ export const TOOLS: ToolDef[] = [
     category: "photo",
     seoTitle: "Reduce Color Photo to Black & White Online Free",
     seoDescription:
-      "Convert photo or signature to grayscale or pure B&W for forms that require it — SizeToKB.in",
+      "Convert photo or signature to grayscale or pure B&W for forms that require it — Size to KB",
     keywords: ["color to black and white online", "grayscale photo converter", "B&W signature"],
   },
   {
@@ -461,7 +461,7 @@ export const TOOLS: ToolDef[] = [
     category: "pdf",
     seoTitle: "Merge PDF Online Free — Combine PDF Files",
     seoDescription:
-      "Merge PDF online free. Combine multiple PDFs into one for exam certificate uploads, then reduce PDF size if needed — SizeToKB.in",
+      "Merge PDF online free. Combine multiple PDFs into one for exam certificate uploads, then reduce PDF size if needed — Size to KB",
     keywords: [
       "merge pdf",
       "merge PDF online free",
@@ -478,7 +478,7 @@ export const TOOLS: ToolDef[] = [
     category: "pdf",
     seoTitle: "Split PDF Online Free — Extract PDF Pages",
     seoDescription:
-      "Split PDF online free. Extract pages or a page range to reduce upload size — SizeToKB.in",
+      "Split PDF online free. Extract pages or a page range to reduce upload size — Size to KB",
     keywords: ["split pdf", "split PDF online free", "extract PDF pages", "PDF page splitter"],
   },
   {
@@ -488,7 +488,7 @@ export const TOOLS: ToolDef[] = [
     category: "pdf",
     seoTitle: "JPG to PDF Online Free — Image to PDF Converter",
     seoDescription:
-      "JPG to PDF converter online free. Convert images to PDF, reorder pages, reduce toward a target KB for exam uploads — SizeToKB.in",
+      "JPG to PDF converter online free. Convert images to PDF, reorder pages, reduce toward a target KB for exam uploads — Size to KB",
     keywords: [
       "jpg to pdf",
       "JPG to PDF online free",
@@ -505,7 +505,7 @@ export const TOOLS: ToolDef[] = [
     category: "pdf",
     seoTitle: "PDF to JPG Online Free — Convert PDF to Image / PNG",
     seoDescription:
-      "PDF to JPG converter online free. Convert PDF pages to JPG or PNG, download ZIP. Private browser tool — SizeToKB.in",
+      "PDF to JPG converter online free. Convert PDF pages to JPG or PNG, download ZIP. Private browser tool — Size to KB",
     keywords: [
       "pdf to jpg",
       "PDF to JPG online free",
@@ -522,7 +522,7 @@ export const TOOLS: ToolDef[] = [
     category: "pdf",
     seoTitle: "Unlock PDF Online Free — Remove PDF Password",
     seoDescription:
-      "Unlock PDF online free. Remove PDF password and download an unlocked copy in your browser — SizeToKB.in",
+      "Unlock PDF online free. Remove PDF password and download an unlocked copy in your browser — Size to KB",
     keywords: [
       "unlock PDF",
       "unlock PDF online free",
@@ -539,7 +539,7 @@ export const TOOLS: ToolDef[] = [
     category: "convert",
     seoTitle: "PDF to Word Online Free — Convert PDF to DOCX",
     seoDescription:
-      "PDF to Word converter online free. Convert PDF to DOCX / editable Word in your browser. Best for text PDFs — SizeToKB.in",
+      "PDF to Word converter online free. Convert PDF to DOCX / editable Word in your browser. Best for text PDFs — Size to KB",
     keywords: [
       "pdf to word",
       "PDF to Word online free",
@@ -555,7 +555,7 @@ export const TOOLS: ToolDef[] = [
     category: "convert",
     seoTitle: "Word to PDF Online Free — Convert DOCX to PDF",
     seoDescription:
-      "Word to PDF converter online free. Convert DOCX to PDF, then reduce PDF size to KB for exam portals — SizeToKB.in",
+      "Word to PDF converter online free. Convert DOCX to PDF, then reduce PDF size to KB for exam portals — Size to KB",
     keywords: [
       "word to pdf",
       "Word to PDF online free",
@@ -571,7 +571,7 @@ export const TOOLS: ToolDef[] = [
     category: "convert",
     seoTitle: "HEIC to JPG Online Free — Then Reduce Image Size to KB",
     seoDescription:
-      "Convert iPhone HEIC/HEIF to JPG online free, then reduce image size to the KB your form needs — SizeToKB.in",
+      "Convert iPhone HEIC/HEIF to JPG online free, then reduce image size to the KB your form needs — Size to KB",
     keywords: ["HEIC to JPG online free", "convert HEIC to JPEG", "iPhone photo to JPG"],
   },
   {
@@ -581,7 +581,7 @@ export const TOOLS: ToolDef[] = [
     category: "convert",
     seoTitle: "Convert JPG PNG WebP Online Free — Reduce File Size for Forms",
     seoDescription:
-      "Convert between JPG, PNG and WebP online free to reduce file size for exam form uploads — SizeToKB.in",
+      "Convert between JPG, PNG and WebP online free to reduce file size for exam form uploads — Size to KB",
     keywords: ["JPG to PNG converter", "PNG to JPG online", "WebP converter free"],
   },
   {
@@ -591,7 +591,7 @@ export const TOOLS: ToolDef[] = [
     category: "extra",
     seoTitle: "Check Photo Size Online Free — Pixels, KB & DPI Before Upload",
     seoDescription:
-      "Check photo width, height, KB size and estimated print size before you reduce or upload — SizeToKB.in",
+      "Check photo width, height, KB size and estimated print size before you reduce or upload — Size to KB",
     keywords: ["image DPI checker", "check photo pixels KB", "photo size checker online"],
   },
   {
@@ -601,7 +601,7 @@ export const TOOLS: ToolDef[] = [
     category: "extra",
     seoTitle: "Aadhaar ID Masker Online Free — Blur Numbers Before Share",
     seoDescription:
-      "Blur Aadhaar or ID numbers on photos before sharing. Private browser tool — SizeToKB.in",
+      "Blur Aadhaar or ID numbers on photos before sharing. Private browser tool — Size to KB",
     keywords: ["Aadhaar masker online", "blur ID number photo", "mask Aadhaar card"],
   },
   {
@@ -611,7 +611,7 @@ export const TOOLS: ToolDef[] = [
     category: "extra",
     seoTitle: "Free Sarkari Biodata & Resume Maker Online — Print Ready PDF",
     seoDescription:
-      "Free sarkari biodata / resume maker with photo upload, education, skills packs and print-ready PDF — SizeToKB.in",
+      "Free sarkari biodata / resume maker with photo upload, education, skills packs and print-ready PDF — Size to KB",
     keywords: [
       "biodata maker",
       "sarkari biodata maker",

@@ -91,7 +91,7 @@ export default function FormWizardPage() {
           {busy ? "Building…" : "Reduce & Download ZIP"}
         </button>
       </div>
-      <ShareButtons className="mt-6" title="Form photo pack wizard — SizeToKB" text="Reduce exam photo & signature to KB pack on SizeToKB.in" path="/form-wizard/" />
+      <ShareButtons className="mt-6" title="Form photo pack wizard — Size to KB" text="Reduce exam photo & signature to KB pack on Size to KB" path="/form-wizard/" />
       <SeoKeywordBlock
         heading="Reduce photo and signature size for form fill"
         paragraphs={["One wizard for SSC photo size, IBPS signature size, PAN photo size and passport KB targets."]}
