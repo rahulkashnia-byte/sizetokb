@@ -5,7 +5,7 @@ export const metadata: Metadata = pageMeta({
   title: "फोटो 50KB में Compress करें — Photo Size Kam Kaise Kare Free",
   description:
     "फोटो को 50KB में compress करें ऑनलाइन फ्री। SSC / Bank फॉर्म के लिए photo size kam kaise kare — Size to KB हिंदी।",
-  path: "/hi/compress-to-50kb/",
+  path: "/hindi/compress-to-50kb/",
   keywords: [
     "photo 50kb",
     "compress image to 50kb",

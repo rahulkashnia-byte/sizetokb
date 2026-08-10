@@ -10,7 +10,8 @@ const QUICK = [
   { href: "/compress-to-50kb/", label: "50KB" },
   { href: "/pdf-to-jpg/", label: "PDF to JPG" },
   { href: "/pdf-unlock/", label: "Unlock PDF" },
-  { href: "/hi/", label: "हिंदी" },
+  { href: "/hindi/", label: "Hindi" },
+  { href: "/telugu/", label: "Telugu" },
   { href: "/#tools", label: "All tools" },
 ];
 
@@ -48,12 +49,6 @@ export function Header() {
 
         <div className="flex items-center gap-2">
           <Link
-            href="/hi/"
-            className="hidden rounded-lg border border-[var(--line)] bg-white px-2.5 py-2 text-xs font-bold text-[var(--ink)] hover:border-[var(--accent)] sm:inline-flex"
-          >
-            हिंदी
-          </Link>
-          <Link
             href="/#custom-tool"
             className="inline-flex items-center rounded-lg bg-[var(--ink)] px-3 py-2 text-xs font-bold text-white hover:bg-[var(--accent)] sm:text-sm"
           >
@@ -80,6 +75,20 @@ export function Header() {
                   className="block border-b border-[var(--line)] bg-[var(--accent-soft)] px-3.5 py-3 text-sm font-bold text-[var(--accent-ink)]"
                 >
                   View all tools on home →
+                </Link>
+                <Link
+                  href="/hindi/"
+                  onClick={() => setOpen(false)}
+                  className="block border-b border-[var(--line)] px-3.5 py-2.5 hover:bg-[var(--wash)]"
+                >
+                  <span className="text-sm font-semibold text-[var(--ink)]">Hindi · हिंदी</span>
+                </Link>
+                <Link
+                  href="/telugu/"
+                  onClick={() => setOpen(false)}
+                  className="block border-b border-[var(--line)] px-3.5 py-2.5 hover:bg-[var(--wash)]"
+                >
+                  <span className="text-sm font-semibold text-[var(--ink)]">Telugu · తెలుగు</span>
                 </Link>
                 {menuTools.map((t) => (
                   <Link

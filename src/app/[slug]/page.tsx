@@ -91,8 +91,12 @@ export default async function ExamPage({ params }: { params: Promise<{ slug: str
             Open Custom KB
           </a>
           {" · "}
-          <a href="/hi/" className="font-bold text-[var(--accent-ink)]">
-            हिंदी में
+          <a href="/hindi/" className="font-bold text-[var(--accent-ink)]">
+            हिंदी
+          </a>
+          {" · "}
+          <a href="/telugu/" className="font-bold text-[var(--accent-ink)]">
+            తెలుగు
           </a>
         </p>
       </section>
@@ -183,7 +187,8 @@ export default async function ExamPage({ params }: { params: Promise<{ slug: str
           { href: "/custom/", label: "Custom KB tool" },
           { href: "/compress-to-50kb/", label: "Compress to 50KB" },
           { href: "/signature-cleaner/", label: "Signature 10–20KB" },
-          { href: "/hi/", label: "हिंदी में इस्तेमाल करें" },
+          { href: "/hindi/", label: "हिंदी में इस्तेमाल करें" },
+          { href: "/telugu/", label: "తెలుగులో ఉపయోగించండి" },
           { href: "/disclaimer/", label: "Disclaimer" },
         ]}
       />

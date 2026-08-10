@@ -7,7 +7,7 @@ export const metadata: Metadata = pageMeta({
   title: "फोटो साइज़ कम कैसे करें — 20KB 50KB 100KB Online Free",
   description:
     "Photo size kam kaise kare? हिंदी गाइड — फोटो को 20KB, 50KB, 100KB में compress करें। सिग्नेचर 10–20KB। Size to KB फ्री टूल।",
-  path: "/hi/size-kam-kaise-kare/",
+  path: "/hindi/size-kam-kaise-kare/",
   keywords: [
     "photo size kam kaise kare",
     "फोटो साइज़ कम कैसे करें",
@@ -27,7 +27,7 @@ export default function HindiSizeKamPage() {
       <h2>सबसे तेज़ तरीका</h2>
       <ol>
         <li>
-          <Link href="/hi/compress-to-50kb/">50KB tool</Link> खोलें (SSC/Bank में सबसे common)।
+          <Link href="/hindi/compress-to-50kb/">50KB tool</Link> खोलें (SSC/Bank में सबसे common)।
         </li>
         <li>फोटो चुनें → crop → compress → <strong>Free Download</strong>।</li>
         <li>
@@ -38,7 +38,7 @@ export default function HindiSizeKamPage() {
       <h2>और लिंक</h2>
       <ul>
         <li>
-          <Link href="/hi/">हिंदी होम</Link>
+          <Link href="/hindi/">हिंदी होम</Link>
         </li>
         <li>
           <Link href="/compress-to-20kb/">20KB</Link> ·{" "}
