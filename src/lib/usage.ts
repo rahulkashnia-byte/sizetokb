@@ -59,7 +59,30 @@ export type UsageSnapshot = {
 const PREFIX = "sizetokb_in_v1_";
 const LOCAL_KEY = "stk_tool_stats_v2";
 const COUNT_API = "https://countapi.mileshilliard.com/api/v1";
-const DAY_HISTORY = 45;
+/** How many recent days to pull from CountAPI (each day = 2 requests). */
+const NETWORK_DAY_FETCH = 31;
+/** Always try these tools on the network so admin sees real downloads. */
+const SEED_TOOL_IDS = [
+  "home",
+  "custom",
+  "itat",
+  "compress-to-50kb",
+  "compress-to-20kb",
+  "compress-to-100kb",
+  "signature-cleaner",
+  "pdf-to-jpg",
+  "pdf-unlock",
+  "passport-photo",
+  "apssb-constable",
+  "upsssc-pet",
+  "rrb-section-controller",
+  "image-resizer",
+  "biodata",
+  "hindi",
+  "telugu",
+] as const;
+const NET_CACHE_KEY = "stk_admin_net_cache_v1";
+const NET_CACHE_MS = 3 * 60 * 1000;
 
 /** SHA-256 of the admin password (plaintext never shipped). */
 export const ADMIN_PASS_SHA256 =
@@ -352,13 +375,44 @@ function bumpLocal(
 }
 
 async function countGet(key: string): Promise<number> {
-  const res = await fetch(`${COUNT_API}/get/${encodeURIComponent(key)}`, {
-    cache: "no-store",
-  });
-  if (!res.ok) return 0;
-  const data = (await res.json()) as { value?: string | number };
-  const n = Number(data.value ?? 0);
-  return Number.isFinite(n) ? n : 0;
+  try {
+    const ctrl = new AbortController();
+    const timer = setTimeout(() => ctrl.abort(), 7000);
+    const res = await fetch(`${COUNT_API}/get/${encodeURIComponent(key)}`, {
+      cache: "no-store",
+      signal: ctrl.signal,
+    });
+    clearTimeout(timer);
+    if (!res.ok) return 0;
+    const data = (await res.json()) as { value?: string | number };
+    const n = Number(data.value ?? 0);
+    return Number.isFinite(n) ? n : 0;
+  } catch {
+    return 0;
+  }
+}
+
+function readNetCache(): UsageSnapshot | null {
+  if (typeof window === "undefined") return null;
+  try {
+    const raw = sessionStorage.getItem(NET_CACHE_KEY);
+    if (!raw) return null;
+    const parsed = JSON.parse(raw) as { at?: number; snap?: UsageSnapshot };
+    if (!parsed?.at || !parsed.snap) return null;
+    if (Date.now() - parsed.at > NET_CACHE_MS) return null;
+    return parsed.snap;
+  } catch {
+    return null;
+  }
+}
+
+function writeNetCache(snap: UsageSnapshot) {
+  if (typeof window === "undefined") return;
+  try {
+    sessionStorage.setItem(NET_CACHE_KEY, JSON.stringify({ at: Date.now(), snap }));
+  } catch {
+    /* ignore */
+  }
 }
 
 async function countHit(key: string): Promise<void> {
@@ -485,19 +539,28 @@ function sortTools(a: ToolStat, b: ToolStat) {
   return b.uses - a.uses || b.opens - a.opens || b.seconds - a.seconds;
 }
 
-function enrichSnapshot(base: {
-  tools: ToolStat[];
-  days: DayStat[];
-  dailyTools: UsageSnapshot["dailyTools"];
-  hourlyOpens: number[];
-  hourlyUses: number[];
-  weekday: number[];
-  recent: RecentEvent[];
-  source: "network" | "local";
-}): UsageSnapshot {
-  const totalOpens = base.tools.reduce((s, t) => s + t.opens, 0);
-  const totalUses = base.tools.reduce((s, t) => s + t.uses, 0);
-  const totalSeconds = base.tools.reduce((s, t) => s + t.seconds, 0);
+function enrichSnapshot(
+  base: {
+    tools: ToolStat[];
+    days: DayStat[];
+    dailyTools: UsageSnapshot["dailyTools"];
+    hourlyOpens: number[];
+    hourlyUses: number[];
+    weekday: number[];
+    recent: RecentEvent[];
+    source: "network" | "local";
+  },
+  networkTotals?: { opens?: number; uses?: number; seconds?: number }
+): UsageSnapshot {
+  const toolOpens = base.tools.reduce((s, t) => s + t.opens, 0);
+  const toolUses = base.tools.reduce((s, t) => s + t.uses, 0);
+  const toolSeconds = base.tools.reduce((s, t) => s + t.seconds, 0);
+  const dayOpens = base.days.reduce((s, d) => s + d.opens, 0);
+  const dayUses = base.days.reduce((s, d) => s + d.uses, 0);
+  const daySeconds = base.days.reduce((s, d) => s + d.seconds, 0);
+  const totalOpens = Math.max(toolOpens, dayOpens, networkTotals?.opens ?? 0);
+  const totalUses = Math.max(toolUses, dayUses, networkTotals?.uses ?? 0);
+  const totalSeconds = Math.max(toolSeconds, daySeconds, networkTotals?.seconds ?? 0);
   const hourly = base.hourlyOpens.map((o, i) => o + (base.hourlyUses[i] || 0));
   let peakHour: number | null = null;
   let peakVal = 0;
@@ -572,111 +635,144 @@ async function mapPool<T, R>(items: T[], concurrency: number, fn: (item: T) => P
   return out;
 }
 
-/** Instant local snapshot for admin (no network). */
+/** Instant local snapshot for admin (no network). Prefer short-lived network cache when present. */
 export function loadLocalUsageSnapshot(): UsageSnapshot {
-  return snapshotFromLocal();
+  return readNetCache() ?? snapshotFromLocal();
 }
 
-/** Load stats for admin: local-first merge + lean network fetch (active tools only). */
+/** Load stats for admin: totals + recent daily downloads first, then seed tools. */
 export async function loadUsageSnapshot(): Promise<UsageSnapshot> {
   const catalog = catalogPaths();
   const local = snapshotFromLocal();
-  const dateKeys = listDateKeys(DAY_HISTORY);
+  const dateKeys = listDateKeys(NETWORK_DAY_FETCH);
 
-  const activeIds = new Set<string>();
+  const idSet = new Set<string>(SEED_TOOL_IDS);
   for (const t of local.tools) {
-    if (t.opens > 0 || t.uses > 0 || t.seconds > 0) activeIds.add(t.id);
+    if (t.opens > 0 || t.uses > 0 || t.seconds > 0) idSet.add(t.id);
   }
   for (const e of local.recent) {
-    activeIds.add(toolIdFromPath(e.path));
+    idSet.add(toolIdFromPath(e.path));
   }
-  // Cap network fan-out — CountAPI is slow if we hit every catalog tool
-  const toolsToFetch = catalog.filter((c) => activeIds.has(c.id)).slice(0, 40);
+  const toolsToFetch = [...idSet].slice(0, 28).map((id) => {
+    const c = catalog.find((row) => row.id === id);
+    return c ?? metaForId(id);
+  });
 
-  try {
-    const [toolResults, dayResults, hourResults] = await Promise.all([
-      mapPool(toolsToFetch, 10, async (c) => {
-        const [opens, uses, seconds] = await Promise.all([
-          countGet(`${PREFIX}tool_${c.id}_opens`),
-          countGet(`${PREFIX}tool_${c.id}_uses`),
-          countGet(`${PREFIX}tool_${c.id}_secs`),
-        ]);
-        return { ...c, opens, uses, seconds };
-      }),
-      mapPool(dateKeys, 10, async (date) => {
-        const [opens, uses, seconds] = await Promise.all([
-          countGet(`${PREFIX}day_${date}_opens`),
-          countGet(`${PREFIX}day_${date}_uses`),
-          countGet(`${PREFIX}day_${date}_secs`),
-        ]);
-        return { date, opens, uses, seconds } satisfies DayStat;
-      }),
-      mapPool(
-        Array.from({ length: 24 }, (_, h) => h),
-        10,
-        async (h) => {
-          const [opens, uses] = await Promise.all([
-            countGet(`${PREFIX}hour_${h}_opens`),
-            countGet(`${PREFIX}hour_${h}_uses`),
-          ]);
-          return { h, opens, uses };
-        }
-      ),
+  let networkTotals = { opens: 0, uses: 0, seconds: 0 };
+  let toolResults: Array<{ id: string; opens: number; uses: number; seconds: number }> = [];
+  let dayResults: DayStat[] = [];
+  let hourResults: Array<{ h: number; opens: number; uses: number }> = [];
+
+  // Phase 1 — all-time totals (what “Downloads” KPI needs when filter = All)
+  networkTotals = {
+    opens: await countGet(`${PREFIX}total_opens`),
+    uses: await countGet(`${PREFIX}total_uses`),
+    seconds: await countGet(`${PREFIX}total_secs`),
+  };
+
+  // Phase 2 — recent day opens/uses (date-wise download counts). Skip secs to keep this fast.
+  dayResults = await mapPool(dateKeys, 8, async (date) => {
+    const [opens, uses] = await Promise.all([
+      countGet(`${PREFIX}day_${date}_opens`),
+      countGet(`${PREFIX}day_${date}_uses`),
     ]);
+    const loc = local.days.find((x) => x.date === date);
+    return {
+      date,
+      opens: Math.max(opens, loc?.opens ?? 0),
+      uses: Math.max(uses, loc?.uses ?? 0),
+      seconds: loc?.seconds ?? 0,
+    } satisfies DayStat;
+  });
 
-    const byId = new Map<string, ToolStat>();
-    for (const c of catalog) {
-      const loc = local.tools.find((t) => t.id === c.id);
-      byId.set(c.id, {
-        ...c,
-        opens: loc?.opens ?? 0,
-        uses: loc?.uses ?? 0,
-        seconds: loc?.seconds ?? 0,
-        lastAt: loc?.lastAt ?? null,
-      });
-    }
-    for (const loc of local.tools) {
-      if (!byId.has(loc.id)) byId.set(loc.id, loc);
-    }
-    for (const row of toolResults) {
-      const prev = byId.get(row.id);
-      byId.set(row.id, {
-        ...row,
-        opens: Math.max(row.opens, prev?.opens ?? 0),
-        uses: Math.max(row.uses, prev?.uses ?? 0),
-        seconds: Math.max(row.seconds, prev?.seconds ?? 0),
-        lastAt: prev?.lastAt ?? null,
-      });
-    }
+  // Phase 3 — seed + active tools (opens/uses only)
+  toolResults = await mapPool(toolsToFetch, 8, async (c) => {
+    const [opens, uses] = await Promise.all([
+      countGet(`${PREFIX}tool_${c.id}_opens`),
+      countGet(`${PREFIX}tool_${c.id}_uses`),
+    ]);
+    return { id: c.id, opens, uses, seconds: 0 };
+  });
 
-    const dayMap = new Map<string, DayStat>();
-    for (const d of dayResults) {
-      const loc = local.days.find((x) => x.date === d.date);
-      dayMap.set(d.date, {
-        date: d.date,
-        opens: Math.max(d.opens, loc?.opens ?? 0),
-        uses: Math.max(d.uses, loc?.uses ?? 0),
-        seconds: Math.max(d.seconds, loc?.seconds ?? 0),
-      });
+  // Phase 4 — hourly (optional for busiest hour); local fills gaps if slow
+  hourResults = await mapPool(
+    Array.from({ length: 24 }, (_, h) => h),
+    8,
+    async (h) => {
+      const [opens, uses] = await Promise.all([
+        countGet(`${PREFIX}hour_${h}_opens`),
+        countGet(`${PREFIX}hour_${h}_uses`),
+      ]);
+      return { h, opens, uses };
     }
-    for (const loc of local.days) {
-      if (!dayMap.has(loc.date)) dayMap.set(loc.date, loc);
-    }
+  );
 
-    const hourlyOpens = Array.from({ length: 24 }, (_, h) => {
-      const net = hourResults.find((x) => x.h === h)?.opens ?? 0;
-      return Math.max(net, local.hourlyOpens[h] || 0);
+  const byId = new Map<string, ToolStat>();
+  for (const c of catalog) {
+    const loc = local.tools.find((t) => t.id === c.id);
+    byId.set(c.id, {
+      ...c,
+      opens: loc?.opens ?? 0,
+      uses: loc?.uses ?? 0,
+      seconds: loc?.seconds ?? 0,
+      lastAt: loc?.lastAt ?? null,
     });
-    const hourlyUses = Array.from({ length: 24 }, (_, h) => {
-      const net = hourResults.find((x) => x.h === h)?.uses ?? 0;
-      return Math.max(net, local.hourlyUses[h] || 0);
+  }
+  for (const loc of local.tools) {
+    if (!byId.has(loc.id)) byId.set(loc.id, loc);
+  }
+  for (const row of toolResults) {
+    const prev: ToolStat =
+      byId.get(row.id) ??
+      ({ ...metaForId(row.id), opens: 0, uses: 0, seconds: 0, lastAt: null } satisfies ToolStat);
+    byId.set(row.id, {
+      ...prev,
+      opens: Math.max(row.opens, prev.opens),
+      uses: Math.max(row.uses, prev.uses),
+      seconds: Math.max(row.seconds, prev.seconds),
+      lastAt: prev.lastAt ?? null,
     });
+  }
 
-    const tools = [...byId.values()].sort(sortTools);
-    const days = [...dayMap.values()].sort((a, b) => b.date.localeCompare(a.date));
-    const anyNetwork = toolResults.some((r) => r.opens > 0 || r.uses > 0 || r.seconds > 0);
+  const dayMap = new Map<string, DayStat>();
+  for (const d of dayResults) dayMap.set(d.date, d);
+  for (const loc of local.days) {
+    const net = dayMap.get(loc.date);
+    if (!net) {
+      dayMap.set(loc.date, loc);
+      continue;
+    }
+    dayMap.set(loc.date, {
+      date: loc.date,
+      opens: Math.max(net.opens, loc.opens),
+      uses: Math.max(net.uses, loc.uses),
+      seconds: Math.max(net.seconds, loc.seconds),
+    });
+  }
+  // Keep older local history beyond the network window
+  for (const loc of local.days) {
+    if (!dayMap.has(loc.date)) dayMap.set(loc.date, loc);
+  }
 
-    return enrichSnapshot({
+  const hourlyOpens = Array.from({ length: 24 }, (_, h) => {
+    const net = hourResults.find((x) => x.h === h)?.opens ?? 0;
+    return Math.max(net, local.hourlyOpens[h] || 0);
+  });
+  const hourlyUses = Array.from({ length: 24 }, (_, h) => {
+    const net = hourResults.find((x) => x.h === h)?.uses ?? 0;
+    return Math.max(net, local.hourlyUses[h] || 0);
+  });
+
+  const tools = [...byId.values()].sort(sortTools);
+  const days = [...dayMap.values()].sort((a, b) => b.date.localeCompare(a.date));
+  const anyNetwork =
+    networkTotals.opens > 0 ||
+    networkTotals.uses > 0 ||
+    toolResults.some((r) => r.opens > 0 || r.uses > 0) ||
+    dayResults.some((d) => d.opens > 0 || d.uses > 0);
+
+  const snap = enrichSnapshot(
+    {
       tools,
       days,
       dailyTools: local.dailyTools,
@@ -684,73 +780,54 @@ export async function loadUsageSnapshot(): Promise<UsageSnapshot> {
       hourlyUses,
       weekday: local.weekday,
       recent: local.recent,
-      source: anyNetwork || dayResults.some((d) => d.opens || d.uses) ? "network" : "local",
-    });
-  } catch {
-    return local;
-  }
+      source: anyNetwork ? "network" : "local",
+    },
+    networkTotals
+  );
+  if (anyNetwork) writeNetCache(snap);
+  return snap;
 }
 
-/** Fetch per-tool stats for a set of IST dates (local-first; skip CountAPI when local has the days). */
+/**
+ * Per-tool stats for selected IST dates.
+ * Always merges CountAPI day×tool counters (max with local) — local-only used to skip
+ * network and hide real downloads when this admin browser had empty dailyTools.
+ */
 export async function loadToolsForDates(
   dates: string[],
   toolIds: string[]
 ): Promise<ToolStat[]> {
   const local = snapshotFromLocal();
-  const ids = toolIds.length ? toolIds : catalogPaths().map((c) => c.id);
+  const idSet = new Set<string>([
+    ...SEED_TOOL_IDS,
+    ...(toolIds.length ? toolIds : catalogPaths().map((c) => c.id)),
+  ]);
+  const ids = [...idSet].slice(0, 16);
+  // Per-tool fan-out is expensive; keep a short window (KPIs still use day totals).
+  const fetchDates = dates.slice(-7);
   const agg = new Map<string, ToolCounters>();
-
   for (const id of ids) agg.set(id, emptyCounters());
 
-  for (const date of dates) {
-    const localDay = local.dailyTools[date];
-    if (localDay) {
-      for (const id of ids) {
-        const cur = agg.get(id)!;
-        const loc = normalizeCounters(localDay[id]);
-        cur.opens += loc.opens;
-        cur.uses += loc.uses;
-        cur.seconds += loc.seconds;
-      }
-    }
-  }
-
-  const missingDates = dates.filter((date) => !local.dailyTools[date]);
   const finish = () =>
     [...agg.entries()]
       .map(([id, v]) => ({ ...metaForId(id), ...v }))
       .sort(sortTools);
 
-  if (missingDates.length === 0) return finish();
-
-  const fetchIds = ids
-    .filter((id) => {
-      const c = agg.get(id)!;
-      return c.opens > 0 || c.uses > 0;
-    })
-    .slice(0, 25);
-
-  if (fetchIds.length === 0) return finish();
-
-  try {
-    await mapPool(
-      missingDates.flatMap((date) => fetchIds.map((id) => ({ date, id }))),
-      10,
-      async ({ date, id }) => {
-        const [opens, uses, seconds] = await Promise.all([
-          countGet(`${PREFIX}day_${date}_tool_${id}_opens`),
-          countGet(`${PREFIX}day_${date}_tool_${id}_uses`),
-          countGet(`${PREFIX}day_${date}_tool_${id}_secs`),
-        ]);
-        const cur = agg.get(id)!;
-        cur.opens += opens;
-        cur.uses += uses;
-        cur.seconds += seconds;
-      }
-    );
-  } catch {
-    /* keep local */
-  }
+  await mapPool(
+    fetchDates.flatMap((date) => ids.map((id) => ({ date, id }))),
+    8,
+    async ({ date, id }) => {
+      const loc = normalizeCounters(local.dailyTools[date]?.[id]);
+      const [opens, uses] = await Promise.all([
+        countGet(`${PREFIX}day_${date}_tool_${id}_opens`),
+        countGet(`${PREFIX}day_${date}_tool_${id}_uses`),
+      ]);
+      const cur = agg.get(id)!;
+      cur.opens += Math.max(opens, loc.opens);
+      cur.uses += Math.max(uses, loc.uses);
+      cur.seconds += loc.seconds;
+    }
+  );
 
   return finish();
 }

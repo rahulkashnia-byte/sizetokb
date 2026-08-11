@@ -34,7 +34,7 @@ export function AdminStatsPanel() {
   const [busy, setBusy] = useState(false);
   const [snap, setSnap] = useState<UsageSnapshot | null>(null);
 
-  const [preset, setPreset] = useState<DatePreset>("all");
+  const [preset, setPreset] = useState<DatePreset>("7d");
   const [customFrom, setCustomFrom] = useState(istDateKey());
   const [customTo, setCustomTo] = useState(istDateKey());
   const [category, setCategory] = useState("all");
@@ -264,7 +264,7 @@ export function AdminStatsPanel() {
           </h1>
           <p className="mt-1 text-xs text-[var(--muted)]">
             {snap
-              ? `${busy ? "Updating…" : "Ready"} · ${new Date(snap.fetchedAt).toLocaleString("en-IN")} · India time (IST)`
+              ? `${busy ? "Updating…" : "Ready"} · ${snap.source === "network" ? "site-wide" : "this browser only"} · ${new Date(snap.fetchedAt).toLocaleString("en-IN")} · IST`
               : "Loading…"}
           </p>
         </div>
