@@ -9,6 +9,7 @@ import {
   formatIstDateTime,
   formatMinutes,
   istDateKey,
+  loadLocalUsageSnapshot,
   loadToolsForDates,
   loadUsageSnapshot,
   statusLabel,
@@ -55,6 +56,8 @@ export function AdminStatsPanel() {
   useEffect(() => {
     if (!authed) return;
     let cancelled = false;
+    // Instant paint from this browser, then refresh from network in background
+    setSnap(loadLocalUsageSnapshot());
     setBusy(true);
     void loadUsageSnapshot()
       .then((s) => {
@@ -155,7 +158,9 @@ export function AdminStatsPanel() {
       selectedDates === null
         ? snap?.totalSeconds ?? 0
         : filteredDays.reduce((s, d) => s + d.seconds, 0);
-    return { used, openedOnly, notUsed, opens, uses, seconds };
+    const conversionPct = opens > 0 ? Math.round((uses / opens) * 1000) / 10 : 0;
+    const avgSecondsPerOpen = opens > 0 ? Math.round(seconds / opens) : 0;
+    return { used, openedOnly, notUsed, opens, uses, seconds, conversionPct, avgSecondsPerOpen };
   }, [baseTools, snap, selectedDates, filteredDays]);
 
   const pagesOpened = useMemo(
@@ -244,10 +249,10 @@ export function AdminStatsPanel() {
   ];
 
   const statusFilters: { id: StatusFilter; label: string }[] = [
-    { id: "all", label: "All pages" },
-    { id: "used", label: "Used" },
-    { id: "opened", label: "Opened only" },
-    { id: "not_used", label: "Not used" },
+    { id: "all", label: "All tools" },
+    { id: "used", label: "Got downloads" },
+    { id: "opened", label: "Opened, no download" },
+    { id: "not_used", label: "Never opened" },
   ];
 
   return (
@@ -255,11 +260,11 @@ export function AdminStatsPanel() {
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
           <h1 className="font-[family-name:var(--font-display)] text-2xl text-[var(--ink)]">
-            Tool stats
+            How people use Size to KB
           </h1>
           <p className="mt-1 text-xs text-[var(--muted)]">
             {snap
-              ? `Updated ${new Date(snap.fetchedAt).toLocaleString("en-IN")} · ${snap.source} · IST`
+              ? `${busy ? "Updating…" : "Ready"} · ${new Date(snap.fetchedAt).toLocaleString("en-IN")} · India time (IST)`
               : "Loading…"}
           </p>
         </div>
@@ -284,26 +289,20 @@ export function AdminStatsPanel() {
 
       {/* Plain-language guide */}
       <section className="mt-5 rounded-2xl border border-[var(--line)] bg-[var(--wash)] p-4 text-sm text-[var(--ink)]">
-        <p className="font-bold">How to read this</p>
-        <ul className="mt-2 space-y-1 text-[var(--muted)]">
+        <p className="font-bold">Simple meaning</p>
+        <ul className="mt-2 space-y-1.5 text-[var(--muted)]">
           <li>
-            <StatusPill status="used" /> <strong className="text-[var(--ink)]">Used</strong> —
-            someone opened the page and completed the tool (download / action).
+            <strong className="text-[var(--ink)]">Visits</strong> — someone opened a tool page
           </li>
           <li>
-            <StatusPill status="opened" /> <strong className="text-[var(--ink)]">Opened only</strong> —
-            page was visited, but no download yet.
+            <strong className="text-[var(--ink)]">Downloads</strong> — they finished and tapped Free
+            Download (or another save action)
           </li>
           <li>
-            <StatusPill status="not_used" /> <strong className="text-[var(--ink)]">Not used</strong> —
-            page was never opened in this period.
+            <strong className="text-[var(--ink)]">Download rate</strong> — downloads ÷ visits (higher
+            is better)
           </li>
         </ul>
-        <p className="mt-2 text-xs text-[var(--muted)]">
-          <strong>Opens</strong> = times the page was opened · <strong>Uses</strong> = times the
-          tool was actually used · <strong>Time</strong> = time spent on that page · clocks are{" "}
-          <strong>IST</strong>.
-        </p>
       </section>
 
       {/* Filters */}
@@ -349,7 +348,7 @@ export function AdminStatsPanel() {
         )}
 
         <p className="mt-4 text-[11px] font-bold uppercase tracking-wide text-[var(--muted)]">
-          Status
+          Show tools that
         </p>
         <div className="mt-2 flex flex-wrap gap-2">
           {statusFilters.map((s) => (
@@ -384,7 +383,7 @@ export function AdminStatsPanel() {
             </select>
           </label>
           <label className="text-xs font-semibold text-[var(--muted)]">
-            Search page
+            Search tool
             <input
               type="search"
               value={query}
@@ -400,8 +399,8 @@ export function AdminStatsPanel() {
               onChange={(e) => setSort(e.target.value as SortKey)}
               className="mt-1 w-full rounded-lg border border-[var(--line)] bg-[var(--wash)] px-3 py-2 text-sm text-[var(--ink)]"
             >
-              <option value="opens">Most opens</option>
-              <option value="uses">Most uses</option>
+              <option value="opens">Most visits</option>
+              <option value="uses">Most downloads</option>
               <option value="time">Most time</option>
               <option value="name">Name A–Z</option>
             </select>
@@ -409,33 +408,76 @@ export function AdminStatsPanel() {
         </div>
       </section>
 
-      <div className="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-6">
-        <Kpi label="Pages opened" value={String(summary.opens)} hint="Total opens" />
-        <Kpi label="Tool uses" value={String(summary.uses)} hint="Downloads / actions" />
-        <Kpi label="Time on site" value={formatMinutes(summary.seconds)} hint="Dwell time" />
+      {/* Story summary */}
+      <section className="mt-6 rounded-3xl border border-[var(--line)] bg-white p-5 shadow-sm sm:p-6">
+        <p className="text-xs font-bold uppercase tracking-wide text-[var(--accent)]">
+          At a glance
+        </p>
+        <p className="mt-2 font-[family-name:var(--font-display)] text-xl font-extrabold text-[var(--ink)] sm:text-2xl">
+          {summary.opens} visits → {summary.uses} downloads
+          <span className="text-[var(--accent)]"> ({summary.conversionPct}% download rate)</span>
+        </p>
+        <p className="mt-2 text-sm text-[var(--muted)]">
+          People spent {formatMinutes(summary.seconds)} looking at tools
+          {summary.opens > 0
+            ? ` · about ${formatMinutes(summary.avgSecondsPerOpen)} per visit`
+            : ""}
+          {snap?.peakHour != null
+            ? ` · busiest around ${formatHourLabel(snap.peakHour)} IST`
+            : ""}
+          .
+        </p>
+      </section>
+
+      <div className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-3">
         <Kpi
-          label="Conversion"
-          value={snap ? `${snap.conversionPct}%` : "—"}
-          hint="Uses ÷ opens"
+          label="Visits"
+          value={String(summary.opens)}
+          hint="Times a tool page was opened"
         />
         <Kpi
-          label="Avg / open"
-          value={snap ? formatMinutes(snap.avgSecondsPerOpen) : "—"}
-          hint="Time per visit"
+          label="Downloads"
+          value={String(summary.uses)}
+          hint="Free Download / save actions"
         />
         <Kpi
-          label="Peak hour"
-          value={
-            snap?.peakHour != null ? formatHourLabel(snap.peakHour) : "—"
-          }
-          hint="Busiest IST hour"
+          label="Download rate"
+          value={`${summary.conversionPct}%`}
+          hint="Downloads ÷ visits"
+        />
+        <Kpi
+          label="Time spent"
+          value={formatMinutes(summary.seconds)}
+          hint="Total time on tool pages"
+        />
+        <Kpi
+          label="Avg visit"
+          value={formatMinutes(summary.avgSecondsPerOpen)}
+          hint="Time per page open"
+        />
+        <Kpi
+          label="Busiest hour"
+          value={snap?.peakHour != null ? formatHourLabel(snap.peakHour) : "—"}
+          hint="India time (IST)"
         />
       </div>
 
-      <div className="mt-3 grid grid-cols-3 gap-3">
-        <Kpi label="Used" value={String(summary.used)} hint="Opened + downloaded" />
-        <Kpi label="Opened only" value={String(summary.openedOnly)} hint="No download yet" />
-        <Kpi label="Not used" value={String(summary.notUsed)} hint="Never opened" />
+      <div className="mt-3 grid grid-cols-1 gap-3 sm:grid-cols-3">
+        <Kpi
+          label="Tools with downloads"
+          value={String(summary.used)}
+          hint="Opened and someone downloaded"
+        />
+        <Kpi
+          label="Opened, no download"
+          value={String(summary.openedOnly)}
+          hint="Visited but left without saving"
+        />
+        <Kpi
+          label="Never opened"
+          value={String(summary.notUsed)}
+          hint="No visits in this period"
+        />
       </div>
 
       {/* Recent activity with clock time */}
@@ -475,7 +517,7 @@ export function AdminStatsPanel() {
                             : "bg-sky-100 text-sky-900"
                         }`}
                       >
-                        {e.type === "use" ? "Used tool" : "Opened page"}
+                        {e.type === "use" ? "Downloaded" : "Visited"}
                       </span>
                     </td>
                     <td className="px-4 py-3">
@@ -557,7 +599,7 @@ export function AdminStatsPanel() {
       {/* Pages opened — clearest list */}
       <section className="mt-8">
         <h2 className="text-sm font-bold uppercase tracking-wide text-[var(--muted)]">
-          Which pages were opened
+          Tools people opened
         </h2>
         <div className="mt-3 overflow-x-auto rounded-2xl border border-[var(--line)] bg-white">
           {pagesOpened.length === 0 ? (
@@ -570,11 +612,11 @@ export function AdminStatsPanel() {
                 <tr>
                   <th className="px-4 py-3">#</th>
                   <th className="px-4 py-3">Status</th>
-                  <th className="px-4 py-3">Page</th>
-                  <th className="px-4 py-3">Opens</th>
-                  <th className="px-4 py-3">Uses</th>
+                  <th className="px-4 py-3">Tool</th>
+                  <th className="px-4 py-3">Visits</th>
+                  <th className="px-4 py-3">Downloads</th>
                   <th className="px-4 py-3">Time</th>
-                  <th className="px-4 py-3">Avg / open</th>
+                  <th className="px-4 py-3">Avg / visit</th>
                   <th className="px-4 py-3">Last active</th>
                 </tr>
               </thead>
@@ -627,8 +669,8 @@ export function AdminStatsPanel() {
               <thead className="border-b border-[var(--line)] bg-[var(--wash)] text-xs uppercase text-[var(--muted)]">
                 <tr>
                   <th className="px-4 py-3">Date</th>
-                  <th className="px-4 py-3">Opens</th>
-                  <th className="px-4 py-3">Uses</th>
+                  <th className="px-4 py-3">Visits</th>
+                  <th className="px-4 py-3">Downloads</th>
                   <th className="px-4 py-3">Time</th>
                   <th className="px-4 py-3">Trend</th>
                 </tr>
@@ -664,7 +706,7 @@ export function AdminStatsPanel() {
       {/* Full list with filters applied */}
       <section className="mt-8 mb-10">
         <h2 className="text-sm font-bold uppercase tracking-wide text-[var(--muted)]">
-          All pages ({filteredTools.length})
+          All tools ({filteredTools.length})
         </h2>
         <div className="mt-3 overflow-x-auto rounded-2xl border border-[var(--line)] bg-white">
           <table className="w-full min-w-[680px] text-left text-sm">
@@ -672,9 +714,9 @@ export function AdminStatsPanel() {
               <tr>
                 <th className="px-4 py-3">#</th>
                 <th className="px-4 py-3">Status</th>
-                <th className="px-4 py-3">Page</th>
-                <th className="px-4 py-3">Opens</th>
-                <th className="px-4 py-3">Uses</th>
+                <th className="px-4 py-3">Tool</th>
+                <th className="px-4 py-3">Visits</th>
+                <th className="px-4 py-3">Downloads</th>
                 <th className="px-4 py-3">Time</th>
               </tr>
             </thead>
@@ -734,13 +776,11 @@ function StatusPill({ status }: { status: ToolStatus }) {
 function Kpi({ label, value, hint }: { label: string; value: string; hint?: string }) {
   return (
     <div className="rounded-2xl border border-[var(--line)] bg-white px-3 py-3 shadow-sm sm:px-4 sm:py-4">
-      <p className="text-[10px] font-bold uppercase tracking-wide text-[var(--muted)] sm:text-[11px]">
-        {label}
-      </p>
-      <p className="mt-1 font-[family-name:var(--font-display)] text-xl text-[var(--ink)] sm:text-2xl">
+      <p className="text-[11px] font-bold text-[var(--muted)]">{label}</p>
+      <p className="mt-1 font-[family-name:var(--font-display)] text-2xl font-extrabold text-[var(--ink)]">
         {value}
       </p>
-      {hint && <p className="mt-0.5 text-[10px] text-[var(--muted)]">{hint}</p>}
+      {hint ? <p className="mt-1 text-[11px] leading-snug text-[var(--muted)]">{hint}</p> : null}
     </div>
   );
 }

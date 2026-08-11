@@ -118,9 +118,9 @@ export function toolStatus(t: Pick<ToolStat, "opens" | "uses">): ToolStatus {
 }
 
 export function statusLabel(s: ToolStatus): string {
-  if (s === "used") return "Used";
-  if (s === "opened") return "Opened only";
-  return "Not used";
+  if (s === "used") return "Got download";
+  if (s === "opened") return "No download yet";
+  return "Never opened";
 }
 
 /** Hour 0–23 in Asia/Kolkata */
@@ -572,56 +572,81 @@ async function mapPool<T, R>(items: T[], concurrency: number, fn: (item: T) => P
   return out;
 }
 
-/** Load stats for admin: all-time tools + recent daily totals. */
+/** Instant local snapshot for admin (no network). */
+export function loadLocalUsageSnapshot(): UsageSnapshot {
+  return snapshotFromLocal();
+}
+
+/** Load stats for admin: local-first merge + lean network fetch (active tools only). */
 export async function loadUsageSnapshot(): Promise<UsageSnapshot> {
   const catalog = catalogPaths();
   const local = snapshotFromLocal();
   const dateKeys = listDateKeys(DAY_HISTORY);
 
+  const activeIds = new Set<string>();
+  for (const t of local.tools) {
+    if (t.opens > 0 || t.uses > 0 || t.seconds > 0) activeIds.add(t.id);
+  }
+  for (const e of local.recent) {
+    activeIds.add(toolIdFromPath(e.path));
+  }
+  // Cap network fan-out — CountAPI is slow if we hit every catalog tool
+  const toolsToFetch = catalog.filter((c) => activeIds.has(c.id)).slice(0, 40);
+
   try {
-    const toolResults = await mapPool(catalog, 6, async (c) => {
-      const [opens, uses, seconds] = await Promise.all([
-        countGet(`${PREFIX}tool_${c.id}_opens`),
-        countGet(`${PREFIX}tool_${c.id}_uses`),
-        countGet(`${PREFIX}tool_${c.id}_secs`),
-      ]);
-      return { ...c, opens, uses, seconds };
-    });
-
-    const dayResults = await mapPool(dateKeys, 6, async (date) => {
-      const [opens, uses, seconds] = await Promise.all([
-        countGet(`${PREFIX}day_${date}_opens`),
-        countGet(`${PREFIX}day_${date}_uses`),
-        countGet(`${PREFIX}day_${date}_secs`),
-      ]);
-      return { date, opens, uses, seconds } satisfies DayStat;
-    });
-
-    const hourResults = await mapPool(
-      Array.from({ length: 24 }, (_, h) => h),
-      6,
-      async (h) => {
-        const [opens, uses] = await Promise.all([
-          countGet(`${PREFIX}hour_${h}_opens`),
-          countGet(`${PREFIX}hour_${h}_uses`),
+    const [toolResults, dayResults, hourResults] = await Promise.all([
+      mapPool(toolsToFetch, 10, async (c) => {
+        const [opens, uses, seconds] = await Promise.all([
+          countGet(`${PREFIX}tool_${c.id}_opens`),
+          countGet(`${PREFIX}tool_${c.id}_uses`),
+          countGet(`${PREFIX}tool_${c.id}_secs`),
         ]);
-        return { h, opens, uses };
-      }
-    );
+        return { ...c, opens, uses, seconds };
+      }),
+      mapPool(dateKeys, 10, async (date) => {
+        const [opens, uses, seconds] = await Promise.all([
+          countGet(`${PREFIX}day_${date}_opens`),
+          countGet(`${PREFIX}day_${date}_uses`),
+          countGet(`${PREFIX}day_${date}_secs`),
+        ]);
+        return { date, opens, uses, seconds } satisfies DayStat;
+      }),
+      mapPool(
+        Array.from({ length: 24 }, (_, h) => h),
+        10,
+        async (h) => {
+          const [opens, uses] = await Promise.all([
+            countGet(`${PREFIX}hour_${h}_opens`),
+            countGet(`${PREFIX}hour_${h}_uses`),
+          ]);
+          return { h, opens, uses };
+        }
+      ),
+    ]);
 
     const byId = new Map<string, ToolStat>();
-    for (const row of toolResults) {
-      const loc = local.tools.find((t) => t.id === row.id);
-      byId.set(row.id, {
-        ...row,
-        opens: Math.max(row.opens, loc?.opens ?? 0),
-        uses: Math.max(row.uses, loc?.uses ?? 0),
-        seconds: Math.max(row.seconds, loc?.seconds ?? 0),
+    for (const c of catalog) {
+      const loc = local.tools.find((t) => t.id === c.id);
+      byId.set(c.id, {
+        ...c,
+        opens: loc?.opens ?? 0,
+        uses: loc?.uses ?? 0,
+        seconds: loc?.seconds ?? 0,
         lastAt: loc?.lastAt ?? null,
       });
     }
     for (const loc of local.tools) {
       if (!byId.has(loc.id)) byId.set(loc.id, loc);
+    }
+    for (const row of toolResults) {
+      const prev = byId.get(row.id);
+      byId.set(row.id, {
+        ...row,
+        opens: Math.max(row.opens, prev?.opens ?? 0),
+        uses: Math.max(row.uses, prev?.uses ?? 0),
+        seconds: Math.max(row.seconds, prev?.seconds ?? 0),
+        lastAt: prev?.lastAt ?? null,
+      });
     }
 
     const dayMap = new Map<string, DayStat>();
@@ -659,14 +684,14 @@ export async function loadUsageSnapshot(): Promise<UsageSnapshot> {
       hourlyUses,
       weekday: local.weekday,
       recent: local.recent,
-      source: anyNetwork || toolResults.length ? "network" : "local",
+      source: anyNetwork || dayResults.some((d) => d.opens || d.uses) ? "network" : "local",
     });
   } catch {
     return local;
   }
 }
 
-/** Fetch per-tool stats for a set of IST dates. */
+/** Fetch per-tool stats for a set of IST dates (local-first; skip CountAPI when local has the days). */
 export async function loadToolsForDates(
   dates: string[],
   toolIds: string[]
@@ -690,11 +715,27 @@ export async function loadToolsForDates(
     }
   }
 
-  const fetchIds = ids.slice(0, 50);
+  const missingDates = dates.filter((date) => !local.dailyTools[date]);
+  const finish = () =>
+    [...agg.entries()]
+      .map(([id, v]) => ({ ...metaForId(id), ...v }))
+      .sort(sortTools);
+
+  if (missingDates.length === 0) return finish();
+
+  const fetchIds = ids
+    .filter((id) => {
+      const c = agg.get(id)!;
+      return c.opens > 0 || c.uses > 0;
+    })
+    .slice(0, 25);
+
+  if (fetchIds.length === 0) return finish();
+
   try {
     await mapPool(
-      dates.flatMap((date) => fetchIds.map((id) => ({ date, id }))),
-      6,
+      missingDates.flatMap((date) => fetchIds.map((id) => ({ date, id }))),
+      10,
       async ({ date, id }) => {
         const [opens, uses, seconds] = await Promise.all([
           countGet(`${PREFIX}day_${date}_tool_${id}_opens`),
@@ -702,26 +743,16 @@ export async function loadToolsForDates(
           countGet(`${PREFIX}day_${date}_tool_${id}_secs`),
         ]);
         const cur = agg.get(id)!;
-        const hadLocal = !!local.dailyTools[date]?.[id];
-        if (!hadLocal) {
-          cur.opens += opens;
-          cur.uses += uses;
-          cur.seconds += seconds;
-        } else {
-          const loc = normalizeCounters(local.dailyTools[date][id]);
-          if (opens > loc.opens) cur.opens += opens - loc.opens;
-          if (uses > loc.uses) cur.uses += uses - loc.uses;
-          if (seconds > loc.seconds) cur.seconds += seconds - loc.seconds;
-        }
+        cur.opens += opens;
+        cur.uses += uses;
+        cur.seconds += seconds;
       }
     );
   } catch {
     /* keep local */
   }
 
-  return [...agg.entries()]
-    .map(([id, v]) => ({ ...metaForId(id), ...v }))
-    .sort(sortTools);
+  return finish();
 }
 
 export function formatMinutes(seconds: number): string {
