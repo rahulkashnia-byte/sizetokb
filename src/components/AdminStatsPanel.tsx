@@ -14,7 +14,6 @@ import {
   loadUsageSnapshot,
   statusLabel,
   toolStatus,
-  verifyAdminPassword,
   type DatePreset,
   type DayStat,
   type ToolStat,
@@ -22,15 +21,16 @@ import {
   type UsageSnapshot,
 } from "@/lib/usage";
 
-const SESSION_KEY = "stk_admin_ok";
-
 type SortKey = "opens" | "uses" | "time" | "name";
 type StatusFilter = "all" | ToolStatus;
 
-export function AdminStatsPanel() {
-  const [authed, setAuthed] = useState(false);
-  const [password, setPassword] = useState("");
-  const [error, setError] = useState<string | null>(null);
+type Props = {
+  /** When true, parent AdminPanel already handled login / lock. */
+  embedded?: boolean;
+  onLogout?: () => void;
+};
+
+export function AdminStatsPanel({ embedded = false, onLogout }: Props) {
   const [busy, setBusy] = useState(false);
   const [snap, setSnap] = useState<UsageSnapshot | null>(null);
 
@@ -46,15 +46,6 @@ export function AdminStatsPanel() {
   const [rangeBusy, setRangeBusy] = useState(false);
 
   useEffect(() => {
-    try {
-      if (sessionStorage.getItem(SESSION_KEY) === "1") setAuthed(true);
-    } catch {
-      /* ignore */
-    }
-  }, []);
-
-  useEffect(() => {
-    if (!authed) return;
     let cancelled = false;
     // Instant paint from this browser, then refresh from network in background
     setSnap(loadLocalUsageSnapshot());
@@ -69,7 +60,7 @@ export function AdminStatsPanel() {
     return () => {
       cancelled = true;
     };
-  }, [authed]);
+  }, []);
 
   const selectedDates = useMemo(
     () => datesForPreset(preset, customFrom, customTo),
@@ -77,7 +68,7 @@ export function AdminStatsPanel() {
   );
 
   useEffect(() => {
-    if (!authed || !snap) return;
+    if (!snap) return;
     if (selectedDates === null) {
       setRangeTools(null);
       return;
@@ -102,7 +93,7 @@ export function AdminStatsPanel() {
     return () => {
       cancelled = true;
     };
-  }, [authed, snap, selectedDates]);
+  }, [snap, selectedDates]);
 
   const filteredDays: DayStat[] = useMemo(() => {
     if (!snap) return [];
@@ -176,24 +167,6 @@ export function AdminStatsPanel() {
     [filteredDays]
   );
 
-  const login = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setError(null);
-    setBusy(true);
-    try {
-      const ok = await verifyAdminPassword(password);
-      if (!ok) {
-        setError("Wrong password");
-        return;
-      }
-      sessionStorage.setItem(SESSION_KEY, "1");
-      setAuthed(true);
-      setPassword("");
-    } finally {
-      setBusy(false);
-    }
-  };
-
   const refresh = async () => {
     setBusy(true);
     try {
@@ -202,42 +175,6 @@ export function AdminStatsPanel() {
       setBusy(false);
     }
   };
-
-  const logout = () => {
-    sessionStorage.removeItem(SESSION_KEY);
-    setAuthed(false);
-    setSnap(null);
-    setRangeTools(null);
-  };
-
-  if (!authed) {
-    return (
-      <div className="mx-auto flex min-h-[70vh] max-w-sm flex-col justify-center px-4 py-16">
-        <h1 className="text-center font-[family-name:var(--font-display)] text-2xl text-[var(--ink)]">
-          Admin
-        </h1>
-        <p className="mt-2 text-center text-sm text-[var(--muted)]">Stats only</p>
-        <form onSubmit={(e) => void login(e)} className="mt-8 space-y-3">
-          <input
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            placeholder="Password"
-            autoComplete="current-password"
-            className="w-full rounded-xl border border-[var(--line)] bg-white px-4 py-3 text-sm"
-          />
-          {error && <p className="text-center text-sm text-rose-600">{error}</p>}
-          <button
-            type="submit"
-            disabled={busy || !password}
-            className="w-full rounded-xl bg-[var(--ink)] py-3 text-sm font-bold text-white disabled:opacity-50"
-          >
-            {busy ? "Checking…" : "Enter"}
-          </button>
-        </form>
-      </div>
-    );
-  }
 
   const presets: { id: DatePreset; label: string }[] = [
     { id: "today", label: "Today" },
@@ -277,13 +214,15 @@ export function AdminStatsPanel() {
           >
             Refresh
           </button>
-          <button
-            type="button"
-            onClick={logout}
-            className="rounded-lg border border-[var(--line)] px-3 py-2 text-xs font-bold"
-          >
-            Lock
-          </button>
+          {!embedded && onLogout ? (
+            <button
+              type="button"
+              onClick={onLogout}
+              className="rounded-lg border border-[var(--line)] px-3 py-2 text-xs font-bold"
+            >
+              Lock
+            </button>
+          ) : null}
         </div>
       </div>
 

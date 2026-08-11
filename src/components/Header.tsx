@@ -10,6 +10,7 @@ const QUICK = [
   { href: "/compress-to-50kb/", label: "50KB" },
   { href: "/pdf-to-jpg/", label: "PDF to JPG" },
   { href: "/pdf-unlock/", label: "Unlock PDF" },
+  { href: "/newsletter/", label: "Tips" },
   { href: "/hindi/", label: "Hindi" },
   { href: "/telugu/", label: "Telugu" },
   { href: "/#tools", label: "All tools" },
@@ -75,6 +76,13 @@ export function Header() {
                   className="block border-b border-[var(--line)] bg-[var(--accent-soft)] px-3.5 py-3 text-sm font-bold text-[var(--accent-ink)]"
                 >
                   View all tools on home →
+                </Link>
+                <Link
+                  href="/newsletter/"
+                  onClick={() => setOpen(false)}
+                  className="block border-b border-[var(--line)] px-3.5 py-2.5 hover:bg-[var(--wash)]"
+                >
+                  <span className="text-sm font-semibold text-[var(--ink)]">Tips / newsletter</span>
                 </Link>
                 <Link
                   href="/hindi/"

@@ -26,6 +26,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     "/white-background",
     "/signature-cleaner",
     "/exam-pack",
+    "/newsletter",
     "/heic-to-jpg",
     "/image-convert",
     "/color-bw",

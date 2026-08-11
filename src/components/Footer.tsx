@@ -123,6 +123,11 @@ export function Footer() {
             <h4 className="text-xs font-bold uppercase tracking-wider text-white/45">Company</h4>
             <ul className="mt-3 space-y-2 text-sm">
               <li>
+                <Link href="/newsletter/" className="text-white/75 hover:text-white">
+                  Newsletter / tips
+                </Link>
+              </li>
+              <li>
                 <Link href="/about-us/" className="text-white/75 hover:text-white">
                   About Us
                 </Link>
