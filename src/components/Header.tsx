@@ -6,7 +6,6 @@ import { featuredTools, toolsForNav } from "@/lib/toolsCatalog";
 import { SARKARISUCHI, sarkarisuchiEnabled, sarkarisuchiJobsUrl } from "@/lib/sevadesk";
 
 const QUICK = [
-  { href: "/#form-ready", label: "Form ready" },
   { href: "/#custom-tool", label: "Reduce to KB" },
   { href: "/compress-to-50kb/", label: "50KB" },
   { href: "/pdf-to-jpg/", label: "PDF to JPG" },
@@ -51,10 +50,10 @@ export function Header() {
 
         <div className="flex items-center gap-2">
           <Link
-            href="/#form-ready"
+            href="/#custom-tool"
             className="inline-flex items-center rounded-lg bg-[var(--ink)] px-3 py-2 text-xs font-bold text-white hover:bg-[var(--accent)] sm:text-sm"
           >
-            Form ready
+            Reduce to KB
           </Link>
 
           {/* Mobile / tablet: compact list */}
