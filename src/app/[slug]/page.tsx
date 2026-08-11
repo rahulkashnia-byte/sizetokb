@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
+import { ApplicationPack } from "@/components/ApplicationPack";
 import { DocUploader } from "@/components/DocUploader";
 import { Faq } from "@/components/Faq";
 import { TrustPills } from "@/components/Features";
@@ -135,6 +136,8 @@ export default async function ExamPage({ params }: { params: Promise<{ slug: str
             ))}
           </div>
         </div>
+
+        <ApplicationPack exam={exam} />
 
         <div className="mt-10 overflow-hidden rounded-2xl border border-[var(--line)] bg-white">
           <div className="border-b border-[var(--line)] bg-[var(--wash)] px-4 py-3">

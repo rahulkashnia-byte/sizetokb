@@ -212,6 +212,9 @@ export async function processToSpec(
   spec: DocSpec,
   options?: ProcessOptions
 ): Promise<ProcessedImage> {
+  if (spec.format === "pdf") {
+    throw new Error("Use PDF compress for PDF documents");
+  }
   const img = await loadImageFromFile(file);
   const mime = spec.format === "png" ? "image/png" : "image/jpeg";
   const scan = options?.forceScan ?? !!spec.scanEffect;

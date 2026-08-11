@@ -10,7 +10,7 @@ export interface DocSpec {
   /** Height in the given unit */
   height?: number;
   unit: DimUnit;
-  format: "jpg" | "png" | "jpeg";
+  format: "jpg" | "png" | "jpeg" | "pdf";
   /** Apply high-contrast scan enhancement (signatures) */
   scanEffect?: boolean;
 }
