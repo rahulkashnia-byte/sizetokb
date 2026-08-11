@@ -102,14 +102,6 @@ export default async function ExamPage({ params }: { params: Promise<{ slug: str
         </p>
       </section>
 
-      <div className="mx-auto max-w-5xl px-4 pb-6 sm:px-6">
-        <ShareButtons
-          title={`${exam.name} photo & signature size — Size to KB`}
-          text={`Reduce ${exam.name} photo & signature size to exact KB free on Size to KB`}
-          path={`/${exam.slug}/`}
-        />
-      </div>
-
       <section className="mx-auto max-w-5xl px-4 pb-10 sm:px-6">
         <div className="overflow-hidden rounded-3xl border border-[var(--line)] bg-white shadow-[var(--card-shadow)]">
           <div className="flex flex-wrap items-center justify-between gap-2 border-b border-[var(--line)] bg-[var(--wash)] px-5 py-3">
@@ -195,6 +187,14 @@ export default async function ExamPage({ params }: { params: Promise<{ slug: str
           { href: "/disclaimer/", label: "Disclaimer" },
         ]}
       />
+
+      <div className="mx-auto max-w-5xl px-4 pb-12 sm:px-6">
+        <ShareButtons
+          title={`${exam.name} photo & signature size — Size to KB`}
+          text={`Reduce ${exam.name} photo & signature size to exact KB free on Size to KB`}
+          path={`/${exam.slug}/`}
+        />
+      </div>
     </>
   );
 }
