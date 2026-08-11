@@ -19,6 +19,19 @@ type TipDraft = {
 
 const TIPS: TipDraft[] = [
   {
+    id: "tip_exam_profiles_hub",
+    slug: "find-exam-photo-signature-kb-profile",
+    day: "2026-07-28",
+    category: "exam-tips",
+    title:
+      "How do I find the exact photo and signature KB for my exam (SSC, Bank, Railway, etc.)?",
+    excerpt:
+      "Don’t guess 20–50 KB. Open your exam profile page — it already has the photo and signature targets.",
+    body: "Indian forms rarely use one universal size. SSC, IBPS, RRB, UPSC, state police and dozens of others each print their own photo and signature KB (and often cm/px).\n\nFastest path on Size to KB:\n\n- Find your exam in the full list (sitemap → exam pages), e.g. SSC CGL, IBPS PO, RRB NTPC\n- Open that profile — photo and signature KB are on the page\n- Crop → compress → Free Download → upload to the portal\n\nIf you need both files in one go, use the exam photo + signature pack. Always re-check the latest official notification before you submit.",
+    ctaLabel: "Browse exam photo profiles",
+    ctaHref: "/sitemap/#exams",
+  },
+  {
     id: "tip_compress_50kb",
     slug: "ssc-photo-20-50-kb",
     day: "2026-08-01",

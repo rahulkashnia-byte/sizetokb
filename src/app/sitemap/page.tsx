@@ -64,7 +64,7 @@ export default function SitemapPage() {
         ))}
       </ul>
 
-      <h2>Exam photo & signature size presets ({sorted.length})</h2>
+      <h2 id="exams">Exam photo & signature size presets ({sorted.length})</h2>
       <ul className="columns-1 sm:columns-2 md:columns-3">
         {sorted.map((e) => (
           <li key={e.slug}>
