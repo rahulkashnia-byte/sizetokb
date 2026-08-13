@@ -28,26 +28,29 @@ const OVERRIDES: Record<string, Override> = {
   },
   "apssb-constable": {
     shortName: "APSSB Constable",
-    title: "APSSB Photo and Signature Size in KB Online Free 2026",
+    title: "APSSB Photo and Signature Size in KB (20–50) Free 2026",
     description:
-      "APSSB photo and signature size in KB — free resizer for Constable forms. Crop, compress to exact KB, Free Download. Private browser tool — Size to KB",
+      "APSSB photo and signature size in KB — photo 20–50 KB, signature 10–20 KB. Free crop + compress, Free Download for Constable form. Private — Size to KB",
     h1: "APSSB photo and signature size in KB",
-    lead: "Searched “APSSB photo and signature size”? Use the tools below for exact KB, then Free Download.",
+    lead: "Searched “APSSB photo and signature size”? Hit 20–50 KB photo / 10–20 KB signature, then Free Download.",
     queryHints: [
       "apssb photo and signature size",
       "apssb photo size",
       "apssb signature size",
       "apssb constable photo size",
+      "apssb photo size in kb",
     ],
   },
   "upsssc-pet": {
     shortName: "UPSSSC PET",
-    title: "UPSSSC PET Signature & Photo Size in KB Online Free 2026",
+    title: "UPSSSC PET Image Size in KB · Photo & Signature Free",
     description:
-      "UPSSSC PET signature size & photo size in KB — free online compress for form upload. Crop, hit KB limit, Free Download — Size to KB",
+      "UPSSSC PET image size in KB — photo 20–50 KB, signature 10–20 KB. Free online compress for PET form. Crop, Free Download on phone — Size to KB",
     h1: "UPSSSC PET photo & signature size in KB",
-    lead: "UPSSSC PET photo and signature KB limits — compress on phone, Free Download, upload to the form.",
+    lead: "UPSSSC PET image / photo / signature KB limits — compress on phone, Free Download, upload to the form.",
     queryHints: [
+      "upsssc pet image",
+      "upsssc pet image size",
       "upsssc pet signature",
       "upsssc pet photo size",
       "upsssc pet signature size",
@@ -56,23 +59,32 @@ const OVERRIDES: Record<string, Override> = {
   },
   "rrb-section-controller": {
     shortName: "RRB Section Controller",
-    title: "RRB Section Controller Photo & Signature Size KB Online Free",
+    title: "Section Controller Signature Size in KB · Photo Free",
     description:
-      "RRB Section Controller photo size & signature size in KB — free resizer. Crop, compress to exact KB, Free Download for Railway form — Size to KB",
-    h1: "RRB Section Controller photo & signature size",
-    lead: "Match RRB Section Controller photo and signature KB limits, then Free Download for upload.",
+      "RRB Section Controller signature size in KB (10–40) & photo size (20–50 KB). Free compress + Free Download for Railway form upload — Size to KB",
+    h1: "RRB Section Controller signature & photo size in KB",
+    lead: "Match Section Controller signature (10–40 KB) and photo (20–50 KB), then Free Download for the RRB form.",
     queryHints: [
-      "rrb section controller photo size",
       "section controller signature size",
+      "rrb section controller photo size",
       "rrb section controller signature size",
+      "section controller photo size",
+      "section controller signature size in kb",
     ],
   },
   afcat: {
     shortName: "AFCAT",
-    title: "AFCAT Photo & Signature Size in KB Online Free 2026",
+    title: "AFCAT Photo Size in KB (10–100) Free · Signature Too",
     description:
-      "AFCAT photo size & signature size in KB — free compress for Air Force form. Crop, exact KB, Free Download — Size to KB",
-    queryHints: ["afcat photo size", "afcat signature size", "afcat photo and signature size"],
+      "AFCAT photo size & signature size in KB — both typically 10–100 KB. Free crop, compress, Free Download for Air Force form — Size to KB",
+    h1: "AFCAT photo & signature size in KB",
+    lead: "Hit AFCAT photo and signature KB limits (10–100 KB), then Free Download for upload.",
+    queryHints: [
+      "afcat photo size",
+      "afcat signature size",
+      "afcat photo and signature size",
+      "afcat photo size in kb",
+    ],
   },
   cuet: {
     shortName: "CUET",
@@ -83,17 +95,31 @@ const OVERRIDES: Record<string, Override> = {
   },
   nda: {
     shortName: "NDA",
-    title: "NDA Photo & Signature Size in KB Online Free 2026",
+    title: "NDA Photo Size in KB Free 2026 · Signature Compress",
     description:
-      "NDA photo size & signature size in KB — free compress for UPSC NDA form. Crop, exact KB, Free Download — Size to KB",
-    queryHints: ["nda photo size", "nda signature size", "nda photo size in kb"],
+      "NDA / UPSC NDA photo size & signature size in KB (often 20–300 KB). Free compress, Free Download for form upload — Size to KB",
+    h1: "NDA photo & signature size in KB",
+    lead: "NDA photo and signature KB limits — compress on phone, Free Download, upload to UPSC form.",
+    queryHints: [
+      "nda photo size",
+      "nda signature size",
+      "nda photo size in kb",
+      "upsc nda photo size",
+    ],
   },
   gate: {
     shortName: "GATE",
-    title: "GATE Photo & Signature Size in KB Online Free 2026",
+    title: "GATE Photo Size in KB Free · Signature 4–30 KB 2026",
     description:
-      "GATE photo size & signature size in KB — free online resizer for IIT form upload. Crop, compress, Free Download — Size to KB",
-    queryHints: ["gate photo size", "gate signature size", "gate photo size in kb"],
+      "GATE photo size in KB (10–200) & signature size (4–30 KB). Free online resizer for IIT GATE form. Crop, Free Download — Size to KB",
+    h1: "GATE photo & signature size in KB",
+    lead: "Match GATE photo (10–200 KB) and signature (4–30 KB), then Free Download for the form.",
+    queryHints: [
+      "gate photo size",
+      "gate signature size",
+      "gate photo size in kb",
+      "gate photo and signature size",
+    ],
   },
   "railway-nfr-apprentice": {
     shortName: "Railway NFR Apprentice",
@@ -104,10 +130,17 @@ const OVERRIDES: Record<string, Override> = {
   },
   nbems: {
     shortName: "NBEMS",
-    title: "NBEMS Photo & Signature Size in KB Online Free 2026",
+    title: "NBEMS Photo Size in KB (20–50) Free · Signature Too",
     description:
-      "NBEMS photo size & signature size in KB — free online tool. Crop, compress, Free Download — Size to KB",
-    queryHints: ["nbems photo size", "nbems signature size"],
+      "NBEMS photo size in KB (20–50) & signature size (10–20 KB). Free crop + compress, Free Download for NBEMS form — Size to KB",
+    h1: "NBEMS photo & signature size in KB",
+    lead: "Hit NBEMS photo and signature KB limits, then Free Download for upload.",
+    queryHints: [
+      "nbems photo size",
+      "nbems signature size",
+      "nbems photo size in kb",
+      "nbems photo and signature size",
+    ],
   },
 
   // —— High-volume India exams ——
@@ -239,10 +272,17 @@ const OVERRIDES: Record<string, Override> = {
   },
   cds: {
     shortName: "CDS",
-    title: "CDS Photo & Signature Size in KB Online Free 2026",
+    title: "CDS Photo Size in KB Free 2026 · Signature Compress",
     description:
-      "UPSC CDS photo size & signature size in KB — free compress for Combined Defence Services form — Size to KB",
-    queryHints: ["cds photo size", "cds signature size", "upsc cds photo size"],
+      "UPSC CDS photo size & signature size in KB (often 20–300 KB). Free compress, Free Download for Combined Defence Services form — Size to KB",
+    h1: "CDS photo & signature size in KB",
+    lead: "Match CDS photo and signature KB limits, then Free Download for the UPSC form.",
+    queryHints: [
+      "cds photo size",
+      "cds signature size",
+      "upsc cds photo size",
+      "cds photo size in kb",
+    ],
   },
   ctet: {
     shortName: "CTET",
@@ -402,10 +442,19 @@ const OVERRIDES: Record<string, Override> = {
   },
   "aiims-norcet-10th-nursing-officer": {
     shortName: "AIIMS NORCET",
-    title: "AIIMS NORCET Photo & Signature Size in KB Online Free",
+    title: "AIIMS NORCET Photo Size in KB (20–50) Free 2026",
     description:
-      "AIIMS NORCET nursing officer photo size & signature size in KB — free compress — Size to KB",
-    queryHints: ["norcet photo size", "aiims norcet photo size", "aiims photo size"],
+      "AIIMS NORCET photo size in KB (20–50) & signature size (10–20 KB). Free compress for nursing officer form. Free Download — Size to KB",
+    h1: "AIIMS NORCET photo & signature size in KB",
+    lead: "NORCET photo 20–50 KB and signature 10–20 KB — Free Download, then upload to the AIIMS form.",
+    queryHints: [
+      "norcet photo size",
+      "aiims norcet photo size",
+      "aiims photo size",
+      "norcet signature size",
+      "aiims norcet signature size",
+      "norcet photo size in kb",
+    ],
   },
   "aiims-ini-cet": {
     shortName: "INI CET",
