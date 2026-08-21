@@ -12,7 +12,7 @@ const QUICK = [
   { href: "/pdf-unlock/", label: "Unlock PDF" },
   { href: "/newsletter/", label: "Tips" },
   { href: "/hindi/", label: "Hindi" },
-  { href: "/telugu/", label: "Telugu" },
+  { href: "/tamil/", label: "Tamil" },
   { href: "/#tools", label: "All tools" },
 ];
 
@@ -90,6 +90,27 @@ export function Header() {
                   className="block border-b border-[var(--line)] px-3.5 py-2.5 hover:bg-[var(--wash)]"
                 >
                   <span className="text-sm font-semibold text-[var(--ink)]">Hindi · हिंदी</span>
+                </Link>
+                <Link
+                  href="/tamil/"
+                  onClick={() => setOpen(false)}
+                  className="block border-b border-[var(--line)] px-3.5 py-2.5 hover:bg-[var(--wash)]"
+                >
+                  <span className="text-sm font-semibold text-[var(--ink)]">Tamil · தமிழ்</span>
+                </Link>
+                <Link
+                  href="/marathi/"
+                  onClick={() => setOpen(false)}
+                  className="block border-b border-[var(--line)] px-3.5 py-2.5 hover:bg-[var(--wash)]"
+                >
+                  <span className="text-sm font-semibold text-[var(--ink)]">Marathi · मराठी</span>
+                </Link>
+                <Link
+                  href="/kannada/"
+                  onClick={() => setOpen(false)}
+                  className="block border-b border-[var(--line)] px-3.5 py-2.5 hover:bg-[var(--wash)]"
+                >
+                  <span className="text-sm font-semibold text-[var(--ink)]">Kannada · ಕನ್ನಡ</span>
                 </Link>
                 <Link
                   href="/telugu/"

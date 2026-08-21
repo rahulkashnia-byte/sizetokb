@@ -102,6 +102,9 @@ export default function HindiHomePage() {
         links={[
           { href: "/hindi/compress-to-50kb/", label: "50KB tool" },
           { href: "/hindi/size-kam-kaise-kare/", label: "साइज़ कम कैसे करें" },
+          { href: "/tamil/", label: "தமிழ்" },
+          { href: "/marathi/", label: "मराठी" },
+          { href: "/kannada/", label: "ಕನ್ನಡ" },
           { href: "/telugu/", label: "తెలుగు" },
           { href: "/signature-cleaner/", label: "Signature cleaner" },
           { href: "/", label: "English home" },

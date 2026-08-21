@@ -108,6 +108,9 @@ export default function TeluguHomePage() {
         links={[
           { href: "/telugu/compress-to-50kb/", label: "50KB tool" },
           { href: "/telugu/photo-size-ela-taggali/", label: "సైజ్ ఎలా తగ్గించాలి" },
+          { href: "/tamil/", label: "தமிழ்" },
+          { href: "/kannada/", label: "ಕನ್ನಡ" },
+          { href: "/marathi/", label: "मराठी" },
           { href: "/hindi/", label: "हिंदी" },
           { href: "/", label: "English home" },
         ]}

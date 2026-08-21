@@ -80,6 +80,9 @@ const SEED_TOOL_IDS = [
   "biodata",
   "hindi",
   "telugu",
+  "tamil",
+  "marathi",
+  "kannada",
 ] as const;
 const NET_CACHE_KEY = "stk_admin_net_cache_v1";
 const NET_CACHE_MS = 3 * 60 * 1000;

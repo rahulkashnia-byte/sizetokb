@@ -35,6 +35,14 @@ const LEGAL = [
   { href: "/disclaimer", label: "Disclaimer" },
 ];
 
+const LANGUAGES = [
+  { href: "/hindi/", label: "हिंदी (Hindi)" },
+  { href: "/tamil/", label: "தமிழ் (Tamil)" },
+  { href: "/marathi/", label: "मराठी (Marathi)" },
+  { href: "/kannada/", label: "ಕನ್ನಡ (Kannada)" },
+  { href: "/telugu/", label: "తెలుగు (Telugu)" },
+];
+
 export default function SitemapPage() {
   const sorted = [...EXAMS].sort((a, b) => a.name.localeCompare(b.name));
 
@@ -60,6 +68,15 @@ export default function SitemapPage() {
         {LEGAL.map((t) => (
           <li key={t.href}>
             <Link href={`${t.href}/`}>{t.label}</Link>
+          </li>
+        ))}
+      </ul>
+
+      <h2>Languages</h2>
+      <ul>
+        {LANGUAGES.map((t) => (
+          <li key={t.href}>
+            <Link href={t.href}>{t.label}</Link>
           </li>
         ))}
       </ul>

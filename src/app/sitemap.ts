@@ -50,6 +50,15 @@ export default function sitemap(): MetadataRoute.Sitemap {
     "/hindi",
     "/hindi/compress-to-50kb",
     "/hindi/size-kam-kaise-kare",
+    "/tamil",
+    "/tamil/compress-to-50kb",
+    "/tamil/photo-size-kurai",
+    "/marathi",
+    "/marathi/compress-to-50kb",
+    "/marathi/photo-size-kami-kara",
+    "/kannada",
+    "/kannada/compress-to-50kb",
+    "/kannada/photo-size-kadime",
     "/telugu",
     "/telugu/compress-to-50kb",
     "/telugu/photo-size-ela-taggali",
@@ -96,6 +105,15 @@ export default function sitemap(): MetadataRoute.Sitemap {
             path === "/hindi" ||
             path === "/hindi/compress-to-50kb" ||
             path === "/hindi/size-kam-kaise-kare" ||
+            path === "/tamil" ||
+            path === "/tamil/compress-to-50kb" ||
+            path === "/tamil/photo-size-kurai" ||
+            path === "/marathi" ||
+            path === "/marathi/compress-to-50kb" ||
+            path === "/marathi/photo-size-kami-kara" ||
+            path === "/kannada" ||
+            path === "/kannada/compress-to-50kb" ||
+            path === "/kannada/photo-size-kadime" ||
             path === "/telugu" ||
             path === "/telugu/compress-to-50kb" ||
             path === "/telugu/photo-size-ela-taggali" ||

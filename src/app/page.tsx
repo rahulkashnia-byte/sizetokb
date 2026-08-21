@@ -81,6 +81,24 @@ export default function HomePage() {
                 हिंदी
               </Link>
               <Link
+                href="/tamil/"
+                className="inline-flex rounded-xl border border-[var(--line)] bg-white px-5 py-3 text-sm font-bold text-[var(--ink)] hover:border-[var(--accent)]"
+              >
+                தமிழ்
+              </Link>
+              <Link
+                href="/marathi/"
+                className="inline-flex rounded-xl border border-[var(--line)] bg-white px-5 py-3 text-sm font-bold text-[var(--ink)] hover:border-[var(--accent)]"
+              >
+                मराठी
+              </Link>
+              <Link
+                href="/kannada/"
+                className="inline-flex rounded-xl border border-[var(--line)] bg-white px-5 py-3 text-sm font-bold text-[var(--ink)] hover:border-[var(--accent)]"
+              >
+                ಕನ್ನಡ
+              </Link>
+              <Link
                 href="/telugu/"
                 className="inline-flex rounded-xl border border-[var(--line)] bg-white px-5 py-3 text-sm font-bold text-[var(--ink)] hover:border-[var(--accent)]"
               >
