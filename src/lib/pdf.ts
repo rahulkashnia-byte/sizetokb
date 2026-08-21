@@ -3,15 +3,17 @@ import { jsPDF } from "jspdf";
 
 export async function imagesToPdf(
   files: { blob: Blob; name: string }[],
-  options?: { maxKb?: number }
-): Promise<{ blob: Blob; sizeKb: number }> {
+  options?: { minKb?: number; maxKb?: number }
+): Promise<{ blob: Blob; sizeKb: number; inRange: boolean }> {
   let quality = 0.92;
   let scale = 1;
   let blob = await buildImagesPdf(files, quality, scale);
   let sizeKb = blob.size / 1024;
+  const minKb = options?.minKb;
+  const maxKb = options?.maxKb;
 
-  if (options?.maxKb) {
-    for (let i = 0; i < 10 && sizeKb > options.maxKb; i++) {
+  if (maxKb != null) {
+    for (let i = 0; i < 12 && sizeKb > maxKb; i++) {
       if (quality > 0.35) quality *= 0.75;
       else scale *= 0.85;
       blob = await buildImagesPdf(files, quality, scale);
@@ -20,7 +22,35 @@ export async function imagesToPdf(
     }
   }
 
-  return { blob, sizeKb: Math.round(sizeKb * 10) / 10 };
+  // If under a required minimum, raise quality/scale toward the band (best-effort).
+  if (minKb != null && sizeKb < minKb) {
+    let best = { blob, sizeKb, dist: Math.abs(sizeKb - (minKb + (maxKb ?? minKb)) / 2) };
+    for (let i = 0; i < 10; i++) {
+      quality = Math.min(0.95, quality + 0.06);
+      scale = Math.min(1.35, scale * 1.08);
+      blob = await buildImagesPdf(files, quality, scale);
+      sizeKb = blob.size / 1024;
+      if (maxKb != null && sizeKb > maxKb) {
+        quality *= 0.85;
+        blob = await buildImagesPdf(files, quality, scale);
+        sizeKb = blob.size / 1024;
+      }
+      const mid = (minKb + (maxKb ?? minKb * 1.4)) / 2;
+      const dist = Math.abs(sizeKb - mid);
+      if (dist < best.dist) best = { blob, sizeKb, dist };
+      if (sizeKb >= minKb && (maxKb == null || sizeKb <= maxKb)) {
+        best = { blob, sizeKb, dist: 0 };
+        break;
+      }
+    }
+    blob = best.blob;
+    sizeKb = best.sizeKb;
+  }
+
+  const rounded = Math.round(sizeKb * 10) / 10;
+  const inRange =
+    (minKb == null || rounded >= minKb) && (maxKb == null || rounded <= maxKb);
+  return { blob, sizeKb: rounded, inRange };
 }
 
 async function buildImagesPdf(

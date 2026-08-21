@@ -102,6 +102,28 @@ export const FORM_PRESETS: FormPreset[] = [
       "police form thumb impression",
     ],
   },
+  {
+    id: "handwritten-declaration",
+    name: "IBPS / SBI handwritten declaration",
+    blurb: "800×400 px · 50–100 KB JPG",
+    photo: {
+      id: "declaration",
+      label: "Handwritten declaration",
+      minKb: 50,
+      maxKb: 100,
+      width: 800,
+      height: 400,
+      unit: "px",
+      format: "jpg",
+      scanEffect: true,
+    },
+    seoKeywords: [
+      "handwritten declaration size KB",
+      "IBPS handwritten declaration 50KB 100KB",
+      "SBI declaration resize online",
+      "handwritten declaration 800x400",
+    ],
+  },
 ];
 
 export function getFormPreset(id: string) {

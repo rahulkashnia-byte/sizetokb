@@ -38,6 +38,10 @@ export default function sitemap(): MetadataRoute.Sitemap {
     "/pan-photo",
     "/aadhaar-photo",
     "/thumb-impression",
+    "/handwritten-declaration",
+    "/join-photo-signature",
+    "/upload-checker",
+    "/jpg-to-pdf-kb",
     "/marksheet-pdf",
     "/pdf-organize",
     "/watermark",
@@ -82,6 +86,11 @@ export default function sitemap(): MetadataRoute.Sitemap {
             path === "/bulk-reduce" ||
             path === "/form-wizard" ||
             path === "/upload-fixer" ||
+            path === "/thumb-impression" ||
+            path === "/handwritten-declaration" ||
+            path === "/join-photo-signature" ||
+            path === "/upload-checker" ||
+            path === "/jpg-to-pdf-kb" ||
             path === "/marksheet-pdf" ||
             path === "/size-kam-kaise-kare" ||
             path === "/hindi" ||

@@ -154,6 +154,7 @@ export default function ImageToPdfPage() {
           "Pair with our PDF compressor if the portal has a strict upload limit.",
         ]}
         links={[
+          { href: "/jpg-to-pdf-kb/", label: "JPG to PDF exact KB bands" },
           { href: "/pdf-compressor/", label: "PDF compressor" },
           { href: "/image-resizer/", label: "Image resizer KB" },
         ]}

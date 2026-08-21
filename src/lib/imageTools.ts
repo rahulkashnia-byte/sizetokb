@@ -173,4 +173,131 @@ export async function reverseImage(
   };
 }
 
+export type JoinPhotoSignLayout = "side-by-side" | "stacked";
+
+export type JoinPhotoSignOptions = {
+  layout?: JoinPhotoSignLayout;
+  /** Target photo box (px) */
+  photoWidth?: number;
+  photoHeight?: number;
+  /** Target signature box (px) */
+  signWidth?: number;
+  signHeight?: number;
+  gap?: number;
+  minKb?: number;
+  maxKb?: number;
+};
+
+/**
+ * Join passport photo + signature into one JPG for portals that ask for a combined upload.
+ */
+export async function joinPhotoAndSignature(
+  photo: File,
+  signature: File,
+  options: JoinPhotoSignOptions = {}
+): Promise<{
+  blob: Blob;
+  url: string;
+  width: number;
+  height: number;
+  sizeKb: number;
+  inRange: boolean;
+}> {
+  const layout = options.layout ?? "side-by-side";
+  const photoW = options.photoWidth ?? 200;
+  const photoH = options.photoHeight ?? 230;
+  const signW = options.signWidth ?? 140;
+  const signH = options.signHeight ?? 60;
+  const gap = options.gap ?? 12;
+  const minKb = options.minKb ?? 20;
+  const maxKb = options.maxKb ?? 50;
+
+  const [photoImg, signImg] = await Promise.all([loadFileImage(photo), loadFileImage(signature)]);
+
+  const drawCover = (
+    ctx: CanvasRenderingContext2D,
+    img: HTMLImageElement,
+    x: number,
+    y: number,
+    w: number,
+    h: number
+  ) => {
+    const scale = Math.max(w / img.naturalWidth, h / img.naturalHeight);
+    const sw = w / scale;
+    const sh = h / scale;
+    const sx = (img.naturalWidth - sw) / 2;
+    const sy = (img.naturalHeight - sh) / 2;
+    ctx.drawImage(img, sx, sy, sw, sh, x, y, w, h);
+  };
+
+  const canvas = document.createElement("canvas");
+  if (layout === "side-by-side") {
+    canvas.width = photoW + gap + signW;
+    canvas.height = Math.max(photoH, signH);
+  } else {
+    canvas.width = Math.max(photoW, signW);
+    canvas.height = photoH + gap + signH;
+  }
+  const ctx = canvas.getContext("2d")!;
+  ctx.fillStyle = "#ffffff";
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+  if (layout === "side-by-side") {
+    drawCover(ctx, photoImg, 0, Math.round((canvas.height - photoH) / 2), photoW, photoH);
+    drawCover(
+      ctx,
+      signImg,
+      photoW + gap,
+      Math.round((canvas.height - signH) / 2),
+      signW,
+      signH
+    );
+  } else {
+    drawCover(ctx, photoImg, Math.round((canvas.width - photoW) / 2), 0, photoW, photoH);
+    drawCover(
+      ctx,
+      signImg,
+      Math.round((canvas.width - signW) / 2),
+      photoH + gap,
+      signW,
+      signH
+    );
+  }
+
+  const minBytes = minKb * 1024;
+  const maxBytes = maxKb * 1024;
+  const mid = (minBytes + maxBytes) / 2;
+  let lo = 0.35;
+  let hi = 0.95;
+  let best: Blob | null = null;
+  let bestDist = Number.POSITIVE_INFINITY;
+
+  for (let i = 0; i < 12; i++) {
+    const q = (lo + hi) / 2;
+    const blob = await canvasToBlob(canvas, "image/jpeg", q);
+    const dist = Math.abs(blob.size - mid);
+    if (dist < bestDist) {
+      best = blob;
+      bestDist = dist;
+    }
+    if (blob.size > maxBytes) hi = q;
+    else if (blob.size < minBytes) lo = q;
+    else {
+      best = blob;
+      break;
+    }
+  }
+
+  if (!best) throw new Error("Could not encode joined image");
+  const sizeKb = Math.round((best.size / 1024) * 10) / 10;
+  return {
+    blob: best,
+    url: URL.createObjectURL(best),
+    width: canvas.width,
+    height: canvas.height,
+    sizeKb,
+    inRange: sizeKb >= minKb && sizeKb <= maxKb,
+  };
+}
+
 export { loadFileImage };

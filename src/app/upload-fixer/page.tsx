@@ -77,6 +77,8 @@ export default function UploadFixerPage() {
         links={[
           { href: "/#custom-tool", label: "Reduce to KB" },
           { href: "/heic-to-jpg/", label: "HEIC to JPG" },
+          { href: "/upload-checker/", label: "Upload checker" },
+          { href: "/handwritten-declaration/", label: "Declaration" },
           { href: "/photo-guide/", label: "Photo guide" },
         ]}
       />

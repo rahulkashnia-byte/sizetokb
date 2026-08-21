@@ -70,12 +70,39 @@ const RULES: { match: RegExp; suggestion: FixSuggestion }[] = [
     },
   },
   {
+    match: /jpg to pdf|image to pdf|photo to pdf|certificate.*pdf.*kb|pdf.*(50|100|200|500)\s*kb/i,
+    suggestion: {
+      title: "JPG to PDF exact KB",
+      reason: "Build a PDF from photos inside a KB band (50–100, 200, 500…).",
+      href: "/jpg-to-pdf-kb/",
+      cta: "JPG → PDF KB",
+    },
+  },
+  {
     match: /pdf|document.*size|certificate/i,
     suggestion: {
       title: "Reduce PDF size",
       reason: "PDF upload is over the portal limit.",
       href: "/pdf-compressor/",
       cta: "Shrink PDF",
+    },
+  },
+  {
+    match: /declaration|handwritten/i,
+    suggestion: {
+      title: "Handwritten declaration size",
+      reason: "Bank forms often need declaration JPG at 50–100 KB (~800×400).",
+      href: "/handwritten-declaration/",
+      cta: "Fix declaration",
+    },
+  },
+  {
+    match: /join|combine|photo and signature|photo & signature|single (image|file).*(sign|photo)/i,
+    suggestion: {
+      title: "Join photo and signature",
+      reason: "Portal may want photo and signature in one JPG.",
+      href: "/join-photo-signature/",
+      cta: "Join files",
     },
   },
   {
