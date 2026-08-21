@@ -99,7 +99,24 @@ export default async function ExamPage({ params }: { params: Promise<{ slug: str
           <a href="/telugu/" className="font-bold text-[var(--accent-ink)]">
             తెలుగు
           </a>
+          {" · "}
+          <a href="/tamil/" className="font-bold text-[var(--accent-ink)]">
+            தமிழ்
+          </a>
         </p>
+        {seo.tips && seo.tips.length > 0 ? (
+          <div className="mx-auto mt-5 max-w-2xl space-y-2 text-left">
+            {seo.tips.map((tip) => (
+              <p
+                key={tip}
+                className="rounded-2xl border border-[var(--line)] bg-[var(--wash)] px-4 py-3 text-sm text-[var(--ink)]"
+              >
+                <span className="font-bold text-[var(--accent-ink)]">Tip · </span>
+                {tip}
+              </p>
+            ))}
+          </div>
+        ) : null}
       </section>
 
       <section className="mx-auto max-w-5xl px-4 pb-10 sm:px-6">
@@ -182,6 +199,7 @@ export default async function ExamPage({ params }: { params: Promise<{ slug: str
           { href: "/custom/", label: "Custom KB tool" },
           { href: "/compress-to-50kb/", label: "Compress to 50KB" },
           { href: "/signature-cleaner/", label: "Signature 10–20KB" },
+          ...(seo.relatedLinks ?? []),
           { href: "/hindi/", label: "हिंदी में इस्तेमाल करें" },
           { href: "/telugu/", label: "తెలుగులో ఉపయోగించండి" },
           { href: "/disclaimer/", label: "Disclaimer" },

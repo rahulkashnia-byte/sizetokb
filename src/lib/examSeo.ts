@@ -8,6 +8,10 @@ export type ExamSeoPack = {
   lead: string;
   keywords: string[];
   faqs: { q: string; a: string }[];
+  /** Short callouts under the hero (exam-specific tips). */
+  tips?: string[];
+  /** Extra internal links for the SEO block. */
+  relatedLinks?: { href: string; label: string }[];
 };
 
 type Override = Partial<ExamSeoPack> & { queryHints?: string[]; shortName?: string };
@@ -45,9 +49,46 @@ const OVERRIDES: Record<string, Override> = {
     shortName: "UPSSSC PET",
     title: "UPSSSC PET Image Size in KB · Photo & Signature Free",
     description:
-      "UPSSSC PET image size in KB — photo 20–50 KB, signature 10–20 KB. Free online compress for PET form. Crop, Free Download on phone — Size to KB",
+      "UPSSSC PET / photo resizer — photo 20–50 KB, signature 10–20 KB (3.5×4.5 / 3.5×1.5 cm). Free crop + compress. Note: some forms need Hindi name under English signature — Size to KB",
     h1: "UPSSSC PET photo & signature size in KB",
     lead: "UPSSSC PET image / photo / signature KB limits — compress on phone, Free Download, upload to the form.",
+    tips: [
+      "Some UPSSSC notifications ask for your full name in Hindi written under the English signature on the same scan — check the latest brochure before upload.",
+      "Use a white/light background photo with clear face coverage; re-check PET vs Lekhpal / Junior Assistant / VDO PDFs if limits differ.",
+    ],
+    relatedLinks: [
+      { href: "/upsssc-lekhpal/", label: "UPSSSC Lekhpal photo size" },
+      { href: "/upsssc-junior-assistant/", label: "UPSSSC Junior Assistant" },
+      { href: "/upsssc-vdo/", label: "UPSSSC VDO photo size" },
+      { href: "/signature-cleaner/", label: "Signature cleaner" },
+      { href: "/hindi/", label: "हिंदी में इस्तेमाल करें" },
+    ],
+    faqs: [
+      {
+        q: "What is the UPSSSC PET photo size in KB?",
+        a: "On this page (verify the official notification): photo typically 20–50 KB · 3.5 cm × 4.5 cm · JPG. Always confirm the latest PET PDF before upload.",
+      },
+      {
+        q: "What is the UPSSSC PET signature size in KB?",
+        a: "Typically 10–20 KB · 3.5 cm × 1.5 cm · JPG on this profile. Some UPSSSC posts mention a higher signature cap (e.g. around 30 KB) — follow the notification for your vacancy.",
+      },
+      {
+        q: "Is Hindi signature mandatory for UPSSSC PET?",
+        a: "Many UPSSSC forms ask you to write your full name in Hindi below the English signature on white paper, then scan as one image. It is not always required for every post — read the current notification.",
+      },
+      {
+        q: "Can I use a square 2×2 inch photo for UPSSSC?",
+        a: "No. UPSSSC-style uploads are usually portrait 3.5 × 4.5 cm. Use the crop tool on this page to match that box, then Free Download.",
+      },
+      {
+        q: "How do I resize UPSSSC PET photo size online free?",
+        a: "Use the Photo tool below: crop → compress into 20–50 KB → Free Download. Processing stays in your browser.",
+      },
+      {
+        q: "Is this free? Do you store my photo?",
+        a: "Yes, free. We do not upload or store your photos or signatures.",
+      },
+    ],
     queryHints: [
       "upsssc pet image",
       "upsssc pet image size",
@@ -55,6 +96,121 @@ const OVERRIDES: Record<string, Override> = {
       "upsssc pet photo size",
       "upsssc pet signature size",
       "upsssc pet photo and signature size",
+      "upsssc photo resizer",
+      "upsssc photo size",
+      "upsssc signature size",
+    ],
+  },
+  "upsssc-lekhpal": {
+    shortName: "UPSSSC Lekhpal",
+    title: "UPSSSC Lekhpal Photo & Signature Size in KB Free 2026",
+    description:
+      "UPSSSC Lekhpal photo size (20–50 KB) & signature size in KB — free crop, compress, Free Download for form upload — Size to KB",
+    h1: "UPSSSC Lekhpal photo & signature size in KB",
+    lead: "Hit Lekhpal photo and signature KB limits, then Free Download for the UPSSSC form.",
+    tips: [
+      "If the notification asks for Hindi name under the English signature, write both on one white paper before scanning.",
+    ],
+    relatedLinks: [
+      { href: "/upsssc-pet/", label: "UPSSSC PET" },
+      { href: "/upsssc-junior-assistant/", label: "Junior Assistant" },
+      { href: "/upsssc-vdo/", label: "VDO" },
+    ],
+    queryHints: [
+      "upsssc lekhpal photo size",
+      "lekhpal photo size",
+      "lekhpal signature size",
+      "upsssc lekhpal signature size",
+    ],
+  },
+  "upsssc-junior-assistant": {
+    shortName: "UPSSSC Junior Assistant",
+    title: "UPSSSC Junior Assistant Photo & Signature Size KB Free",
+    description:
+      "UPSSSC Junior Assistant photo & signature size in KB — free online resizer for UP form upload. Crop, exact KB, Free Download — Size to KB",
+    h1: "UPSSSC Junior Assistant photo & signature size",
+    relatedLinks: [
+      { href: "/upsssc-pet/", label: "UPSSSC PET" },
+      { href: "/upsssc-lekhpal/", label: "Lekhpal" },
+      { href: "/upsssc-vdo/", label: "VDO" },
+    ],
+    queryHints: [
+      "upsssc junior assistant photo size",
+      "upsssc junior assistant signature size",
+      "junior assistant photo size upsssc",
+    ],
+  },
+  "upsssc-vdo": {
+    shortName: "UPSSSC VDO",
+    title: "UPSSSC VDO Photo & Signature Size in KB Online Free",
+    description:
+      "UPSSSC VDO (Village Development Officer) photo size & signature size in KB — free compress for form upload — Size to KB",
+    h1: "UPSSSC VDO photo & signature size in KB",
+    relatedLinks: [
+      { href: "/upsssc-pet/", label: "UPSSSC PET" },
+      { href: "/upsssc-lekhpal/", label: "Lekhpal" },
+      { href: "/upsssc-junior-assistant/", label: "Junior Assistant" },
+    ],
+    queryHints: [
+      "upsssc vdo photo size",
+      "vdo photo size",
+      "upsssc vdo signature size",
+      "village development officer photo size",
+    ],
+  },
+  tnpsc: {
+    shortName: "TNPSC",
+    title: "TNPSC Photo & Signature Size in KB Online Free 2026",
+    description:
+      "TNPSC photo size & signature size in KB — free Tamil Nadu exam form resizer. Crop, compress, Free Download — Size to KB",
+    h1: "TNPSC photo & signature size in KB",
+    lead: "Match TNPSC photo and signature KB limits, then Free Download for the official form.",
+    relatedLinks: [
+      { href: "/tamil/", label: "தமிழ் Size to KB" },
+      { href: "/mpsc/", label: "MPSC" },
+      { href: "/kpsc/", label: "KPSC" },
+    ],
+    queryHints: [
+      "tnpsc photo size",
+      "tnpsc signature size",
+      "tnpsc photo size in kb",
+      "tnpsc photo and signature size",
+    ],
+  },
+  mpsc: {
+    shortName: "MPSC",
+    title: "MPSC Photo & Signature Size in KB Online Free 2026",
+    description:
+      "MPSC photo size & signature size in KB — free Maharashtra PSC form resizer. Crop, compress, Free Download — Size to KB",
+    h1: "MPSC photo & signature size in KB",
+    relatedLinks: [
+      { href: "/marathi/", label: "मराठी Size to KB" },
+      { href: "/tnpsc/", label: "TNPSC" },
+      { href: "/kpsc/", label: "KPSC" },
+    ],
+    queryHints: [
+      "mpsc photo size",
+      "mpsc signature size",
+      "mpsc photo size in kb",
+      "maharashtra psc photo size",
+    ],
+  },
+  kpsc: {
+    shortName: "KPSC",
+    title: "KPSC Photo & Signature Size in KB Online Free 2026",
+    description:
+      "KPSC photo size & signature size in KB — free Karnataka PSC form resizer. Crop, compress, Free Download — Size to KB",
+    h1: "KPSC photo & signature size in KB",
+    relatedLinks: [
+      { href: "/kannada/", label: "ಕನ್ನಡ Size to KB" },
+      { href: "/tnpsc/", label: "TNPSC" },
+      { href: "/mpsc/", label: "MPSC" },
+    ],
+    queryHints: [
+      "kpsc photo size",
+      "kpsc signature size",
+      "kpsc photo size in kb",
+      "karnataka psc photo size",
     ],
   },
   "rrb-section-controller": {
@@ -527,6 +683,10 @@ const SLUG_ACRONYMS = new Set([
   "dsssb",
   "bpsc",
   "upsssc",
+  "tnpsc",
+  "mpsc",
+  "kpsc",
+  "vdo",
   "uppsc",
   "rpsc",
   "mppsc",
@@ -699,7 +859,7 @@ export function examSeo(exam: Exam): ExamSeoPack {
     },
   ];
 
-  return { title, description, h1, lead, keywords, faqs };
+  return { title, description, h1, lead, keywords, faqs, tips: o.tips, relatedLinks: o.relatedLinks };
 }
 
 /** Clearer uploader labels on exam pages */

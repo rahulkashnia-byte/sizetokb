@@ -5568,6 +5568,180 @@ export const EXAMS: Exam[] = [
         "scanEffect": true
       }
     ]
+  },
+  {
+    "slug": "upsssc-lekhpal",
+    "name": "UPSSSC Lekhpal",
+    "formsOut": false,
+    "year": 2026,
+    "documents": [
+      {
+        "id": "photo",
+        "label": "Photo",
+        "minKb": 20,
+        "maxKb": 50,
+        "width": 3.5,
+        "height": 4.5,
+        "unit": "cm",
+        "format": "jpg"
+      },
+      {
+        "id": "sign",
+        "label": "Sign",
+        "minKb": 10,
+        "maxKb": 20,
+        "width": 3.5,
+        "height": 1.5,
+        "unit": "cm",
+        "format": "jpg",
+        "scanEffect": true
+      }
+    ]
+  },
+  {
+    "slug": "upsssc-junior-assistant",
+    "name": "UPSSSC Junior Assistant",
+    "formsOut": false,
+    "year": 2026,
+    "documents": [
+      {
+        "id": "photo",
+        "label": "Photo",
+        "minKb": 20,
+        "maxKb": 50,
+        "width": 3.5,
+        "height": 4.5,
+        "unit": "cm",
+        "format": "jpg"
+      },
+      {
+        "id": "sign",
+        "label": "Sign",
+        "minKb": 10,
+        "maxKb": 20,
+        "width": 3.5,
+        "height": 1.5,
+        "unit": "cm",
+        "format": "jpg",
+        "scanEffect": true
+      }
+    ]
+  },
+  {
+    "slug": "upsssc-vdo",
+    "name": "UPSSSC VDO",
+    "formsOut": false,
+    "year": 2026,
+    "documents": [
+      {
+        "id": "photo",
+        "label": "Photo",
+        "minKb": 20,
+        "maxKb": 50,
+        "width": 3.5,
+        "height": 4.5,
+        "unit": "cm",
+        "format": "jpg"
+      },
+      {
+        "id": "sign",
+        "label": "Sign",
+        "minKb": 10,
+        "maxKb": 20,
+        "width": 3.5,
+        "height": 1.5,
+        "unit": "cm",
+        "format": "jpg",
+        "scanEffect": true
+      }
+    ]
+  },
+  {
+    "slug": "tnpsc",
+    "name": "TNPSC",
+    "formsOut": false,
+    "year": 2026,
+    "documents": [
+      {
+        "id": "photo",
+        "label": "Photo",
+        "minKb": 20,
+        "maxKb": 50,
+        "width": 3.5,
+        "height": 4.5,
+        "unit": "cm",
+        "format": "jpg"
+      },
+      {
+        "id": "sign",
+        "label": "Sign",
+        "minKb": 10,
+        "maxKb": 20,
+        "width": 3.5,
+        "height": 1.5,
+        "unit": "cm",
+        "format": "jpg",
+        "scanEffect": true
+      }
+    ]
+  },
+  {
+    "slug": "mpsc",
+    "name": "MPSC",
+    "formsOut": false,
+    "year": 2026,
+    "documents": [
+      {
+        "id": "photo",
+        "label": "Photo",
+        "minKb": 20,
+        "maxKb": 50,
+        "width": 3.5,
+        "height": 4.5,
+        "unit": "cm",
+        "format": "jpg"
+      },
+      {
+        "id": "sign",
+        "label": "Sign",
+        "minKb": 10,
+        "maxKb": 20,
+        "width": 3.5,
+        "height": 1.5,
+        "unit": "cm",
+        "format": "jpg",
+        "scanEffect": true
+      }
+    ]
+  },
+  {
+    "slug": "kpsc",
+    "name": "KPSC",
+    "formsOut": false,
+    "year": 2026,
+    "documents": [
+      {
+        "id": "photo",
+        "label": "Photo",
+        "minKb": 20,
+        "maxKb": 50,
+        "width": 3.5,
+        "height": 4.5,
+        "unit": "cm",
+        "format": "jpg"
+      },
+      {
+        "id": "sign",
+        "label": "Sign",
+        "minKb": 10,
+        "maxKb": 20,
+        "width": 3.5,
+        "height": 1.5,
+        "unit": "cm",
+        "format": "jpg",
+        "scanEffect": true
+      }
+    ]
   }
 ];
 
