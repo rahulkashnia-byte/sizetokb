@@ -76,20 +76,23 @@ function canvasToBlob(
   });
 }
 
-/** Convert each PDF page to JPG or PNG. Optional password for locked files. */
+/** Convert each PDF page to JPG or PNG. Optional password + max KB per image. */
 export async function pdfToImages(
   file: File,
   options?: {
     format?: PdfImageFormat;
     scale?: number;
     quality?: number;
+    /** Cap each page image at this many KB (JPG quality/scale loop). */
+    maxKb?: number;
     password?: string;
     onProgress?: (msg: string) => void;
   }
 ): Promise<{ images: PdfPageImage[]; pages: number }> {
   const format = options?.format ?? "jpg";
-  const scale = options?.scale ?? 2;
-  const quality = options?.quality ?? 0.92;
+  let scale = options?.scale ?? 2;
+  let quality = options?.quality ?? 0.92;
+  const maxKb = options?.maxKb;
   const base = file.name.replace(/\.pdf$/i, "") || "page";
 
   options?.onProgress?.("Opening PDF…");
@@ -98,15 +101,36 @@ export async function pdfToImages(
 
   for (let i = 1; i <= pages; i++) {
     options?.onProgress?.(`Rendering page ${i}/${pages}…`);
-    const canvas = await renderPageToCanvas(pdf, i, scale);
-    const blob = await canvasToBlob(canvas, format, quality);
+    let canvas = await renderPageToCanvas(pdf, i, scale);
+    let blob = await canvasToBlob(canvas, format, quality);
+    let width = canvas.width;
+    let height = canvas.height;
+
+    if (maxKb != null && format === "jpg" && blob.size / 1024 > maxKb) {
+      let q = quality;
+      let s = scale;
+      for (let attempt = 0; attempt < 12 && blob.size / 1024 > maxKb; attempt++) {
+        if (q > 0.35) q *= 0.78;
+        else s = Math.max(0.55, s * 0.85);
+        canvas.width = 0;
+        canvas.height = 0;
+        canvas = await renderPageToCanvas(pdf, i, s);
+        blob = await canvasToBlob(canvas, format, q);
+        width = canvas.width;
+        height = canvas.height;
+        if (q < 0.28 && s <= 0.55) break;
+      }
+      quality = q;
+      scale = s;
+    }
+
     const ext = format === "png" ? "png" : "jpg";
     images.push({
       blob,
       filename: `${base}-page-${i}.${ext}`,
       page: i,
-      width: canvas.width,
-      height: canvas.height,
+      width,
+      height,
       sizeKb: Math.round((blob.size / 1024) * 10) / 10,
     });
     canvas.width = 0;

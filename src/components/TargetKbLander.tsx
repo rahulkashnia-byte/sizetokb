@@ -22,12 +22,15 @@ export function TargetKbLander({
   path,
   seoHeading,
   paragraphs,
+  subtitle,
 }: {
   targetKb: number;
   titleAccent: string;
   path: string;
   seoHeading: string;
   paragraphs: string[];
+  /** Optional hero subline override */
+  subtitle?: string;
 }) {
   const minKb = Math.max(1, Math.round(targetKb * 0.4));
   return (
@@ -37,8 +40,8 @@ export function TargetKbLander({
           Compress Image to <span className="text-[var(--accent)]">{titleAccent}</span>
         </h1>
         <p className="mt-3 text-[var(--muted)]">
-          Reduce photo size to {targetKb}KB online free for SSC, Bank, Railway and government form
-          uploads. Private browser tool.
+          {subtitle ??
+            `Reduce photo size to ${targetKb}KB online free for SSC, Bank, Railway and government form uploads. Private browser tool.`}
         </p>
         <TrustPills />
         <div className="mt-4 flex flex-wrap justify-center gap-2">
@@ -64,7 +67,7 @@ export function TargetKbLander({
           initialMaxKb={targetKb}
           defaultFilename={`photo-${targetKb}kb`}
           headline={`Hit ${targetKb} KB max`}
-          subhead={`Preset for compress image to ${targetKb}KB — adjust min/max if your portal differs.`}
+          subhead={`Preset for compress image to ${targetKb}KB / image compressor to ${targetKb}KB — adjust min/max if your portal differs.`}
         />
       </div>
 

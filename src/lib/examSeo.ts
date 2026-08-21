@@ -516,15 +516,69 @@ const OVERRIDES: Record<string, Override> = {
     shortName: "Bihar Police Constable",
     title: "Bihar Police Constable Photo & Signature Size in KB Free",
     description:
-      "Bihar Police Constable photo size & signature size in KB — free compress for CSBC form — Size to KB",
-    queryHints: ["bihar police constable photo size", "bihar police photo size"],
+      "Bihar Police Constable / CSBC photo size & signature size in KB — free compress for constable form — Size to KB",
+    relatedLinks: [
+      { href: "/bihar-police-bpssc-si-daroga/", label: "Bihar Police SI (main photo size)" },
+      { href: "/bihar-police-bpssc-asi/", label: "Bihar Police ASI" },
+    ],
+    queryHints: [
+      "bihar police constable photo size",
+      "csbc constable photo size",
+      "bihar police constable signature size",
+    ],
   },
   "bihar-police-bpssc-si-daroga": {
     shortName: "Bihar Police SI",
-    title: "Bihar Police SI (Daroga) Photo & Signature Size in KB Free",
+    title: "Bihar Police Photo Size in KB Free · SI Daroga Signature",
     description:
-      "Bihar Police BPSSC SI Daroga photo size & signature size in KB — free crop + compress — Size to KB",
-    queryHints: ["bihar police si photo size", "bpssc si photo size", "daroga photo size"],
+      "Bihar police photo size in KB — BPSSC SI Daroga photo 20–50 KB & signature 10–20 KB. Free crop, compress, Free Download — Size to KB",
+    h1: "Bihar Police photo & signature size in KB",
+    lead: "Bihar police / BPSSC SI (Daroga) photo and signature KB limits — Free Download for the form.",
+    tips: [
+      "Searching “bihar police photo size”? Use this SI (Daroga) page as the main tool — Constable and ASI have their own post-specific pages linked below.",
+    ],
+    relatedLinks: [
+      { href: "/bihar-police-constable/", label: "Bihar Police Constable" },
+      { href: "/bihar-police-bpssc-asi/", label: "Bihar Police ASI" },
+      { href: "/bihar-police-bpssc-havildar-clerk/", label: "Havildar Clerk" },
+      { href: "/compress-to-50kb/", label: "Compress to 50KB" },
+    ],
+    queryHints: [
+      "bihar police photo size",
+      "bihar police signature size",
+      "bihar police si photo size",
+      "bpssc si photo size",
+      "daroga photo size",
+      "bihar police photo size in kb",
+    ],
+  },
+  "bihar-police-bpssc-asi": {
+    shortName: "Bihar Police ASI",
+    title: "Bihar Police ASI Photo & Signature Size in KB Free",
+    description:
+      "Bihar Police BPSSC ASI photo size & signature size in KB — free crop + compress for ASI form — Size to KB",
+    relatedLinks: [
+      { href: "/bihar-police-bpssc-si-daroga/", label: "Bihar Police photo size (SI)" },
+      { href: "/bihar-police-constable/", label: "Constable" },
+    ],
+    queryHints: [
+      "bihar police asi photo size",
+      "bpssc asi photo size",
+      "bihar police asi signature size",
+    ],
+  },
+  "bihar-police-bpssc-havildar-clerk": {
+    shortName: "Bihar Police Havildar Clerk",
+    title: "Bihar Police Havildar Clerk Photo & Signature Size KB Free",
+    description:
+      "Bihar Police BPSSC Havildar Clerk photo & signature size in KB — free form resizer — Size to KB",
+    relatedLinks: [
+      { href: "/bihar-police-bpssc-si-daroga/", label: "Bihar Police photo size (SI)" },
+    ],
+    queryHints: [
+      "bihar police havildar clerk photo size",
+      "bpssc havildar photo size",
+    ],
   },
   "dsssb-tgt": {
     shortName: "DSSSB TGT",

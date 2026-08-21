@@ -140,17 +140,21 @@ export const TOOLS: ToolDef[] = [
   {
     href: "/compress-to-200kb/",
     label: "Compress to 200KB",
-    blurb: "Docs / marksheet style max",
+    blurb: "Image compressor to 200KB",
     category: "size",
-    seoTitle: "Compress Image to 200KB Online Free — Reduce Photo Size to 200KB",
+    seoTitle: "Compress Image to 200KB Online Free — Image Compressor 200KB",
     seoDescription:
-      "Compress image to 200KB online free. Reduce photo size to 200KB for documents and form uploads — Size to KB",
+      "Compress image to 200KB online free. Image compressor to 200KB for marksheets, certificates & form uploads — Size to KB",
     keywords: [
       "compress image to 200kb",
+      "image compressor to 200kb",
+      "compress 200kb",
       "reduce photo size to 200kb",
       "compress photo to 200KB",
       "image compressor 200KB",
+      "resize image to 200kb",
     ],
+    featured: true,
   },
   {
     href: "/compress-to-500kb/",
@@ -631,17 +635,19 @@ export const TOOLS: ToolDef[] = [
   {
     href: "/pdf-to-jpg/",
     label: "PDF to JPG",
-    blurb: "PDF pages → JPG / PNG",
+    blurb: "PDF → JPG · optional 50KB cap",
     category: "pdf",
-    seoTitle: "PDF to JPG Online Free — Convert PDF to Image / PNG",
+    seoTitle: "PDF to JPG 50KB Online Free — Convert PDF to Image",
     seoDescription:
-      "PDF to JPG converter online free. Convert PDF pages to JPG or PNG, download ZIP. Private browser tool — Size to KB",
+      "PDF to JPG 50KB online free — convert PDF pages to JPG/PNG and optionally cap each image at 50KB, 100KB or 200KB — Size to KB",
     keywords: [
+      "pdf to jpg 50kb",
       "pdf to jpg",
       "PDF to JPG online free",
+      "pdf to jpg 90 kb",
+      "convert pdf to jpg less than 100kb",
       "pdf to image",
       "convert PDF to JPG",
-      "PDF to PNG converter",
     ],
     featured: true,
   },
