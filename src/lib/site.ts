@@ -6,7 +6,7 @@ export const SITE = {
   domain: "sizetokb.in",
   url: "https://sizetokb.in",
   altDomain: "sizetokb.com",
-  tagline: "Reduce image & signature size to exact KB · PDF & image tools",
+  tagline: "Reduce KB · exam photo & signature size · PDF tools",
   email: "support@sizetokb.in",
   locale: "en_IN",
   year: new Date().getFullYear(),
@@ -37,6 +37,9 @@ export const SITE_KEYWORDS = [
   "unlock PDF online free",
   "PDF password remover",
   // Exact KB — India forms
+  "reduce kb",
+  "reduce KB",
+  "reduce KB online free",
   "reduce image size",
   "reduce image size online",
   "reduce image size in KB",

@@ -4,11 +4,11 @@ import { SITE, SITE_KEYWORDS } from "@/lib/site";
 export const defaultMetadata: Metadata = {
   metadataBase: new URL(SITE.url),
   title: {
-    default: `Reduce Image Size to KB · PDF to JPG, Merge & Unlock PDF | ${SITE.seoName}`,
+    default: `Reduce KB Online Free · Exam Photo & Signature Size | ${SITE.seoName}`,
     template: `%s | ${SITE.seoName}`,
   },
   description:
-    "Free online tools: reduce image & signature size to exact KB, PDF to JPG, JPG to PDF, merge PDF, compress PDF, unlock PDF password, PDF to Word. Private browser tools for SSC, UPSC, Bank & more — Size to KB",
+    "Reduce KB online free — compress exam photo & signature to exact KB (20/50/100/200). PDF to JPG, unlock PDF. For SSC, Railway, UPSSSC, IBPS & more — Size to KB",
   keywords: [...SITE_KEYWORDS],
   authors: [{ name: SITE.seoName, url: SITE.url }],
   creator: SITE.seoName,
@@ -22,15 +22,15 @@ export const defaultMetadata: Metadata = {
     locale: SITE.locale,
     url: SITE.url,
     siteName: SITE.seoName,
-    title: `Reduce image size to KB · PDF to JPG & Unlock PDF | ${SITE.seoName}`,
+    title: `Reduce KB · Exam Photo & Signature Size | ${SITE.seoName}`,
     description:
-      "Compress photo to 20–50KB, signature to 10–20KB. Convert PDF to JPG, merge/compress PDF, remove PDF password — free in your browser.",
+      "Reduce KB online free. Compress photo to 20–50KB, signature to 10–20KB. PDF to JPG & unlock PDF — free in your browser.",
   },
   twitter: {
     card: "summary_large_image",
-    title: `Reduce Image Size to KB · PDF Tools | ${SITE.seoName}`,
+    title: `Reduce KB Online Free · Exact Size Tools | ${SITE.seoName}`,
     description:
-      "PDF to JPG, unlock PDF, merge PDF, compress PDF + exact-KB photo/signature tools. Free — Size to KB",
+      "Reduce KB for exam forms — photo, signature, PDF to JPG. Free browser tools — Size to KB",
   },
   robots: {
     index: true,

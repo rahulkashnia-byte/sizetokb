@@ -28,13 +28,15 @@ export const TOOL_CATEGORIES: { id: ToolCategory; title: string }[] = [
 export const TOOLS: ToolDef[] = [
   {
     href: "/#custom-tool",
-    label: "Reduce size to KB",
+    label: "Reduce KB",
     blurb: "Set any min–max KB on this page",
     category: "size",
-    seoTitle: "Reduce Image & Signature Size to Exact KB Online Free",
+    seoTitle: "Reduce KB Online Free — Exact Photo & Signature Size",
     seoDescription:
-      "Reduce photo and signature size to the exact KB your form needs. Free browser tool for SSC, UPSC, Bank & more — Size to KB",
+      "Reduce KB online free. Compress photo and signature to the exact KB your exam form needs — Size to KB",
     keywords: [
+      "reduce kb",
+      "reduce KB online free",
       "reduce image size to KB",
       "reduce signature size online",
       "reduce photo size for form",
@@ -46,10 +48,12 @@ export const TOOLS: ToolDef[] = [
     label: "Custom reduce to KB",
     blurb: "Dedicated custom min–max KB page",
     category: "size",
-    seoTitle: "Reduce Photo & Signature Size to Any Custom KB Online Free",
+    seoTitle: "Reduce KB Online Free — Any Custom Min–Max Photo & Signature Size",
     seoDescription:
-      "Reduce image size and reduce signature size to any min–max KB with optional cm/px. Free for exam form fill — Size to KB",
+      "Reduce KB online free: set any min–max for photo or signature (optional cm/px). Exact size for exam form fill — Size to KB",
     keywords: [
+      "reduce kb",
+      "reduce KB online free",
       "reduce signature size to 20KB",
       "reduce photo size to 50KB",
       "custom reduce image size KB",

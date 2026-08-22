@@ -28,15 +28,29 @@ const OVERRIDES: Record<string, Override> = {
       "ITAT photo size & signature size in KB — crop, compress and Free Download on phone. Exact KB for form upload. Private · Size to KB",
     h1: "ITAT photo & signature size in KB",
     lead: "Hit ITAT photo and signature KB limits, then Free Download and upload to the portal.",
+    relatedLinks: [
+      { href: "/isro-icrb/", label: "ISRO ICRB photo size" },
+      { href: "/railway-nfr-apprentice/", label: "Railway NFR Apprentice" },
+      { href: "/compress-to-50kb/", label: "Compress to 50KB" },
+      { href: "/signature-cleaner/", label: "Signature cleaner" },
+    ],
     queryHints: ["itat photo size", "itat signature size", "itat photo and signature size"],
   },
   "apssb-constable": {
     shortName: "APSSB Constable",
-    title: "APSSB Photo and Signature Size in KB (20–50) Free 2026",
+    title: "APSSB Photo and Signature Size Free · Exact KB 2026",
     description:
-      "APSSB photo and signature size in KB — photo 20–50 KB, signature 10–20 KB. Free crop + compress, Free Download for Constable form. Private — Size to KB",
+      "APSSB photo and signature size in KB — photo 20–50 KB, signature 10–20 KB. Free online resizer for Constable form. Crop, Free Download — Size to KB",
     h1: "APSSB photo and signature size in KB",
     lead: "Searched “APSSB photo and signature size”? Hit 20–50 KB photo / 10–20 KB signature, then Free Download.",
+    tips: [
+      "Use JPG only. Crop the face tightly for photo and keep signature ink clear on white paper before compress.",
+    ],
+    relatedLinks: [
+      { href: "/compress-to-50kb/", label: "Compress to 50KB" },
+      { href: "/signature-cleaner/", label: "Signature 10–20KB" },
+      { href: "/upsssc-pet/", label: "UPSSSC PET" },
+    ],
     queryHints: [
       "apssb photo and signature size",
       "apssb photo size",
@@ -47,30 +61,35 @@ const OVERRIDES: Record<string, Override> = {
   },
   "upsssc-pet": {
     shortName: "UPSSSC PET",
-    title: "UPSSSC PET Image Size in KB · Photo & Signature Free",
+    title: "UPSSSC PET Signature & Photo Size in KB · Free Resizer",
     description:
-      "UPSSSC PET / photo resizer — photo 20–50 KB, signature 10–20 KB (3.5×4.5 / 3.5×1.5 cm). Free crop + compress. Note: some forms need Hindi name under English signature — Size to KB",
+      "PET signature size & photo size in KB — UPSSSC PET form photo editor / resizer. Photo 20–50 KB, signature 10–20 KB. Free Download — Size to KB",
     h1: "UPSSSC PET photo & signature size in KB",
-    lead: "UPSSSC PET image / photo / signature KB limits — compress on phone, Free Download, upload to the form.",
+    lead: "PET form photo and signature size — compress on phone, Free Download, upload to UPSSSC. Also works as a free PET photo editor / resizer.",
     tips: [
       "Some UPSSSC notifications ask for your full name in Hindi written under the English signature on the same scan — check the latest brochure before upload.",
-      "Use a white/light background photo with clear face coverage; re-check PET vs Lekhpal / Junior Assistant / VDO PDFs if limits differ.",
+      "Searched “PET signature size” or “PET form photo and signature size”? Use the tools below for exact KB.",
     ],
     relatedLinks: [
       { href: "/upsssc-lekhpal/", label: "UPSSSC Lekhpal photo size" },
       { href: "/upsssc-junior-assistant/", label: "UPSSSC Junior Assistant" },
       { href: "/upsssc-vdo/", label: "UPSSSC VDO photo size" },
       { href: "/signature-cleaner/", label: "Signature cleaner" },
+      { href: "/compress-to-50kb/", label: "Compress to 50KB" },
       { href: "/hindi/", label: "हिंदी में इस्तेमाल करें" },
     ],
     faqs: [
+      {
+        q: "What is the UPSSSC PET / PET form signature size in KB?",
+        a: "Typically 10–20 KB · 3.5 cm × 1.5 cm · JPG on this profile. Some UPSSSC posts mention a higher signature cap (e.g. around 30 KB) — follow the notification for your vacancy.",
+      },
       {
         q: "What is the UPSSSC PET photo size in KB?",
         a: "On this page (verify the official notification): photo typically 20–50 KB · 3.5 cm × 4.5 cm · JPG. Always confirm the latest PET PDF before upload.",
       },
       {
-        q: "What is the UPSSSC PET signature size in KB?",
-        a: "Typically 10–20 KB · 3.5 cm × 1.5 cm · JPG on this profile. Some UPSSSC posts mention a higher signature cap (e.g. around 30 KB) — follow the notification for your vacancy.",
+        q: "Is there a free UPSSSC PET photo editor / resizer?",
+        a: "Yes — this page is a free PET photo resizer: crop, compress to KB, Free Download. Processing stays in your browser.",
       },
       {
         q: "Is Hindi signature mandatory for UPSSSC PET?",
@@ -81,21 +100,23 @@ const OVERRIDES: Record<string, Override> = {
         a: "No. UPSSSC-style uploads are usually portrait 3.5 × 4.5 cm. Use the crop tool on this page to match that box, then Free Download.",
       },
       {
-        q: "How do I resize UPSSSC PET photo size online free?",
-        a: "Use the Photo tool below: crop → compress into 20–50 KB → Free Download. Processing stays in your browser.",
-      },
-      {
         q: "Is this free? Do you store my photo?",
         a: "Yes, free. We do not upload or store your photos or signatures.",
       },
     ],
     queryHints: [
+      "pet signature size",
+      "pet form signature size",
+      "pet form photo and signature size",
+      "pet photo dimensions",
       "upsssc pet image",
       "upsssc pet image size",
       "upsssc pet signature",
       "upsssc pet photo size",
       "upsssc pet signature size",
       "upsssc pet photo and signature size",
+      "upsssc pet photo editor",
+      "photo resizer for pet exam",
       "upsssc photo resizer",
       "upsssc photo size",
       "upsssc signature size",
@@ -215,17 +236,72 @@ const OVERRIDES: Record<string, Override> = {
   },
   "rrb-section-controller": {
     shortName: "RRB Section Controller",
-    title: "Section Controller Signature Size in KB · Photo Free",
+    title: "Section Controller Signature & Photo Size in KB Free",
     description:
-      "RRB Section Controller signature size in KB (10–40) & photo size (20–50 KB). Free compress + Free Download for Railway form upload — Size to KB",
-    h1: "RRB Section Controller signature & photo size in KB",
-    lead: "Match Section Controller signature (10–40 KB) and photo (20–50 KB), then Free Download for the RRB form.",
+      "RRB Section Controller signature size & photo / image size in KB — signature 10–40 KB, photo 20–50 KB. Free photo resizer + Free Download — Size to KB",
+    h1: "Section Controller signature & photo size in KB",
+    lead: "Searched “section controller signature size” or “RRB section controller image”? Match KB limits, then Free Download for the Railway form.",
+    tips: [
+      "Use the Signature tool for “section controller signature size” (typically 10–40 KB) and the Photo tool for image / photo size (20–50 KB).",
+    ],
+    relatedLinks: [
+      { href: "/railway-nfr-apprentice/", label: "Railway NFR Apprentice" },
+      { href: "/rrb-group-d/", label: "RRB Group D" },
+      { href: "/railway-ntpc/", label: "RRB NTPC" },
+      { href: "/signature-cleaner/", label: "Signature cleaner" },
+      { href: "/compress-to-50kb/", label: "Compress to 50KB" },
+    ],
     queryHints: [
       "section controller signature size",
+      "rrb section controller signature",
+      "rrb section controller image",
+      "section controller image",
+      "section controller photo size",
       "rrb section controller photo size",
       "rrb section controller signature size",
-      "section controller photo size",
+      "photo resizer rrb section controller",
+      "rrb section controller image resizer",
       "section controller signature size in kb",
+    ],
+  },
+  "isro-icrb": {
+    shortName: "ISRO ICRB",
+    title: "ISRO ICRB Photo & Signature Size in KB Online Free 2026",
+    description:
+      "ISRO ICRB photo size & signature size in KB — free crop, compress, Free Download for ISRO form upload — Size to KB",
+    h1: "ISRO ICRB photo & signature size in KB",
+    lead: "Hit ISRO ICRB photo and signature KB limits, then Free Download for the portal.",
+    relatedLinks: [
+      { href: "/itat/", label: "ITAT photo size" },
+      { href: "/railway-nfr-apprentice/", label: "Railway NFR Apprentice" },
+      { href: "/compress-to-50kb/", label: "Compress to 50KB" },
+      { href: "/signature-cleaner/", label: "Signature cleaner" },
+      { href: "/compress-to-200kb/", label: "Compress to 200KB" },
+    ],
+    queryHints: [
+      "isro icrb photo size",
+      "isro photo size",
+      "isro signature size",
+      "isro icrb signature size",
+    ],
+  },
+  "allahabad-high-court-ro-aro-ca": {
+    shortName: "Allahabad HC RO ARO",
+    title: "Allahabad High Court RO ARO Photo Upload Size KB Free",
+    description:
+      "Allahabad High Court RO / ARO / CA photo upload size in KB & signature size — free crop, compress, Free Download — Size to KB",
+    h1: "Allahabad High Court RO ARO photo & signature size",
+    lead: "Searched “Allahabad High Court RO ARO photo upload”? Match KB limits below, Free Download, then upload.",
+    relatedLinks: [
+      { href: "/compress-to-50kb/", label: "Compress to 50KB" },
+      { href: "/signature-cleaner/", label: "Signature cleaner" },
+      { href: "/upload-fixer/", label: "Upload error fixer" },
+    ],
+    queryHints: [
+      "allahabad high court ro aro photo upload",
+      "allahabad high court photo size",
+      "allahabad high court ro aro signature size",
+      "ahc ro aro photo size",
     ],
   },
   afcat: {
@@ -282,6 +358,14 @@ const OVERRIDES: Record<string, Override> = {
     title: "Railway NFR Apprentice Photo & Signature Size KB Free",
     description:
       "Railway NFR Apprentice photo & signature size in KB — free compress. Crop, hit KB, Free Download — Size to KB",
+    relatedLinks: [
+      { href: "/rrb-section-controller/", label: "RRB Section Controller" },
+      { href: "/rrb-group-d/", label: "RRB Group D" },
+      { href: "/railway-ntpc/", label: "RRB NTPC" },
+      { href: "/isro-icrb/", label: "ISRO ICRB" },
+      { href: "/compress-to-50kb/", label: "Compress to 50KB" },
+      { href: "/signature-cleaner/", label: "Signature cleaner" },
+    ],
     queryHints: ["nfr apprentice photo size", "railway nfr apprentice signature size"],
   },
   nbems: {
@@ -386,10 +470,22 @@ const OVERRIDES: Record<string, Override> = {
   },
   "sbi-po": {
     shortName: "SBI PO",
-    title: "SBI PO Photo & Signature Size in KB Online Free 2026",
+    title: "SBI PO Photo and Signature Size in KB Online Free 2026",
     description:
-      "SBI PO photo size & signature size in KB — free crop + compress for SBI form. Free Download — Size to KB",
-    queryHints: ["sbi po photo size", "sbi po signature size", "sbi po photo size in kb"],
+      "SBI PO photo and signature size in KB — free crop + compress for SBI form. Photo 20–50 KB, signature 10–20 KB, Free Download — Size to KB",
+    h1: "SBI PO photo and signature size in KB",
+    relatedLinks: [
+      { href: "/handwritten-declaration/", label: "Handwritten declaration" },
+      { href: "/thumb-impression/", label: "Thumb impression" },
+      { href: "/ibps-clerk/", label: "IBPS Clerk" },
+      { href: "/signature-cleaner/", label: "Signature cleaner" },
+    ],
+    queryHints: [
+      "sbi po photo and signature size",
+      "sbi po photo size",
+      "sbi po signature size",
+      "sbi po photo size in kb",
+    ],
   },
   "sbi-clerk": {
     shortName: "SBI Clerk",
@@ -582,24 +678,51 @@ const OVERRIDES: Record<string, Override> = {
   },
   "dsssb-tgt": {
     shortName: "DSSSB TGT",
-    title: "DSSSB TGT Photo & Signature Size in KB Online Free 2026",
+    title: "DSSSB Photo Size in KB Free · TGT Signature Too",
     description:
-      "DSSSB TGT photo size & signature size in KB — free Delhi teacher form resizer — Size to KB",
-    queryHints: ["dsssb tgt photo size", "dsssb photo size", "dsssb signature size"],
+      "DSSSB photo size / image size & TGT signature size in KB — free Delhi teacher form resizer. Crop, Free Download — Size to KB",
+    h1: "DSSSB TGT photo & signature size in KB",
+    relatedLinks: [
+      { href: "/dsssb-mts/", label: "DSSSB MTS" },
+      { href: "/dsssb-aso/", label: "DSSSB ASO" },
+      { href: "/compress-to-50kb/", label: "Compress to 50KB" },
+    ],
+    queryHints: [
+      "dsssb photo size",
+      "dsssb image size",
+      "dsssb photo resizer",
+      "dsssb photo resize",
+      "dsssb tgt photo size",
+      "dsssb signature size",
+    ],
   },
   "dsssb-mts": {
     shortName: "DSSSB MTS",
-    title: "DSSSB MTS Photo & Signature Size in KB Online Free 2026",
+    title: "DSSSB MTS Photo & Signature Size in KB · Image Size Free",
     description:
-      "DSSSB MTS photo size & signature size in KB — free compress for Delhi form — Size to KB",
-    queryHints: ["dsssb mts photo size", "dsssb mts signature size"],
+      "DSSSB MTS photo size & signature size in KB — free compress for Delhi MTS form. Also for DSSSB image size searches — Size to KB",
+    relatedLinks: [
+      { href: "/dsssb-tgt/", label: "DSSSB TGT / photo size" },
+      { href: "/dsssb-aso/", label: "DSSSB ASO" },
+      { href: "/compress-to-50kb/", label: "Compress to 50KB" },
+    ],
+    queryHints: [
+      "dsssb mts photo size",
+      "dsssb mts signature size",
+      "dsssb image size",
+      "dsssb photo resizer",
+    ],
   },
   "dsssb-aso": {
     shortName: "DSSSB ASO",
-    title: "DSSSB ASO Photo & Signature Size in KB Online Free 2026",
+    title: "DSSSB ASO Photo & Signature Size in KB Online Free",
     description:
-      "DSSSB ASO photo size & signature size in KB — free online resizer — Size to KB",
-    queryHints: ["dsssb aso photo size", "dsssb aso signature size"],
+      "DSSSB ASO photo size & signature size in KB — free online resizer for Delhi form — Size to KB",
+    relatedLinks: [
+      { href: "/dsssb-tgt/", label: "DSSSB TGT / photo size" },
+      { href: "/dsssb-mts/", label: "DSSSB MTS" },
+    ],
+    queryHints: ["dsssb aso photo size", "dsssb aso signature size", "dsssb photo size"],
   },
   bpsc: {
     shortName: "BPSC",
