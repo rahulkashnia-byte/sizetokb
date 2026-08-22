@@ -5,12 +5,15 @@ import { SITE } from "@/lib/site";
 import { pageMeta } from "@/lib/seo";
 
 export const metadata: Metadata = pageMeta({
-  title: "About Us — Size to KB",
+  title: "About Size to KB (sizetokb.in) — Official Site",
   description:
-    "About Size to KB — free photo resize to KB, signature compressor, and exam form document tools built for Indian aspirants.",
+    "About Size to KB — the official free exam photo & signature compressor at sizetokb.in (also sizetokb.com). Built for Indian form uploads.",
   path: "/about-us",
   keywords: [
     "about Size to KB",
+    "size to kb",
+    "sizetokb.in",
+    "sizetokb",
     "photo resize online India",
     "exam photo resizer",
     "compress image to KB free",
@@ -19,11 +22,16 @@ export const metadata: Metadata = pageMeta({
 
 export default function AboutPage() {
   return (
-    <LegalLayout title="About SizeToKB" updated="8 August 2026">
+    <LegalLayout title="About Size to KB" updated="22 August 2026">
       <p>
-        <strong>{SITE.name}</strong> ({SITE.domain} / {SITE.altDomain}) helps students and job
-        aspirants across India resize photos and signatures to the exact kilobyte (KB) limits
-        required by online application portals.
+        <strong>Size to KB</strong> ({SITE.name}) is the official free website at{" "}
+        <strong>{SITE.domain}</strong> (also {SITE.altDomain}). We help students and job aspirants
+        across India resize photos and signatures to the exact kilobyte (KB) limits required by
+        online application portals.
+      </p>
+      <p>
+        If you searched “size to kb” or “sizetokb”, this is the site: compress exam photos and
+        signatures privately in your browser — no signup.
       </p>
 
       <h2>What we built</h2>

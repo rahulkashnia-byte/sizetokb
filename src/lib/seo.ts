@@ -4,11 +4,12 @@ import { SITE, SITE_KEYWORDS } from "@/lib/site";
 export const defaultMetadata: Metadata = {
   metadataBase: new URL(SITE.url),
   title: {
-    default: `Reduce KB Online Free · Exam Photo & Signature Size | ${SITE.seoName}`,
+    // Brand-first so “size to kb” / sizetokb navigational searches match the homepage.
+    default: `Size to KB (sizetokb.in) — Free Exam Photo & Signature Resizer`,
     template: `%s | ${SITE.seoName}`,
   },
   description:
-    "Reduce KB online free — compress exam photo & signature to exact KB (20/50/100/200). PDF to JPG, unlock PDF. For SSC, Railway, UPSSSC, IBPS & more — Size to KB",
+    "Size to KB (sizetokb.in) — free exam photo & signature tools. Compress to exact KB (20/50/100/200), PDF to JPG, unlock PDF. Official site for SizeToKB.",
   keywords: [...SITE_KEYWORDS],
   authors: [{ name: SITE.seoName, url: SITE.url }],
   creator: SITE.seoName,
@@ -22,15 +23,15 @@ export const defaultMetadata: Metadata = {
     locale: SITE.locale,
     url: SITE.url,
     siteName: SITE.seoName,
-    title: `Reduce KB · Exam Photo & Signature Size | ${SITE.seoName}`,
+    title: `Size to KB (sizetokb.in) — Free Exam Photo & Signature Resizer`,
     description:
-      "Reduce KB online free. Compress photo to 20–50KB, signature to 10–20KB. PDF to JPG & unlock PDF — free in your browser.",
+      "Official Size to KB site. Compress photo to 20–50KB, signature to 10–20KB. PDF to JPG & unlock PDF — free in your browser.",
   },
   twitter: {
     card: "summary_large_image",
-    title: `Reduce KB Online Free · Exact Size Tools | ${SITE.seoName}`,
+    title: `Size to KB (sizetokb.in) — Exact KB Tools`,
     description:
-      "Reduce KB for exam forms — photo, signature, PDF to JPG. Free browser tools — Size to KB",
+      "Official Size to KB / sizetokb.in — exam photo, signature & PDF tools. Free in your browser.",
   },
   robots: {
     index: true,

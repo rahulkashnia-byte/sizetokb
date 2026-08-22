@@ -14,6 +14,10 @@ import Link from "next/link";
 
 const HOME_FAQS = [
   {
+    q: "What is Size to KB (sizetokb.in)?",
+    a: "Size to KB is the free exam photo & signature site at sizetokb.in (also sizetokb.com). Compress photos and signatures to the exact KB your SSC, Railway, Bank or state form needs — privately in your browser.",
+  },
+  {
     q: "How do I reduce KB / reduce image size online free?",
     a: "Use Reduce to KB on this homepage: upload your photo, set min–max KB (e.g. 20–50), crop, then Free Download. Or open Compress to 50KB / 20KB / 200KB presets.",
   },
@@ -59,12 +63,12 @@ export default function HomePage() {
               Size to KB · Free · Private
             </p>
             <h1 className="mt-3 font-[family-name:var(--font-display)] text-[2.25rem] font-extrabold leading-[1.06] tracking-tight text-[var(--ink)] sm:text-5xl lg:text-[3.35rem]">
-              Reduce KB — photo & signature size to the{" "}
+              Size to KB — photo & signature to the{" "}
               <span className="text-[var(--accent)]">exact limit</span> your form needs
             </h1>
             <p className="mx-auto mt-4 max-w-2xl text-base leading-relaxed text-[var(--muted)] sm:text-lg">
-              Free exam photo & signature tools: compress to 20KB / 50KB / 100KB / 200KB, plus PDF to
-              JPG, unlock PDF — for SSC, Railway, UPSSSC, IBPS, UPSC and more.
+              Official sizetokb.in tools: compress to 20KB / 50KB / 100KB / 200KB, plus PDF to JPG,
+              unlock PDF — for SSC, Railway, UPSSSC, IBPS, UPSC and more.
             </p>
             <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
               <a

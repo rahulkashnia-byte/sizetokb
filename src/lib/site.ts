@@ -17,6 +17,13 @@ export const SITE = {
  * then India exam / exact-KB intent.
  */
 export const SITE_KEYWORDS = [
+  // Brand / navigational (Google “size to kb” → sizetokb.in)
+  "size to kb",
+  "Size to KB",
+  "sizetokb",
+  "sizetokb.in",
+  "sizetokb.com",
+  "SizeToKB",
   // Mega-volume PDF / convert (Semrush-scale intent)
   "jpg to pdf",
   "pdf to jpg",
